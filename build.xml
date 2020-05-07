@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="rpasystem">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="D:\eclipse-jee\eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-webmvc/4.3.26.RELEASE/spring-webmvc-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-aop/4.3.26.RELEASE/spring-aop-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-beans/4.3.26.RELEASE/spring-beans-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-core/4.3.26.RELEASE/spring-core-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-expression/4.3.26.RELEASE/spring-expression-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-web/4.3.26.RELEASE/spring-web-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-context/4.3.26.RELEASE/spring-context-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-context-support/4.3.26.RELEASE/spring-context-support-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-jdbc/4.3.26.RELEASE/spring-jdbc-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-tx/4.3.26.RELEASE/spring-tx-4.3.26.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/security/spring-security-core/4.2.15.RELEASE/spring-security-core-4.2.15.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/security/spring-security-web/4.2.15.RELEASE/spring-security-web-4.2.15.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/security/spring-security-config/4.2.15.RELEASE/spring-security-config-4.2.15.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/googlecode/ehcache-spring-annotations/ehcache-spring-annotations/1.1.3/ehcache-spring-annotations-1.1.3.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/net/sf/ehcache/ehcache-core/2.2.0/ehcache-core-2.2.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/microsoft/sqlserver/mssql-jdbc/6.4.0.jre8/mssql-jdbc-6.4.0.jre8.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/batch/spring-batch-core/4.2.1.RELEASE/spring-batch-core-4.2.1.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/io/micrometer/micrometer-core/1.3.2/micrometer-core-1.3.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/hdrhistogram/HdrHistogram/2.1.11/HdrHistogram-2.1.11.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/batch/javax.batch-api/1.0/javax.batch-api-1.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/codehaus/jettison/jettison/1.2/jettison-1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/batch/spring-batch-infrastructure/4.2.1.RELEASE/spring-batch-infrastructure-4.2.1.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/retry/spring-retry/1.2.4.RELEASE/spring-retry-1.2.4.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/batch/spring-batch-test/4.2.1.RELEASE/spring-batch-test-4.2.1.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/springframework/spring-test/5.2.2.RELEASE/spring-test-5.2.2.RELEASE.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/aspectj/aspectjrt/1.9.5/aspectjrt-1.9.5.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/fasterxml/jackson/core/jackson-databind/2.6.4/jackson-databind-2.6.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/fasterxml/jackson/core/jackson-annotations/2.6.0/jackson-annotations-2.6.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/fasterxml/jackson/core/jackson-core/2.6.4/jackson-core-2.6.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/aspectj/aspectjtools/1.9.5/aspectjtools-1.9.5.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/junit/junit/4.13/junit-4.13.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/quartz-scheduler/quartz/2.3.2/quartz-2.3.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/mchange/c3p0/0.9.5.4/c3p0-0.9.5.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/mchange/mchange-commons-java/0.2.15/mchange-commons-java-0.2.15.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/zaxxer/HikariCP-java7/2.4.13/HikariCP-java7-2.4.13.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/aopalliance/aopalliance/1.0/aopalliance-1.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/mybatis/mybatis/3.2.2/mybatis-3.2.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/mybatis/mybatis-spring/1.2.0/mybatis-spring-1.2.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/tomcat/tomcat-dbcp/7.0.53/tomcat-dbcp-7.0.53.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/cglib/cglib/3.1/cglib-3.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/ow2/asm/asm/4.2/asm-4.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/servlet/jsp/jsp-api/2.1/jsp-api-2.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/servlet/jstl/1.2/jstl-1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-io/commons-io/2.4/commons-io-2.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-fileupload/commons-fileupload/1.3.1/commons-fileupload-1.3.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/googlecode/json-simple/json-simple/1.1/json-simple-1.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/mail/mail/1.4.7/mail-1.4.7.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/activation/activation/1.1/activation-1.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/lazyluke/log4jdbc-remix/0.2.7/log4jdbc-remix-0.2.7.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/inject/javax.inject/1/javax.inject-1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-lang/commons-lang/2.3/commons-lang-2.3.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/javax/persistence/persistence-api/1.0.2/persistence-api-1.0.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-net/commons-net/3.6/commons-net-3.6.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-beanutils/commons-beanutils/1.9.3/commons-beanutils-1.9.3.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/commons/commons-configuration2/2.0/commons-configuration2-2.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/poi/poi-ooxml/3.11/poi-ooxml-3.11.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/poi/poi/3.11/poi-3.11.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/poi/poi-ooxml-schemas/3.11/poi-ooxml-schemas-3.11.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/jcraft/jsch/0.1.53/jsch-0.1.53.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/openoffice/juh/4.1.2/juh-4.1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/openoffice/jurt/4.1.2/jurt-4.1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/openoffice/ridl/4.1.2/ridl-4.1.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/pdfbox/pdfbox/2.0.8/pdfbox-2.0.8.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/pdfbox/fontbox/2.0.8/fontbox-2.0.8.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/artofsolving/jodconverter/2.2.1/jodconverter-2.2.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/openoffice/unoil/2.3.0/unoil-2.3.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/maven/maven-plugin-api/2.0.11/maven-plugin-api-2.0.11.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/slf4j/slf4j-log4j12/1.6.6/slf4j-log4j12-1.6.6.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/httpcomponents/httpclient/4.3.4/httpclient-4.3.4.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/jsoup/jsoup/1.11.2/jsoup-1.11.2.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/org/jetbrains/annotations-java5/19.0.0/annotations-java5-19.0.0.jar"/>
+        <pathelement location="../../apache-maven-3.6.0/repository_market/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar"/>
+    </path>
+    <path id="rpasystem.classpath">
+        <pathelement location="target/classes"/>
+        <pathelement location="target/test-classes"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="target/classes"/>
+        <mkdir dir="target/test-classes"/>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src/main/resources">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/test-classes">
+            <fileset dir="src/test/java">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/test-classes">
+            <fileset dir="src/test/resources">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="target/classes"/>
+        <delete dir="target/test-classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <src path="src/main/resources"/>
+            <exclude name="**"/>
+            <classpath refid="rpasystem.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/test/java"/>
+            <src path="src/test/resources"/>
+            <exclude name="**"/>
+            <classpath refid="rpasystem.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+</project>
