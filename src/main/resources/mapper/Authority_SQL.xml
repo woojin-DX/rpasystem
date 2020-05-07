@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.admin.authority.AuthorityDAO">
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listAuthority" parameterType="hashmap" resultType="com.woojin.commercial.admin.authority.AuthorityVO">
+		<![CDATA[
+			SELECT 
+				  maintb.auth_cd                                              /* 권한코드 */
+				, maintb.auth_nm                                              /* 권한명 */
+    		, ROW_NUMBER() OVER (
+    	    ]]>
+   		<trim prefix="ORDER BY" suffixOverrides=",">
+    		<![CDATA[	
+    			maintb.auth_cd DESC,
+    	    ]]>
+   		</trim>
+		<![CDATA[
+    		) AS rownum
+			FROM tb_authority maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="auth_nm != '' and auth_nm != null">
+	    			and maintb.auth_nm = #{auth_nm}
+    			</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.auth_nm like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    		<trim prefix="ORDER BY" suffixOverrides=",">
+    		<![CDATA[	
+			maintb.auth_cd ASC,
+    	    ]]>
+    		</trim>
+    		<if test="nStart > -1 and nStart != null">
+    			<![CDATA[	
+	    			OFFSET #{nStart} ROWS FETCH NEXT #{nLimit} ROWS ONLY 
+    			]]>
+    		</if>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountAuthority" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as totalcount
+			FROM tb_authority maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="auth_nm != '' and auth_nm != null">
+	    			and maintb.auth_nm = #{auth_nm}
+    			</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.auth_nm like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountAuthority" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_authority')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailAuthority" parameterType="hashmap" resultType="com.woojin.commercial.admin.authority.AuthorityVO">
+		<![CDATA[
+			SELECT 
+				  maintb.auth_cd                                              /* 권한코드 */
+				, maintb.auth_nm                                              /* 권한명 */
+			FROM tb_authority maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="auth_nm != '' and auth_nm != null">
+	    			and maintb.auth_nm = #{auth_nm}
+    			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertAuthority" parameterType="java.util.Map">
+		<![CDATA[
+			insert into tb_authority ( 
+				auth_cd,
+				auth_nm
+			) values (
+				#{new_cd},
+				#{auth_nm}
+			)
+		]]>
+	</insert>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateAuthority" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_authority
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+				<if test="auth_nm != null">auth_nm = #{auth_nm},</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="auth_cd != '' and auth_cd != null">
+	    			and auth_cd = #{auth_cd}
+    			</if>
+		</trim>
+	</update>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 권한정보 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteAuthority" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_authority
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="auth_cd != '' and auth_cd != null">
+	    			and auth_cd = #{auth_cd}
+    			</if>
+		</trim>
+	</delete>
+
+
+</mapper>

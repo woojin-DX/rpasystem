@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="db" location="classpath:config/database.properties" />
+
+    <bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" autowire="byType">
+        <property name="driverClassName" value="#{db['jdbc.driver']}"/>
+        <property name="url" value="#{db['jdbc.url']}"/>
+        <property name="username" value="#{db['jdbc.username']}"/>
+        <property name="password" value="#{db['jdbc.password']}"/>
+        <property name="initialSize" value="3" />
+        <property name="maxActive" value="100" />
+        <property name="maxIdle" value="30" />
+        <property name="minIdle" value="3" />
+        <property name="maxWait" value="10000" />
+        <property name="validationQuery" value="select 1"/>
+    </bean>
+
+    <!--bean id="dataSourceSpied" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/MOT_RPQ" />
+    </bean-->
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath:/mapper/*_SQL.xml" />
+    </bean>
+
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"  destroy-method="clearCache">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSourceSpied" />
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="loggingType" value="MULTI_LINE" />
+                <property name="sqlPrefix" value="SQL         :  "/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="serviceOperation" expression="execution(public * com.woojin.commercial..*Service.*(..))" />
+        <aop:advisor id="transactionAdvisor" pointcut-ref="serviceOperation" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="process*" propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+
+</beans>

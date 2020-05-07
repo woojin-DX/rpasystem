@@ -1,0 +1,1361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.shipping.ShippingDAO">
+	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingInfo">
+		<id column="shipping_key" property="shipping_key"/>
+		<id column="orderfor_key" property="orderfor_key"/>
+		<id column="company_cd" property="company_cd"/>
+		<id column="material_num" property="material_num"/>
+		<id column="order_dt" property="order_dt"/>
+		<id column="process_cd" property="process_cd"/>
+		<id column="packing_cd" property="packing_cd"/>
+		<association property="splace" column="{place_key=place_key}" javaType="com.woojin.commercial.supply.PlaceVO" select="selectPlace"/>
+		<association property="process" column="{common_cd=process_cd}" javaType="com.woojin.commercial.admin.commoncode.CommonCodeVO" select="selectProcess"/>
+		<association property="packing" column="{common_cd=packing_cd}" javaType="com.woojin.commercial.admin.commoncode.PackingCodeVO" select="selectPacking"/>
+		<association property="allsupply_qty" column="{orderfor_key=orderfor_key}" javaType="int" select="selectAllSupplyQty"/>
+		<association property="bstrf" column="{MATNR=material_num}" javaType="int" select="selectBSTRF"/>
+		<association property="mtart_nm" column="{MATNR=material_num}" javaType="String" select="selectMTART"/>
+		<association property="inven_use_qty" column="{MATNR=material_num}" javaType="int" select="selectInvenUseQty"/>
+		<association property="mtm_use_qty" column="{MATNR=material_num}" javaType="int" select="selectMTMQty"/>
+		<association property="prod_order_qty" column="{MATL_CD=material_num}" javaType="int" select="selectProdOrderQty"/>
+		<association property="first_use_flag" column="{orderfor_key=orderfor_key}" javaType="String" select="selectFirstUseFlag"/>
+		<association property="mtmreg_qty" column="{shipping_key=shipping_key}" javaType="int" select="selectMtmRegQty"/>
+
+	</resultMap>
+
+	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingDetail">
+		<id column="shipping_key" property="shipping_key"/>
+		<id column="orderfor_key" property="orderfor_key"/>
+		<id column="company_cd" property="company_cd"/>
+		<id column="material_num" property="material_num"/>
+		<id column="order_dt" property="order_dt"/>
+		<id column="process_cd" property="process_cd"/>
+		<id column="packing_cd" property="packing_cd"/>		
+		<association property="splace" column="{place_key=place_key}" javaType="com.woojin.commercial.supply.PlaceVO" select="selectPlace"/>
+		<association property="process" column="{common_cd=process_cd}" javaType="com.woojin.commercial.admin.commoncode.CommonCodeVO" select="selectProcess"/>
+		<association property="packing" column="{common_cd=packing_cd}" javaType="com.woojin.commercial.admin.commoncode.PackingCodeVO" select="selectPacking"/>
+		<association property="firstaccept_dt" column="{orderfor_key=orderfor_key}" javaType="String" select="selectShppingAcceptDt"/>
+		<association property="bstrf" column="{MATNR=material_num}" javaType="int" select="selectBSTRF"/>
+		<association property="mtart_nm" column="{MATNR=material_num}" javaType="String" select="selectMTART"/>
+		<association property="inven_use_qty" column="{MATNR=material_num}" javaType="int" select="selectInvenUseQty"/>
+		<association property="mtm_use_qty" column="{MATNR=material_num}" javaType="int" select="selectMTMQty"/>
+		<association property="prod_order_qty" column="{MATL_CD=material_num}" javaType="int" select="selectProdOrderQty"/>
+		<association property="first_use_flag" column="{orderfor_key=orderfor_key}" javaType="String" select="selectFirstUseFlag"/>
+		<association property="remainallqty" column="{shipping_key=shipping_key,orderfor_key=orderfor_key}" javaType="int" select="selectExcReaminAllQty"/>
+		<association property="remaininvenqty" column="{shipping_key=shipping_key,orderfor_key=orderfor_key,material_num=material_num}" javaType="int" select="selectExcRealReaminInvenQty"/>
+		<association property="remainmtmqty" column="{shipping_key=shipping_key,material_num=material_num}" javaType="int" select="selectExcRealReaminMtmQty"/>
+		<association property="mtminfo" column="{shipping_key=shipping_key}" javaType="java.util.Map" select="selectMtmInfo"/>
+		<association property="mtmreg_qty" column="{shipping_key=shipping_key}" javaType="int" select="selectMtmRegQty"/>
+	</resultMap>
+
+	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingSum">
+		<id column="material_num" property="material_num"/>
+		<association property="mtm_use_qty" column="{MATNR=material_num}" javaType="int" select="selectMTMQty"/>
+		<association property="prod_order_qty" column="{MATL_CD=material_num}" javaType="int" select="selectProdOrderQty"/>
+	</resultMap>
+	
+	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingInfoExcel">
+		<id column="material_num" property="material_num"/>
+		<association property="inven_use_qty" column="{MATNR=material_num}" javaType="int" select="selectInvenUseQty"/>
+		<association property="mtm_use_qty" column="{MATNR=material_num}" javaType="int" select="selectMTMQty"/>
+		<association property="prod_order_qty" column="{MATL_CD=material_num}" javaType="int" select="selectProdOrderQty"/>
+
+	</resultMap>
+
+	<resultMap type="com.woojin.commercial.supply.PlaceVO" id="PlaceCode"></resultMap>
+	<resultMap type="com.woojin.commercial.admin.commoncode.CommonCodeVO" id="ProcessCode"></resultMap>
+	<resultMap type="com.woojin.commercial.admin.commoncode.PackingCodeVO" id="PackingCode"></resultMap>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listShipping" parameterType="hashmap" resultMap="ShippingInfo">
+		<![CDATA[
+		select maintb.*
+			, case when maintb.packing_flag = 'Y' then '포장' else '' end packing_flag_nm
+			,oritb.company_cd
+			,saptb.company_nm
+			,oritb.material_num
+			,oritb.order_dt
+			,oritb.place_key
+			,oritb.supply_req_qty
+			,oritb.supply_req_dt
+			,oritb.confirm_qty
+			,oritb.shipping_dt
+			,oritb.unit_price
+			,oritb.total_price
+			, case when
+				DENSE_RANK() OVER(order by oritb.company_cd DESC,plc.place_nm DESC, oritb.material_num DESC, oritb.order_dt ASC) % 2 = 0 then 'FEFFE8'
+			  else 'FFFFFF' end as trbgcolor
+		from tb_shipping maintb
+			inner join tb_orderfor oritb on maintb.orderfor_key = oritb.orderfor_key
+			inner join OPENQUERY(ERP_DL, '
+						select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+			') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+			left outer join tb_place plc on oritb.place_key = plc.place_key
+			WHERE maintb.use_fl ! = 'END'
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+				and oritb.company_cd = #{coperation_cd}
+			</if>
+		<if test="accept_dt_start != '' and accept_dt_start != null">
+		  <![CDATA[
+				and (oritb.order_dt  >= #{accept_dt_start})
+				]]>
+		</if>
+		<if test="accept_dt_end != '' and accept_dt_end != null">
+			<![CDATA[
+				and (oritb.order_dt <= #{accept_dt_end})
+				]]>
+		</if>
+		<if test="material_list != '' and material_list != null">
+				and oritb.material_num = #{material_list}
+		</if>
+		<choose>
+			<when test='role != null and role.equals("ADMIN") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_BOS','ST_CFM','ST_ING','ST_OFR','ST_SPG')
+			</when>
+			<when test='role != null and role.equals("SHIPPING") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_CFM')
+			</when>
+		</choose>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='role != null and role.equals("ADMIN") and common_cd.equals("ST_LST")'>
+					and maintb.process_cd in('ST_CFM','ST_ING','ST_OFR')
+				</when>
+				<otherwise>
+					and maintb.process_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			order by oritb.company_cd asc,plc.place_nm asc, oritb.material_num asc, oritb.order_dt DESC, maintb.shipping_seq asc, maintb.modify_dt ASC
+    	]]>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+    			<![CDATA[	
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+    		</if>
+    </select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="selectProcess" resultMap="ProcessCode">
+		<![CDATA[
+			SELECT
+				  *
+			FROM tb_common_code maintb
+			where common_cd = #{common_cd}
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="selectPacking" resultMap="PackingCode">
+		<![CDATA[
+			SELECT
+				  *
+			FROM tb_common_code maintb
+			where common_cd = #{common_cd}
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectPlace" resultMap="PlaceCode">
+		<![CDATA[
+			SELECT
+				 place_key, company_cd,replace(place_nm,'주식회사','(주)') as place_nm, use_fl
+			FROM tb_place maintb
+			where place_key = #{place_key}
+		]]>
+	</select>
+	
+	<select id="selectShppingAcceptDt" resultType="String">
+	<![CDATA[
+		select accept_dt
+		from tb_shipping maintb
+		where maintb.orderfor_key = #{orderfor_key} and maintb.shipping_seq = 0
+		]]>
+	</select>
+
+	<select id="selectAllSupplyQty" resultType="int">
+	<![CDATA[
+		select ISNULL(MAX(allsupply_qty),0) as allsupply_qty
+		from(
+			select ISNULL(sum(maintb.supply_qty),0) as allsupply_qty
+			from tb_shipping maintb
+			where maintb.orderfor_key = #{orderfor_key}
+			and maintb.shipping_seq > 0
+		) tot
+		]]>
+	</select>
+
+	<select id="selectBSTRF" resultType="int">
+	<![CDATA[
+			SELECT ISNULL(cast(BSTRF as int),0) as bstrf
+			FROM ERP_DL.WJP.wjp.MARC
+			WHERE MATNR = #{MATNR}
+		]]>
+	</select>
+
+	<select id="selectMTART" resultType="String">
+	<![CDATA[
+			SELECT case MTART
+					when 'ROH' then N'원자재'
+					when 'HAWA' then N'상품'
+					when 'FERT' then N'제품'
+					when 'HALB' then N'반제품'
+					else ''
+				end mtart_nm
+			FROM ERP_DL.WJP.wjp.MARA
+			WHERE MATNR = #{MATNR}
+		]]>
+	</select>
+
+	<select id="selectProdOrderQty" resultType="int">
+	<![CDATA[
+		select ISNULL(MAX(prod_order_qty),0) as prod_order_qty
+		from(
+			SELECT ISNULL(SUM(PLAN_QTY-GOODISH_QTY),0) as prod_order_qty
+			FROM [192.9.200.159].[IMES].[dbo].[V_MARKET_ALIVE] A
+			WHERE MATL_CD = #{MATL_CD}
+		) tot
+	]]>
+	</select>
+
+	<select id="selectInvenUseQty" resultType="int">
+	<![CDATA[
+		select ISNULL(MAX(inven_use_qty),0) as inven_use_qty
+		from(
+			select ISNULL(SUM(a.LABST),0) as inven_use_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			where  a.LABST > 0 and a.MATNR = #{MATNR}
+			group by b.MTART
+		) tot
+		]]>
+	</select>
+
+	<select id="selectMTMQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(MAX(mtm_use_qty),0) as mtm_use_qty
+		 from(
+			select case when b.MTART = 'HAWA' then 0 else
+				(
+					select SUM(aa.LABST) as mtm_qty
+					from ERP_DL.WJP.wjp.MARD aa
+					inner join ERP_DL.WJP.wjp.MARA bb on aa.MATNR = bb.MATNR
+					where  bb.MTART = 'FERT' and aa.LABST > 0
+						and LEFT(aa.MATNR,LEN(aa.MATNR)-2) = LEFT(#{MATNR},LEN(#{MATNR})-2) and aa.MATNR != #{MATNR}
+				)
+				end mtm_use_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			where  a.LABST > 0 and a.MATNR = #{MATNR}
+			group by b.MTART
+		) tot
+	]]>
+	</select>
+
+	<select id="selectFirstUseFlag" resultType="String">
+	<![CDATA[
+			select ISNULL(use_fl,'') as first_use_fl
+			from tb_shipping
+			where shipping_seq = 0 and orderfor_key = #{orderfor_key}
+	]]>
+	</select>
+
+	<select id="selectMtmRegQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(SUM(modi_qty),0) mtmreg_qty
+		FROM tb_shipping_mtm
+		WHERE shipping_key = #{shipping_key}
+	]]>
+	</select>
+<!-- 출하후 잔여수량 -->
+	<select id="selectReaminAllQty" resultType="int">
+	<![CDATA[
+		select a.CONFIRM_QTY - ISNULL(SUM(b.SUPPLY_QTY),0) as remainall_qty
+		from TB_ORDERFOR a left join tb_shipping b on a.orderfor_key = b.orderfor_key
+		and b.shipping_seq > 0
+		where a.orderfor_key = #{orderfor_key}
+		group by a.orderfor_key, a.CONFIRM_QTY
+	]]>
+	</select>
+	<!-- 본인을 제외한 출하후 잔여수량 -->
+	<select id="selectExcReaminAllQty" resultType="int">
+	<![CDATA[
+		select ISNULL(CONFIRM_QTY,0) - ISNULL(SUPPLY_QTY,0) as excremain_qty
+		from(
+			select a.orderfor_key, a.CONFIRM_QTY, ISNULL(SUM(b.SUPPLY_QTY),0) as SUPPLY_QTY
+			from TB_ORDERFOR a left join tb_shipping b on a.orderfor_key = b.orderfor_key
+			and b.shipping_seq > 0 and b.shipping_key != #{shipping_key}
+			where a.orderfor_key = #{orderfor_key}
+			group by a.orderfor_key, a.CONFIRM_QTY
+		) tot
+	]]>
+	</select>
+<!-- 동일품번 총가용 재고 - 총출하재고 = 실가용재고 -->
+	<select id="selectrealReaminInvenQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(SUM(inven_use_qty),0) - ISNULL(SUM(supply_qty),0) as inven_useall_qty
+		from (
+			select ISNULL(SUM(a.LABST),0) as inven_use_qty, 0 as supply_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			where  a.LABST > 0 and a.MATNR = #{material_num}
+			union all
+			SELECT ISNULL(SUM(PLAN_QTY-GOODISH_QTY),0) as inven_use_qty, 0 as supply_qty
+			FROM [192.9.200.159].[IMES].[dbo].[V_MARKET_ALIVE] A
+			WHERE MATL_CD = #{material_num}
+			union all
+			select 0 as inven_use_qty, ISNULL(SUM(b.SUPPLY_QTY),0) as supply_qty_qty
+			from TB_ORDERFOR a left join tb_shipping b on a.orderfor_key = b.orderfor_key
+			and b.shipping_seq > 0
+			where  a.material_num = #{material_num}
+
+		) tot
+	]]>
+	</select>
+	<select id="selectExcRealReaminInvenQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(SUM(inven_use_qty),0) - ISNULL(SUM(supply_qty),0) as inven_useall_qty
+		from (
+			select ISNULL(SUM(a.LABST),0) as inven_use_qty, 0 as supply_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			where  a.LABST > 0 and a.MATNR = #{material_num}
+			union all
+			SELECT ISNULL(SUM(PLAN_QTY-GOODISH_QTY),0) as inven_use_qty, 0 as supply_qty
+			FROM [192.9.200.159].[IMES].[dbo].[V_MARKET_ALIVE] A
+			WHERE MATL_CD = #{material_num}
+			union all
+			select 0 as inven_use_qty, ISNULL(SUM(b.SUPPLY_QTY),0) as supply_qty_qty
+			from TB_ORDERFOR a left join tb_shipping b on a.orderfor_key = b.orderfor_key
+			and b.shipping_seq > 0  and b.shipping_key != #{shipping_key}
+			where  a.material_num = #{material_num} and a.orderfor_key = #{orderfor_key} and b.PROCESS_CD not in('ST_SPG','ST_BCP')
+		) tot
+	]]>
+	</select>
+<!-- 동일품번 총MTM가용 재고 - 총MTM출하재고 = 실MTM가용재고 -->
+	<select id="selectrealReaminMtmQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(MAX(mtm_use_qty),0) as mtm_use_qty
+		from(
+			select case when b.MTART = 'HAWA' then 0 else
+			(
+				select SUM(aa.LABST) as mtm_qty
+				from ERP_DL.WJP.wjp.MARD aa
+				inner join ERP_DL.WJP.wjp.MARA bb on aa.MATNR = bb.MATNR
+				where  bb.MTART = 'FERT' and aa.LABST > 0
+					and LEFT(aa.MATNR,LEN(aa.MATNR)-2) = LEFT(#{material_num},LEN(#{material_num})-2) and aa.MATNR != #{material_num}
+			)
+			end mtm_use_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			left outer join tb_shipping_mtm d on b.MATNR COLLATE Korean_Wansung_CI_AS = d.MATERIAL_NUM
+			where  a.LABST > 0 and a.MATNR = #{material_num}
+			group by b.MTART
+		) tot
+	]]>
+	</select>
+
+	<select id="selectExcRealReaminMtmQty" resultType="int">
+	<![CDATA[
+		SELECT ISNULL(MAX(mtm_use_qty),0) as mtm_use_qty
+		 from(
+
+			select case when b.MTART = 'HAWA' then 0 else
+			(
+				select SUM(aa.LABST) as mtm_qty
+				from ERP_DL.WJP.wjp.MARD aa
+				inner join ERP_DL.WJP.wjp.MARA bb on aa.MATNR = bb.MATNR
+				where  bb.MTART = 'FERT' and aa.LABST > 0
+					and LEFT(aa.MATNR,LEN(aa.MATNR)-2) = LEFT(#{material_num},LEN(#{material_num})-2) and aa.MATNR != #{material_num}
+			)
+			end mtm_use_qty
+			from ERP_DL.WJP.wjp.MARD a
+			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+			left outer join tb_shipping_mtm d on b.MATNR COLLATE Korean_Wansung_CI_AS = d.MATERIAL_NUM  and  shipping_key != #{shipping_key}
+			where  a.LABST > 0 and a.MATNR = #{material_num}
+			group by b.MTART
+		) tot
+	]]>
+	</select>
+
+	<select id="selectMtmInfo" resultType="java.util.Map">
+	<![CDATA[
+		select distinct STUFF((SELECT ',' + pre_storage_loc
+			FROM tb_shipping_mtm
+			where shipping_key = #{shipping_key}
+			FOR XML PATH('')), 1, 1, '') as pre_storage_loc
+			, STUFF((SELECT ',' + modi_meterial_num
+			FROM tb_shipping_mtm
+			where shipping_key = #{shipping_key}
+			FOR XML PATH('')), 1, 1, '') as modi_meterial_num
+			, STUFF((SELECT ',' + cast(modi_qty  as varchar)
+			FROM tb_shipping_mtm
+			where shipping_key = #{shipping_key}
+			FOR XML PATH('')), 1, 1, '') as modi_qty
+			, STUFF((SELECT ',' + storage_loc
+			FROM tb_shipping_mtm
+			where shipping_key = #{shipping_key}
+			FOR XML PATH('')), 1, 1, '') as storage_loc
+		from tb_shipping_mtm
+		where shipping_key = #{shipping_key}
+
+	]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listShippingExcel" parameterType="hashmap" resultMap="ShippingInfoExcel">
+		<![CDATA[
+		select maintb.*
+			, case when maintb.packing_flag = 'Y' then '포장' else '' end packing_flag_nm
+			,oritb.company_cd
+			,saptb.company_nm
+			,oritb.material_num
+			,oritb.order_dt
+			,oritb.place_key
+			,oritb.supply_req_qty
+			,oritb.supply_req_dt
+			,oritb.confirm_qty
+			,oritb.shipping_dt
+			,oritb.unit_price
+			,oritb.total_price
+			, subtb1.status_nm as packing_nm /* 상태명 */
+			, subtb2.status_nm as process_nm /* 상태명 */
+			, plc.place_nm
+			, saptb2.BSTRF bstrf
+			, case saptb3.MTART
+					when 'ROH' then N'원자재'
+					when 'HAWA' then N'상품'
+					when 'FERT' then N'제품'
+					when 'HALB' then N'반제품'
+				end mtart_nm
+			, case when
+				DENSE_RANK() OVER(order by oritb.company_cd DESC,plc.place_nm DESC, oritb.material_num DESC, oritb.order_dt ASC) % 2 = 0 then 'FEFFE8'
+			  else 'FFFFFF' end as trbgcolor
+		from tb_shipping maintb
+			inner join tb_orderfor oritb on maintb.orderfor_key = oritb.orderfor_key
+			inner join OPENQUERY(ERP_DL, '
+						select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+			') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+			left outer join tb_place plc on oritb.place_key = plc.place_key
+			left outer join market..tb_common_code subtb2 on subtb2.common_cd = maintb.process_cd
+			left outer join market..tb_common_code subtb1 on subtb1.common_cd = maintb.packing_cd
+			left outer join ERP_DL.WJP.wjp.MARC saptb2 on oritb.material_num = saptb2.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+			WHERE maintb.use_fl ! = 'END'
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+				and oritb.company_cd = #{coperation_cd}
+			</if>
+		<if test="accept_dt_start != '' and accept_dt_start != null">
+		  <![CDATA[
+				and (oritb.order_dt  >= #{accept_dt_start})
+				]]>
+		</if>
+		<if test="accept_dt_end != '' and accept_dt_end != null">
+			<![CDATA[
+				and (oritb.order_dt <= #{accept_dt_end})
+				]]>
+		</if>
+		<if test="material_list != '' and material_list != null">
+				and oritb.material_num = #{material_list}
+		</if>
+		<choose>
+			<when test='role != null and role.equals("ADMIN") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_BOS','ST_CFM','ST_ING','ST_OFR','ST_SPG')
+			</when>
+			<when test='role != null and role.equals("SHIPPING") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_CFM')
+			</when>
+		</choose>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='role != null and role.equals("ADMIN") and common_cd.equals("ST_LST")'>
+					and maintb.process_cd in('ST_CFM','ST_ING','ST_OFR')
+				</when>
+				<otherwise>
+					and maintb.process_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+	</select>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailShipping" parameterType="hashmap" resultMap="ShippingDetail">
+		<![CDATA[
+		select maintb.*
+			,oritb.company_cd
+			,saptb.company_nm
+			,oritb.material_num
+			,oritb.order_dt
+			,oritb.place_key
+			,oritb.supply_req_qty
+			,oritb.supply_req_dt
+			,oritb.confirm_qty
+			,oritb.shipping_dt
+			,oritb.unit_price
+			,oritb.total_price
+		from tb_shipping maintb
+			inner join tb_orderfor oritb on maintb.orderfor_key = oritb.orderfor_key
+			inner join OPENQUERY(ERP_DL, '
+						select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+			') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+		WHERE maintb.shipping_key = #{shipping_key}
+		]]>
+    </select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountShipping" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*) as totalcount
+			from tb_shipping maintb
+			inner join tb_orderfor oritb on maintb.orderfor_key = oritb.orderfor_key
+			inner join OPENQUERY(ERP_DL, '
+						select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+			') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+			WHERE maintb.use_fl ! = 'END'
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+			and oritb.company_cd = #{coperation_cd}
+		</if>
+		<if test="accept_dt_start != '' and accept_dt_start != null">
+			<![CDATA[
+				and (oritb.order_dt  >= #{accept_dt_start})
+				]]>
+		</if>
+		<if test="accept_dt_end != '' and accept_dt_end != null">
+			<![CDATA[
+				and (oritb.order_dt <= #{accept_dt_end})
+				]]>
+		</if>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<choose>
+			<when test='role != null and role.equals("ADMIN") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_BOS','ST_CFM','ST_ING','ST_OFR','ST_SPG')
+			</when>
+			<when test='role != null and role.equals("SHIPPING") and pagemode.equals("list")'>
+				and maintb.process_cd in('ST_CFM')
+			</when>
+		</choose>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='role != null and role.equals("ADMIN") and common_cd.equals("ST_LST")'>
+					and maintb.process_cd in('ST_CFM','ST_ING','ST_OFR')
+				</when>
+				<otherwise>
+					and maintb.process_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+	</select>
+
+
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listShippingCfm" parameterType="hashmap" resultType="com.woojin.commercial.shipping.ShippingVO">
+		<![CDATA[
+		SELECT
+		    tot.orderfor_key
+			,tot.shipping_key
+			,tot.company_cd
+			,tot.company_nm
+			,tot.material_num
+			,tot.process_nm
+			,tot.supply_place
+			,tot.confirm_qty
+			,tot.shipping_method
+			,tot1.COMMON_CD as packing_cd
+			,tot1.STATUS_NM as packing_nm
+			,tot.packing_flag
+			,tot.supply_req_qty
+			,tot.supply_qty
+			,tot.supply_dt
+			,tot.bstrf
+			,tot.mtart_nm
+			,tot.order_dt
+			,packing_flag_nm
+			, case when
+				DENSE_RANK() OVER(order by tot.supply_dt ASC, tot.company_nm DESC, tot.supply_place DESC, tot.material_num DESC) % 2 = 0 then 'FEFFE8'
+			else 'FFFFFF' end as trbgcolor
+		FROM(
+			select
+			    oritb.orderfor_key
+				,maintb.shipping_key
+				, oritb.company_cd /* 업체코드 */
+				, saptb.company_nm company_nm /*업체명*/
+				, oritb.material_num material_num /* 품번 */
+				, subtb2.status_nm as process_nm /* 상태명 */
+				, subtb3.place_nm as supply_place /*납품처*/
+				, oritb.confirm_qty as confirm_qty                                          /* 확정수량 */
+				, subtb1.status_seq as packing_seq /* 상태코드 */
+				, maintb.shipping_method as shipping_method /* 출하방법 */
+				, maintb.packing_flag
+				, oritb.supply_req_qty as supply_req_qty                                       /* 납품요청수량 */
+				, maintb.supply_qty as supply_qty /* 납품수량 */
+				, maintb.supply_dt /* 남품일자 */
+				, saptb2.BSTRF as bstrf     /*포장단위*/
+				, case saptb3.MTART
+						when 'ROH' then N'원자재'
+						when 'HAWA' then N'상품'
+						when 'FERT' then N'제품'
+						when 'HALB' then N'반제품'
+					end mtart_nm
+				,oritb.ORDER_DT as order_dt
+				, case when maintb.packing_flag = 'Y' then N'포장' else '' end packing_flag_nm
+
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_common_code subtb2 on subtb2.common_cd = maintb.process_cd
+				left outer join tb_common_code subtb1 on subtb1.common_cd = maintb.packing_cd
+				left outer join ERP_DL.WJP.wjp.MARC saptb2 on oritb.material_num = saptb2.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join tb_place subtb3 on subtb3.place_key = oritb.place_key
+				WHERE maintb.use_fl ! = 'END' and maintb.SHIPPING_SEQ > 0
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+			and oritb.company_cd = #{coperation_cd}
+		</if>
+		<if test="supply_dt_start != '' and supply_dt_start != null">
+			<![CDATA[
+				and maintb.supply_dt >= #{supply_dt_start}
+				]]>
+		</if>
+		<if test="supply_dt_end != '' and supply_dt_end != null">
+			<![CDATA[
+				and maintb.supply_dt <= #{supply_dt_end}
+				]]>
+		</if>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='common_cd != null and common_cd.equals("ST_SPG")'>
+					and subtb2.common_cd in('ST_SPG','ST_BCP')
+				</when>
+				<otherwise>
+					and subtb2.common_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			) tot
+			inner join tb_common_code tot1 on tot.packing_seq = tot1.STATUS_SEQ and tot1.DIVISION_CD = 'OM'
+
+			order by tot.supply_dt DESC, tot.company_nm asc, tot.supply_place asc, tot.material_num asc
+    	]]>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+		</if>
+	</select>
+
+
+	<!--*******************************************************************************************
+            쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+            작  성  자 : 가치노을      작  성  일 : 2020-03-26
+            수  정  자 :             수  정  일 :
+            수정  내용 :
+            *******************************************************************************************-->
+	<select id="listCountShippingCfm" parameterType="hashmap" resultType="int">
+		<![CDATA[
+		select
+			COUNT(*) as totalcount
+		FROM(
+			select
+			    oritb.orderfor_key
+				,maintb.shipping_key
+				, oritb.company_cd /* 업체코드 */
+				, saptb.company_nm company_nm /*업체명*/
+				, oritb.material_num material_num /* 품번 */
+				, subtb2.status_nm as process_nm /* 상태명 */
+				, subtb3.place_nm as supply_place /*납품처*/
+				, oritb.confirm_qty as confirm_qty                                          /* 확정수량 */
+				, subtb1.status_seq as packing_seq /* 상태코드 */
+				, maintb.shipping_method as shipping_method /* 출하방법 */
+				, oritb.supply_req_qty as supply_req_qty                                       /* 납품요청수량 */
+				, maintb.supply_qty as supply_qty /* 납품수량 */
+				, maintb.supply_dt /* 남품일자 */
+				, saptb2.BSTRF as bstrf     /*포장단위*/
+				, case saptb3.MTART
+						when 'ROH' then N'원자재'
+						when 'HAWA' then N'상품'
+						when 'FERT' then N'제품'
+						when 'HALB' then N'반제품'
+					end mtart_nm
+				,oritb.ORDER_DT as order_dt
+
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_common_code subtb2 on subtb2.common_cd = maintb.process_cd
+				left outer join tb_common_code subtb1 on subtb1.common_cd = maintb.packing_cd
+				left outer join ERP_DL.WJP.wjp.MARC saptb2 on oritb.material_num = saptb2.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join tb_place subtb3 on subtb3.place_key = oritb.place_key
+
+				WHERE maintb.use_fl ! = 'END' and maintb.SHIPPING_SEQ > 0
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+			and oritb.company_cd = #{coperation_cd}
+		</if>
+		<if test="supply_dt_start != '' and supply_dt_start != null">
+			<![CDATA[
+				and maintb.supply_dt >= #{supply_dt_start}
+				]]>
+		</if>
+		<if test="supply_dt_end != '' and supply_dt_end != null">
+			<![CDATA[
+				and maintb.supply_dt <= #{supply_dt_end}
+				]]>
+		</if>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			) tot
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listShippingCfmAddr" parameterType="hashmap" resultType="com.woojin.commercial.shipping.ShippingVO">
+		<![CDATA[
+			select
+			    distinct
+				 maintb.supply_dt /* 남품일자 */
+				, saptb.company_nm company_nm /*업체명*/
+				, subtb3.place_nm as supply_place /*납품처*/
+				, subtb3.place_addr
+
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_common_code subtb2 on subtb2.common_cd = maintb.process_cd
+				left outer join tb_place subtb3 on subtb3.place_key = oritb.place_key
+				WHERE maintb.use_fl ! = 'END' and maintb.SHIPPING_SEQ > 0
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+			and oritb.company_cd = #{coperation_cd}
+		</if>
+		<if test="supply_dt_start != '' and supply_dt_start != null">
+			<![CDATA[
+				and maintb.supply_dt >= #{supply_dt_start}
+				]]>
+		</if>
+		<if test="supply_dt_end != '' and supply_dt_end != null">
+			<![CDATA[
+				and maintb.supply_dt <= #{supply_dt_end}
+				]]>
+		</if>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='common_cd != null and common_cd.equals("ST_SPG")'>
+					and subtb2.common_cd in('ST_SPG','ST_BCP')
+				</when>
+				<otherwise>
+					and subtb2.common_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			order by maintb.supply_dt DESC, saptb.company_nm asc, subtb3.place_nm asc
+    	]]>
+	</select>
+
+	<!--*******************************************************************************************
+            쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+            작  성  자 : 가치노을      작  성  일 : 2020-03-26
+            수  정  자 :             수  정  일 :
+            수정  내용 :
+            *******************************************************************************************-->
+	<select id="listShippingSum" parameterType="hashmap" resultMap="ShippingSum">
+		<![CDATA[
+		select material_num
+			, saptb3.MTART as mtart    /*자재유형*/
+			, saptb2.BSTRF as bstrf     /*포장단위*/
+			, oritb.sum_qty
+			, ISNULL(saptb4.INVEN_USE_QTY,0) as inven_use_qty
+			, ISNULL(saptb4.INVEN_USE_QTY,0) - ISNULL(oritb.sum_qty,0) as verification_qty
+
+		from (
+			select a.material_num as material_num /* 품번 */
+				, SUM(a.supply_req_qty) - ISNULL(SUM(supply_qty),0) as sum_qty
+			from tb_orderfor a
+			left outer join(
+				SELECT orderfor_key, SUM(supply_qty) as supply_qty
+				from tb_shipping
+				where shipping_seq > 0 and process_cd in('ST_BCP','ST_SPG')
+				group by orderfor_key
+			) b on a.orderfor_key = b.orderfor_key
+			where process_cd in('ST_BOS','ST_CFM','ST_OFR')
+			group by material_num
+		) oritb
+		left outer join (
+				SELECT MATL_CD, SUM(PLAN_QTY-GOODISH_QTY) as PROD_ORDER_QTY
+				FROM [192.9.200.159].[IMES].[dbo].[V_MARKET_ALIVE] A
+				GROUP BY MATL_CD
+			) db159 on oritb.material_num = db159.MATL_CD COLLATE Korean_Wansung_CI_AS
+			left outer join ERP_DL.WJP.wjp.MARC saptb2 on oritb.material_num = saptb2.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join (select b.MTART,a.MATNR, SUM(a.LABST) as INVEN_USE_QTY
+				from ERP_DL.WJP.wjp.MARD a
+				inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+				where  a.LABST > 0
+				group by a.MATNR, b.MTART
+			) saptb4 on oritb.material_num = saptb4.MATNR COLLATE Korean_Wansung_CI_AS
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="material_list != '' and material_list != null">
+				and oritb.material_num = #{material_list}
+			</if>
+		</trim>
+		<![CDATA[
+		order by ISNULL(saptb4.INVEN_USE_QTY,0) - ISNULL(oritb.sum_qty,0) DESC, oritb.material_num asc
+		]]>
+	</select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountShipping" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_shipping')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="remainQty" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+		select
+			ISNULL(saptb4.INVEN_USE_QTY,0) - ISNULL(comfirm.allsupply_qty,0) as allremain_qty
+		from
+			tb_orderfor oritb
+			inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+			left outer join (
+				select t1.orderfor_key, t1.material_num,sum(tt.supply_qty) as allsupply_qty
+				from tb_shipping tt inner join tb_orderfor t1 on tt.orderfor_key = t1.orderfor_key
+				 where tt.process_cd = 'ST_CFM'  and tt.shipping_seq > 0
+				group by t1.orderfor_key, t1.material_num
+			) comfirm on comfirm.orderfor_key = maintb.orderfor_key
+			left outer join (select b.MTART,a.MATNR, SUM(a.LABST) as INVEN_USE_QTY
+				from ERP_DL.WJP.wjp.MARD a
+				inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+				where  a.LABST > 0
+				group by a.MATNR, b.MTART
+			) saptb4 on oritb.material_num = saptb4.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join (select LEFT(a.MATNR,LEN(a.MATNR)-2) as MATNR , SUM(a.LABST) as MTM_QTY
+				from ERP_DL.WJP.wjp.MARD a
+				inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+				where  b.MTART = 'FERT' and a.LABST > 0
+				group by LEFT(a.MATNR,LEN(a.MATNR)-2)
+			) saptb5 on saptb5.MATNR COLLATE Korean_Wansung_CI_AS = left(oritb.material_num,len(oritb.material_num)-2)
+		WHERE maintb.shipping_key = #{shipping_key}
+			and maintb.shipping_seq = #{shipping_seq}
+		]]>
+    </select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 데이타 상세내역
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="remainMTMQty" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+		select
+			case when saptb4.MTART = 'FERT'
+			then ISNULL(saptb5.MTM_QTY,0) - ISNULL(comfirm.allsupply_qty,0)
+			else ISNULL(saptb4.INVEN_USE_QTY,0) - ISNULL(comfirm.allsupply_qty,0)
+			end allremain_qty
+		from
+			tb_orderfor oritb
+			inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+			left outer join (
+				select t1.orderfor_key, t1.material_num,sum(tt.supply_qty) as allsupply_qty
+				from tb_shipping tt inner join tb_orderfor t1 on tt.orderfor_key = t1.orderfor_key
+				 where tt.process_cd = 'ST_CFM'  and tt.shipping_seq > 0
+				group by t1.orderfor_key, t1.material_num
+			) comfirm on comfirm.orderfor_key = maintb.orderfor_key
+			left outer join (select a.MATNR,b.MTART, SUM(a.LABST) as INVEN_USE_QTY
+				from ERP_DL.WJP.wjp.MARD a
+				inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+				where  a.LABST > 0
+				group by a.MATNR,b.MTART
+			) saptb4 on oritb.material_num = saptb4.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join (select LEFT(a.MATNR,LEN(a.MATNR)-2) as MATNR , SUM(a.LABST) as MTM_QTY
+				from ERP_DL.WJP.wjp.MARD a
+				inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
+				where  b.MTART = 'FERT' and a.LABST > 0
+				group by LEFT(a.MATNR,LEN(a.MATNR)-2)
+			) saptb5 on saptb5.MATNR COLLATE Korean_Wansung_CI_AS = left(oritb.material_num,len(oritb.material_num)-2)
+		WHERE maintb.shipping_key = #{shipping_key}
+			and maintb.shipping_seq = #{shipping_seq}
+		]]>
+    </select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타에서 기존 존재여부
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntShipping" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT count(shipping_key) as overcnt
+			FROM tb_shipping
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and shipping_key = #{shipping_key}
+			and shipping_seq = #{shipping_seq}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타에서 기존 목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabListShipping" parameterType="hashmap"  resultType="com.woojin.commercial.shipping.ShippingVO">
+		<![CDATA[
+			SELECT 
+				  maintb.company_cd                                           /* 업체코드 */
+				, maintb.accept_dt                                        /* 납품예정일 */
+				, maintb.material_num                                         /* 품번 */
+				, maintb.shipping_seq                                         /* 출하순번 */
+				, maintb.order_dt                                             /* 발주일자 */
+				, maintb.process_cd                                            /* 포장방법 */
+				, maintb.packing_cd                                            /* 포장방법 */
+				, maintb.shipping_method                                      /* 출하방법 */
+				, maintb.supply_qty                                           /* 납품수량 */
+				, maintb.remain_qty                                           /* 잔여수량 */
+				, maintb.supply_dt                                            /* 남품일자 */
+				, maintb.receive_dt                                           /* 수령일자 */
+				, maintb.process_id                                           /* 처리자 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, maintb.modify_dt                                            /* 수정일자 */
+			FROM tb_shipping
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and shipping_key = #{shipping_key}
+			and shipping_seq = #{shipping_seq}
+		</trim>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공장코드(est no) 데이타 정렬순서 최고값
+	작  성  자 : 가치노을      작  성  일 : 2020-03-14
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="getShippingSum" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+        SELECT ISNULL(SUM(maintb.supply_qty),0) as sum_qty
+        FROM tb_shipping maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and maintb.orderfor_key = #{orderfor_key}
+			and maintb.shipping_seq > 0
+		</trim>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공장코드(est no) 데이타 정렬순서 최고값
+	작  성  자 : 가치노을      작  성  일 : 2020-03-14
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="getShippingMaxSeq" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+        SELECT ISNULL(MAX(maintb.shipping_seq),0)+1 as shipping_seq
+        FROM tb_shipping maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and maintb.orderfor_key = #{orderfor_key}
+		</trim>
+	</select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertShipping" parameterType="java.util.Map">
+		<selectKey resultType="String" keyProperty="new_cd" order="BEFORE">
+			<![CDATA[
+				SELECT
+					concat(#{orderfor_key},'-', RIGHT(CONCAT('000',MAX(RIGHT([shipping_key],2)+1)),2))
+					as new_cd
+				 FROM tb_shipping
+				 where orderfor_key = #{orderfor_key}
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into tb_shipping (
+				shipping_key,
+				orderfor_key,
+				shipping_seq,
+				accept_dt,
+				process_cd,
+				packing_cd,
+				shipping_method,
+				supply_qty,
+				remain_qty,
+				supply_dt,
+				process_id,
+				modify_id,
+				modify_dt
+			) values (
+				#{new_cd},
+				#{orderfor_key},
+				#{shipping_seq},
+				#{accept_dt},
+				#{process_cd},
+				#{packing_method},
+				#{shipping_method},
+				replace(#{supply_qty},',',''),
+				replace(#{remain_qty},',',''),
+				#{supply_dt},
+				#{process_id},
+				#{modify_id},
+				getdate()
+			)
+		]]>
+	</insert>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShipping" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_shipping
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='accept_dt != null'>accept_dt = #{accept_dt},</if>
+			<if test='process_cd != null'>process_cd = #{process_cd},</if>
+			<if test='packing_method != null'>packing_cd = #{packing_method},</if>
+			<if test='shipping_method != null'>shipping_method = #{shipping_method},</if>
+			<if test='supply_qty != null'>supply_qty = replace(#{supply_qty},',',''),</if>
+			<if test='remain_qty != null'>remain_qty = replace(#{remain_qty},',',''),</if>
+			<if test='supply_dt != null'>supply_dt = #{supply_dt},</if>
+			<if test='receive_dt != null'>receive_dt = #{receive_dt},</if>
+			<if test='use_fl != null'>use_fl = #{use_fl},</if>
+			<if test='process_id != null'>process_id = #{process_id},</if>
+			<if test='modify_id != null'>modify_id = #{modify_id},</if>
+		</trim>
+		<![CDATA[
+			,modify_dt = getdate()
+		WHERE shipping_key = #{shipping_key}
+		]]>
+
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShippingOffer" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_shipping
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='accept_dt != null'>accept_dt = #{accept_dt},</if>
+			<if test='process_cd != null'>process_cd = #{process_cd},</if>
+			<if test='remain_qty != null'>remain_qty = replace(#{remain_qty},',',''),</if>
+			<if test='supply_qty != null'>supply_qty = replace(#{supply_qty},',',''),</if>
+			<if test='receive_dt != null'>receive_dt = #{receive_dt},</if>
+			<if test='use_fl != null'>use_fl = #{use_fl},</if>
+			<if test='process_id != null'>process_id = #{process_id},</if>
+			<if test='modify_id != null'>modify_id = #{modify_id},</if>
+		</trim>
+		<![CDATA[
+			,modify_dt = getdate()
+			WHERE orderfor_key = #{orderfor_key}
+			and shipping_seq = 0
+		]]>
+	</update>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteShipping" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_shipping
+			WHERE shipping_key = #{shipping_key}
+		]]>
+	</delete>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateSupplyReceipt" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_orderfor
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='process_cd != null'>process_cd = #{process_cd},</if>
+			<if test='confirm_qty != null'>confirm_qty = replace(#{confirm_qty},',',''),</if>
+			<if test='shipping_dt != null'>shipping_dt = #{shipping_dt},</if>
+			<if test='total_price != null'>total_price = replace(#{total_price},',',''),</if>
+			<if test='modify_id != null'>modify_id = #{modify_id},</if>
+		</trim>
+		<![CDATA[
+			,modify_dt = getdate()
+			WHERE orderfor_key = #{orderfor_key}
+		]]>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 자재코드목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listMaterialAll" parameterType="hashmap" resultType="com.woojin.commercial.shipping.MeterialAllVO">
+		<![CDATA[
+			SELECT distinct material_num
+  			FROM market.dbo.tb_orderfor
+			ORDER BY material_num ASC
+    	]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShippingPross">
+		<![CDATA[
+			MERGE tb_shipping AS T
+			USING (
+				SELECT
+					DISTINCT ORDERS.CUSTOMER_CD
+					, ORDERS.DELIV_REQ_DT
+					, DETAIL.MATL_CD MATERIALCODE
+					, FORMAT(DETAIL.QTY,'#.#') QUANTITY
+					, ORITB.ORDERFOR_KEY
+				FROM  [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER  ORDERS
+					INNER JOIN [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER_DETAIL  DETAIL ON ORDERS.DELIV_ORDER = DETAIL.DELIV_ORDER
+					inner join [dbo].[TB_ORDERFOR] ORITB on ORITB.COMPANY_CD COLLATE Korean_Wansung_CI_AS = ORDERS.CUSTOMER_CD
+						AND DETAIL.MATL_CD COLLATE Korean_Wansung_CI_AS = ORITB.MATERIAL_NUM
+				where ORDERS.DELIV_ITEM_CATE = 'ZTAM' and ORDERS.STATE = 'Shipped'
+					and ORDERS.DELIV_REQ_DT = CONVERT(CHAR(10), getdate(), 112)  and ORITB.PROCESS_CD != 'ST_BCP'
+			) AS S ON (T.ORDERFOR_KEY = S.ORDERFOR_KEY
+				AND S.DELIV_REQ_DT COLLATE Korean_Wansung_CI_AS = replace(T.SUPPLY_DT,'.','')
+				AND S.QUANTITY = T.SUPPLY_QTY)
+			WHEN MATCHED THEN
+				UPDATE SET T.PROCESS_CD = 'ST_SPG';
+		]]>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShippingSupplyPross">
+		<![CDATA[
+			MERGE tb_shipping AS T
+			USING (
+				SELECT DISTINCT oritb.[ORDERFOR_KEY]
+					  , oritb.CONFIRM_QTY
+					  , SUM(shptb.[SUPPLY_QTY]) SUM_SUPPLY_QTY
+					  , case when oritb.CONFIRM_QTY = SUM(shptb.[SUPPLY_QTY]) then 'ST_SPG' else 'ST_CFM' END PROCESS_FLAG
+					  , 0 as[SHIPPING_SEQ]
+				FROM [dbo].[TB_ORDERFOR] oritb
+					inner join [dbo].[TB_SHIPPING] shptb on oritb.[ORDERFOR_KEY] = shptb.[ORDERFOR_KEY]
+				WHERE shptb.[PROCESS_CD] = 'ST_SPG' and shptb.[SHIPPING_SEQ] != 0
+				GROUP BY oritb.[ORDERFOR_KEY] ,oritb.CONFIRM_QTY
+			) AS S ON (T.ORDERFOR_KEY = S.ORDERFOR_KEY
+				AND S.SHIPPING_SEQ  = T.SHIPPING_SEQ)
+			WHEN MATCHED  AND S.PROCESS_FLAG = 'ST_SPG' THEN
+				UPDATE SET T.PROCESS_CD = 'ST_SPG';
+		]]>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShippingOrderPross">
+		<![CDATA[
+			MERGE TB_ORDERFOR AS T
+			USING (
+				SELECT DISTINCT oritb.[ORDERFOR_KEY]
+				  ,shptb.PROCESS_CD
+			  FROM [dbo].[TB_ORDERFOR] oritb
+				inner join [dbo].[TB_SHIPPING] shptb on oritb.[ORDERFOR_KEY] = shptb.[ORDERFOR_KEY]
+			  WHERE shptb.[PROCESS_CD] = 'ST_SPG' and oritb.[PROCESS_CD] not in('ST_SPG','ST_BCP') AND shptb.SHIPPING_SEQ = 0
+			) AS S ON (T.ORDERFOR_KEY = S.ORDERFOR_KEY)
+			WHEN MATCHED  AND S.PROCESS_CD = 'ST_SPG' THEN
+				UPDATE SET T.PROCESS_CD = 'ST_SPG';
+		]]>
+	</update>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateShipping_method">
+		<![CDATA[
+			UPDATE tb_shipping
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='shipping_method != null'>shipping_method = #{shipping_method},</if>
+			<if test='packing_flag != null'>packing_flag = #{packing_flag},</if>
+		</trim>
+		<![CDATA[
+			WHERE shipping_key = #{shipping_key}
+		]]>
+	</update>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.batchjob.scheduling.ExcelDataDAO">
+    <!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listExcelData" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.ExcelDataVO">
+		<![CDATA[
+			select
+				oritb.company_cd /* 업체코드 */
+				, '' as mtart
+				, db159_1.PRD_GRP_NM as prdgrp_nm
+				, oritb.material_num
+				, maintb.supply_qty
+				, '1000' supply_place
+				, maintb.supply_dt /* 남품일자 */
+
+			from tb_orderfor oritb
+			inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+			left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join [192.9.200.159].IMES.dbo.WMAS_PRD_GRP db159_1 on saptb3.SPART COLLATE Korean_Wansung_CI_AS = db159_1.PRD_GRP_CD
+			WHERE maintb.SHIPPING_SEQ > 0  and maintb.supply_dt = CONVERT(CHAR(10), getdate(), 102)
+				and maintb.process_cd = 'ST_CFM'
+			order by oritb.company_cd
+				, db159_1.PRD_GRP_NM
+				, maintb.supply_dt
+    	]]>
+	</select>
+
+    <!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listExcelDataSum" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.ExcelDataSumVO">
+		<![CDATA[
+			SELECT company_cd
+				, '' as mtart
+				, prdgrp_nm
+				, 'ZORM' as ordertype
+				, '4600' as ordercorp
+				, '20' as orderpath
+				, '00' as ordergroup
+				, NUM + 1 as srow
+				, count(*) as cnt
+				, supply_dt
+				, ppno
+				, '' as docnum
+				, '' as supply_num
+
+
+			FROM (
+				select
+							oritb.company_cd /* 업체코드 */
+							, db159_1.PRD_GRP_NM as prdgrp_nm
+							, oritb.material_num
+							, maintb.supply_qty
+							, '1000' supply_place
+							, maintb.supply_dt /* 남품일자 */
+							, concat(plc.place_nm,'-',maintb.shipping_method) as ppno
+							, RANK() OVER( ORDER BY oritb.company_cd, concat(plc.place_nm,'-',maintb.shipping_method) , db159_1.PRD_GRP_NM, maintb.supply_dt ) AS NUM
+						from tb_orderfor oritb
+						inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+						left outer join tb_place plc on oritb.place_key = plc.place_key
+						left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+						left outer join [192.9.200.159].IMES.dbo.WMAS_PRD_GRP db159_1 on saptb3.SPART COLLATE Korean_Wansung_CI_AS = db159_1.PRD_GRP_CD
+						WHERE maintb.SHIPPING_SEQ > 0  and maintb.supply_dt = CONVERT(CHAR(10), getdate(), 102)
+							and maintb.process_cd = 'ST_CFM'
+			) tot
+			group by company_cd
+				, ppno
+				, prdgrp_nm
+				, supply_dt
+				, NUM
+
+			order by company_cd
+				, ppno
+				, prdgrp_nm
+				, supply_dt
+				, NUM
+    	]]>
+	</select>
+
+
+</mapper>

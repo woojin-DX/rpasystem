@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.supply.SupplyDAO">
+	<resultMap type="com.woojin.commercial.supply.SupplyVO" id="SupplyInfo">
+		<id column="orderfor_key" property="orderfor_key"/>
+		<association property="splace" column="{place_key=place_key}" javaType="com.woojin.commercial.supply.PlaceVO" select="selectPlace"/>
+		<association property="process" column="{common_cd=process_cd}" javaType="com.woojin.commercial.admin.commoncode.CommonCodeVO" select="selectProcess"/>
+		<association property="shpping" column="{shipping_key=orderfor_key}" javaType="com.woojin.commercial.shipping.ShippingVO" select="selectShipping"/>
+		<association property="supply_dt" column="{orderfor_key=orderfor_key}" javaType="String" select="selectShippingSupplyDt"/>
+
+	</resultMap>
+	<resultMap type="com.woojin.commercial.supply.SupplyVO" id="DetailSupply">
+		<association property="process" column="{common_cd=process_cd}" javaType="com.woojin.commercial.admin.commoncode.CommonCodeVO" select="selectProcess"/>
+	</resultMap>
+	<resultMap type="com.woojin.commercial.supply.PlaceVO" id="PlaceCode"></resultMap>
+	<resultMap type="com.woojin.commercial.admin.commoncode.CommonCodeVO" id="ProcessCode"></resultMap>
+	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShppingInfo"></resultMap>
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectSupply" parameterType="hashmap" resultMap="SupplyInfo">
+		<![CDATA[
+			SELECT
+				maintb.*,saptb.company_nm
+			FROM tb_orderfor maintb
+			inner join OPENQUERY(ERP_DL, '
+				select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+				inner join wjp.KNA1 b on a.ID = b.KUNNR
+			') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = maintb.user_id
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="company_cd != '' and company_cd != null">
+				and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="order_dt_start != '' and order_dt_start != null">
+				<![CDATA[
+		    		and maintb.order_dt >= #{order_dt_start}
+		    		]]>
+			</if>
+			<if test="order_dt_end != '' and order_dt_end != null">
+				<![CDATA[
+		    		and maintb.order_dt <= #{order_dt_end}
+		    		]]>
+			</if>
+			<if test="material_num != '' and material_num != null">
+				and maintb.material_num = #{material_num}
+			</if>
+			<if test="knumh != '' and knumh != null">
+				and maintb.knumh = #{knumh}
+			</if>
+			<choose>
+				<when test="process_cd != '' and process_cd != null">
+					and maintb.process_cd = #{process_cd}
+				</when>
+				<otherwise>
+					and maintb.process_cd not in('ST_BCP','ST_SPG')
+				</otherwise>
+			</choose>
+			<if test="use_fl != '' and use_fl != null">
+				and maintb.use_fl = #{use_fl}
+			</if>
+			<if test="place_cd != '' and place_cd != null">
+				and maintb.place_key = #{place_cd}
+			</if>
+			<if test="schword != '' and schword != null">
+				<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+					<![CDATA[
+	    				OR (maintb.material_num like concat('%',#{schword},'%'))
+	    				OR (maintb.supply_place like concat('%',#{schword},'%'))
+	    			]]>
+				</trim>
+			</if>
+		</trim>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<![CDATA[
+			maintb.company_cd  ASC,maintb.order_dt  ASC,maintb.material_num  ASC, maintb.modify_dt ASC,
+    	    ]]>
+		</trim>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+		</if>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="selectProcess" resultMap="ProcessCode">
+		<![CDATA[
+			SELECT
+				  *
+			FROM tb_common_code maintb
+			where common_cd = #{common_cd}
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectPlace" resultMap="PlaceCode">
+		<![CDATA[
+			SELECT
+				  *
+			FROM tb_place maintb
+			where place_key = #{place_key}
+		]]>
+	</select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectShipping" resultMap="ShppingInfo">
+		<![CDATA[
+		select
+			*
+		from tb_shipping
+		where shipping_key = concat(#{shipping_key},'-00')
+
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectShippingSupplyDt" resultType="String">
+		<![CDATA[
+		select
+			max(supply_dt) as supply_dt
+		from tb_shipping
+		where orderfor_key = #{orderfor_key} and shipping_seq > 0
+
+		]]>
+	</select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountSupply" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as totalcount
+			FROM tb_orderfor maintb
+		]]>
+		<![CDATA[
+				inner join tb_shipping subtb3 on maintb.orderfor_key = subtb3.orderfor_key
+					and subtb3.shipping_seq = 0
+		]]>
+		<![CDATA[
+				inner join tb_common_code subtb1
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb1.common_cd=subtb3.process_cd
+		</trim>
+		<![CDATA[
+				inner join tb_user_info subtb2
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb2.user_id=maintb.user_id
+		</trim>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="company_cd != '' and company_cd != null">
+				and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="order_dt_start != '' and order_dt_start != null">
+				<![CDATA[
+		    		and maintb.order_dt >= #{order_dt_start}
+		    		]]>
+			</if>
+			<if test="order_dt_end != '' and order_dt_end != null">
+				<![CDATA[
+		    		and maintb.order_dt <= #{order_dt_end}
+		    		]]>
+			</if>
+			<if test="material_num != '' and material_num != null">
+				and maintb.material_num = #{material_num}
+			</if>
+			<if test="knumh != '' and knumh != null">
+				and maintb.knumh = #{knumh}
+			</if>
+			<choose>
+				<when test="process_cd != '' and process_cd != null">
+					and maintb.process_cd = #{process_cd}
+				</when>
+				<otherwise>
+					and maintb.process_cd not in('ST_BCP','ST_SPG')
+				</otherwise>
+			</choose>
+			<if test="use_fl != '' and use_fl != null">
+				and maintb.use_fl = #{use_fl}
+			</if>
+			<if test="place_cd != '' and place_cd != null">
+				and maintb.place_key = #{place_cd}
+			</if>
+			<if test="schword != '' and schword != null">
+				<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+					<![CDATA[
+	    				OR (maintb.material_num like concat('%',#{schword},'%'))
+	    				OR (maintb.supply_place like concat('%',#{schword},'%'))
+	    			]]>
+				</trim>
+			</if>
+		</trim>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 발주정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listSupplyEnd" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+			SELECT
+				  maintb.company_cd                                           /* 업체코드 */
+				, maintb.order_dt                                             /* 발주일자 */
+				, maintb.material_num                                         /* 품번 */
+				, maintb.knumh                                                /* CondReqNo */
+				, maintb.user_id                                              /* 사용자아이디 */
+				, maintb.supply_place                                         /* 납품처 */
+				, maintb.supply_req_qty                                       /* 납품요청수량 */
+				, maintb.supply_req_dt                                        /* 납품요청일 */
+				, maintb.confirm_qty                                          /* 확정수량 */
+				, maintb.shipping_dt                                          /* 출하일자 */
+				, maintb.unit_price                                           /* 단가 */
+				, maintb.total_price                                          /* 금액 */
+				, maintb.last_receive_dt                                      /* 최종수령일 */
+				, maintb.use_fl                                               /* 취소여부 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 수정일자 */
+				, subtb1.process_cd
+				, subtb1.status_cd as processsub_cd                                                   /* 상태코드 */
+				, subtb1.status_nm as process_nm                                                   /* 상태명 */
+				, subtb3.shipping_seq                                         /* 출하순번 */
+				, subtb3.supply_qty                                           /* 납품수량 */
+				, subtb3.supply_dt                                            /* 남품일자 */
+				, subtb3.receive_dt                                           /* 수령일자 */
+				, subtb3.remain_qty /* 잔여수량 */
+				, case when subtb3.shipping_seq = 0 then 'FFFFFF' else 'e7fdb5' end trbgcolor
+    		, ROW_NUMBER() OVER (
+    	]]>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<![CDATA[
+    		maintb.company_cd  DESC,maintb.order_dt  DESC,maintb.material_num  DESC,maintb.modify_dt ASC,
+    	]]>
+		</trim>
+		<![CDATA[
+    		) AS rownum
+			FROM tb_orderfor maintb
+		]]>
+		<![CDATA[
+				inner join tb_shipping subtb3 on maintb.orderfor_key = subtb3.orderfor_key
+					and subtb3.shipping_seq > 0
+		]]>
+		<![CDATA[
+				inner join tb_common_code subtb1
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb1.common_cd=subtb3.process_cd
+		</trim>
+		<![CDATA[
+				inner join tb_user_info subtb2
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb2.user_id=maintb.user_id
+		</trim>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and subtb3.process_cd in('ST_SPG','ST_BCP')
+			<if test="company_cd != '' and company_cd != null">
+				and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="supply_dt_start != '' and supply_dt_start != null">
+				<![CDATA[
+		    		and subtb3.supply_dt >= #{supply_dt_start}
+		    		]]>
+			</if>
+			<if test="supply_dt_end != '' and supply_dt_end != null">
+				<![CDATA[
+		    		and subtb3.supply_dt <= #{supply_dt_end}
+		    		]]>
+			</if>
+			<if test="material_num != '' and material_num != null">
+				and maintb.material_num = #{material_num}
+			</if>
+			<if test="knumh != '' and knumh != null">
+				and maintb.knumh = #{knumh}
+			</if>
+
+			<if test="schword != '' and schword != null">
+				<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+					<![CDATA[
+	    				OR (maintb.material_num like concat('%',#{schword},'%'))
+	    				OR (maintb.supply_place like concat('%',#{schword},'%'))
+	    			]]>
+				</trim>
+			</if>
+		</trim>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<![CDATA[
+			maintb.company_cd  ASC,maintb.order_dt  ASC,maintb.material_num  ASC,subtb3.shipping_seq ASC, maintb.modify_dt ASC,
+    	    ]]>
+		</trim>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+		</if>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountSupplyEnd" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*) as totalcount
+			FROM tb_orderfor maintb
+		]]>
+		<![CDATA[
+				inner join tb_shipping subtb3 on maintb.orderfor_key = subtb3.orderfor_key
+					and subtb3.shipping_seq > 0
+		]]>
+		<![CDATA[
+				inner join tb_common_code subtb1
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb1.common_cd=subtb3.process_cd
+		</trim>
+		<![CDATA[
+				inner join tb_user_info subtb2
+		]]>
+		<trim prefix="on" prefixOverrides="AND|OR">
+			and subtb2.user_id=maintb.user_id
+		</trim>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and subtb3.process_cd in('ST_SPG','ST_BCP')
+			<if test="company_cd != '' and company_cd != null">
+				and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="supply_dt_start != '' and supply_dt_start != null">
+				<![CDATA[
+		    		and subtb3.supply_dt >= #{supply_dt_start}
+		    		]]>
+			</if>
+			<if test="supply_dt_end != '' and supply_dt_end != null">
+				<![CDATA[
+		    		and subtb3.supply_dt <= #{supply_dt_end}
+		    		]]>
+			</if>
+			<if test="material_num != '' and material_num != null">
+				and maintb.material_num = #{material_num}
+			</if>
+			<if test="knumh != '' and knumh != null">
+				and maintb.knumh = #{knumh}
+			</if>
+
+			<if test="schword != '' and schword != null">
+				<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+					<![CDATA[
+	    				OR (maintb.material_num like concat('%',#{schword},'%'))
+	    				OR (maintb.supply_place like concat('%',#{schword},'%'))
+	    			]]>
+				</trim>
+			</if>
+		</trim>
+	</select>
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountSupply" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_orderfor')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailSupply" parameterType="hashmap" resultMap="DetailSupply">
+		<![CDATA[
+			SELECT 
+				  *
+			FROM tb_orderfor maintb
+			where orderfor_key = #{orderfor_key}
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타에서 기존 존재여부
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntSupply" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT count(company_cd) as overcnt
+			FROM tb_orderfor
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+			and company_cd = #{company_cd}
+			and order_dt = #{order_dt}
+			and material_num = #{material_num}
+			and place_key = #{place_key}
+			]]>
+			<if test='processFlag != null and processFlag.equals("update")'>
+				and orderfor_key != #{orderfor_key}
+			</if>
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타에서 기존 목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabListSupply" parameterType="hashmap"  resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+			SELECT 
+				  maintb.company_cd                                           /* 업체코드 */
+				, maintb.order_dt                                             /* 발주일자 */
+				, maintb.material_num                                         /* 품번 */
+				, maintb.knumh                                                /* CondReqNo */
+				, maintb.user_id                                              /* 사용자아이디 */
+				, maintb.supply_place                                         /* 납품처 */
+				, maintb.supply_req_qty                                       /* 납품요청수량 */
+				, maintb.supply_req_dt                                        /* 납품요청일 */
+				, maintb.confirm_qty                                          /* 확정수량 */
+				, maintb.shipping_dt                                          /* 출하일자 */
+				, maintb.unit_price                                           /* 단가 */
+				, maintb.total_price                                          /* 금액 */
+				, maintb.last_receive_dt                                      /* 최종수령일 */
+				, maintb.use_fl                                               /* 취소여부 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 수정일자 */
+			FROM tb_orderfor
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and company_cd = #{company_cd}
+			and order_dt = #{order_dt}
+			and material_num = #{material_num}
+			and place_key = #{place_key}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertSupply" parameterType="java.util.Map">
+		<selectKey resultType="String" keyProperty="new_cd" order="BEFORE">
+			<![CDATA[
+				SELECT
+					case when MAX(RIGHT(orderfor_key,2)) IS NULL
+						then
+							concat(#{company_cd},'-',RIGHT(REPLACE(#{order_dt},'.',''),6),'-01')
+						else
+							concat(#{company_cd},'-',RIGHT(REPLACE(#{order_dt},'.',''),6),'-', RIGHT(CONCAT('000',MAX(RIGHT([orderfor_key],2)+1)),2))
+					end new_cd
+				 FROM tb_orderfor
+				 where company_cd = #{company_cd} and order_dt = #{order_dt}
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into tb_orderfor (
+				orderfor_key,
+				company_cd,
+				order_dt,
+				material_num,
+				place_key,
+				knumh,
+				user_id,
+				process_cd,
+				supply_place,
+				supply_req_qty,
+				supply_req_dt,
+				unit_price,
+				total_price,
+				modify_id,
+				modify_dt
+			) values (
+				#{new_cd},
+				#{company_cd},
+				#{order_dt},
+				#{material_num},
+				#{place_key},
+				#{knumh},
+				#{user_id},
+				#{process_cd},
+				#{supply_place},
+				replace(#{supply_req_qty},',',''),
+				#{supply_req_dt},
+				replace(#{unit_price},',',''),
+				replace(#{total_price},',',''),
+				#{modify_id},
+				getdate()
+			)
+		]]>
+	</insert>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateSupply" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_orderfor
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='supply_place != null and !supply_place.equals("NULL")'>supply_place = #{supply_place},</if>
+			<if test='supply_req_qty != null and !supply_req_qty.equals("NULL")'>supply_req_qty = replace(#{supply_req_qty},',',''),</if>
+			<if test='supply_req_dt != null and !supply_req_dt.equals("NULL")'>supply_req_dt = #{supply_req_dt},</if>
+			<if test='confirm_qty != null and !confirm_qty.equals("NULL")'>confirm_qty = replace(#{confirm_qty},',',''),</if>
+			<if test='shipping_dt != null and !shipping_dt.equals("NULL")'>shipping_dt = #{shipping_dt},</if>
+			<if test='unit_price != null and !unit_price.equals("NULL")'>unit_price = replace(#{unit_price},',',''),</if>
+			<if test='total_price != null and !total_price.equals("NULL")'>total_price = replace(#{total_price},',',''),</if>
+			<if test='last_receive_dt != null and !last_receive_dt.equals("NULL")'>last_receive_dt = #{last_receive_dt},</if>
+			<if test='use_fl != null and !use_fl.equals("NULL")'>use_fl = #{use_fl},</if>
+			<if test='modify_id != null and !modify_id.equals("NULL")'>modify_id = #{modify_id},</if>
+		</trim>
+		<![CDATA[
+			,modify_dt = getdate()
+		WHERE orderfor_key = #{orderfor_key}
+		]]>
+
+	</update>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteSupply" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_orderfor
+			WHERE orderfor_key = #{orderfor_key}
+		]]>
+	</delete>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteSupplyShipping" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_shipping
+			WHERE shipping_key = concat(#{orderfor_key},'-00') and orderfor_key = #{orderfor_key}
+		]]>
+	</delete>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertShippingFirst" parameterType="java.util.Map">
+		<![CDATA[
+			insert into tb_shipping (
+				shipping_key,
+				orderfor_key,
+				shipping_seq,
+				process_cd,
+				use_fl,
+				modify_id,
+				modify_dt
+			) values (
+				concat(#{orderfor_key},'-00'),
+				#{orderfor_key},
+				#{shipping_seq},
+				'ST_BOS',
+				'ING',
+				#{modify_id},
+				getdate()
+			)
+		]]>
+	</insert>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateSupplyRecive" parameterType="java.util.Map">
+		<![CDATA[
+			merge into TB_ORDERFOR tar
+			using(
+				SELECT maintb.[ORDERFOR_KEY]
+				  ,sum(maintb.[SUPPLY_QTY]) sumqty
+				FROM [dbo].[TB_SHIPPING] maintb
+					inner join [dbo].[TB_ORDERFOR] oritb on maintb.ORDERFOR_KEY = oritb.ORDERFOR_KEY
+				WHERE maintb.shipping_seq > 0 and  len(maintb.[RECEIVE_DT]) = 10 and maintb.PROCESS_CD = 'ST_BCP' and oritb.PROCESS_CD != 'ST_BCP'
+				group by maintb.[ORDERFOR_KEY]
+			) src on tar.ORDERFOR_KEY = src.ORDERFOR_KEY and tar.confirm_qty = src.sumqty
+			WHEN MATCHED THEN
+				UPDATE SET tar.PROCESS_CD = 'ST_BCP'
+					, tar.LAST_RECEIVE_DT = CONVERT(CHAR(10), getdate(), 102);
+		]]>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 다중삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-14
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="multiUpdateShippingRecive" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_shipping SET PROCESS_CD = 'ST_BCP', RECEIVE_DT = CONVERT(CHAR(10), getdate(), 102)
+			WHERE shipping_key in
+		]]>
+		<foreach collection="list" item="item"  index="index"  open="(" separator="," close=")" >
+			#{item.shipping_key}
+		</foreach>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 자재코드목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listMaterialNum" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
+		<![CDATA[
+			SELECT
+			  	knumh                   /* CondRegNo */
+				, material_num  /* 자재코드 */
+				, unit_price  /* 단가 */
+			FROM OPENQUERY(ERP_DL, '
+					SELECT
+						maintb.KNUMH as knumh
+						, RIGHT(maintb.VAKEY,CHARINDEX('' '',REVERSE(maintb.VAKEY))-1) as material_num
+						, ISNULL(ROUND(subtb.KBETR  / subtb.KPEIN *100,0),0) as unit_price
+					FROM wjp.KONH maintb
+					LEFT OUTER JOIN  wjp.KONP subtb ON maintb.KNUMH = subtb.KNUMH
+					where maintb.VAKEY like concat(''460020'',''${company_cd}'',''%'')  and DATBI = ''99991231''
+					      and maintb.DATAB = (select max(DATAB) from wjp.KONH where VAKEY = maintb.VAKEY and DATBI = ''99991231'' and subtb.LOEVM_KO != ''X'')
+				')
+			ORDER BY material_num ASC
+    	]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 자재코드목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailMaterialNum" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
+		<![CDATA[
+			SELECT
+			  	knumh                   /* CondRegNo */
+				, material_num  /* 자재코드 */
+				, unit_price  /* 단가 */
+			FROM OPENQUERY(ERP_DL, '
+					SELECT
+						maintb.KNUMH as knumh
+						, RIGHT(maintb.VAKEY,CHARINDEX('' '',REVERSE(maintb.VAKEY))-1) as material_num
+						, ISNULL(ROUND(subtb.KBETR  / subtb.KPEIN *100,0),0) as unit_price
+					FROM wjp.KONH maintb
+					LEFT OUTER JOIN  wjp.KONP subtb ON maintb.KNUMH = subtb.KNUMH
+					where maintb.VAKEY like concat(''460020'',''${company_cd}'',''%'')  and DATBI = ''99991231''
+					      and maintb.DATAB = (select max(DATAB) from wjp.KONH where VAKEY = maintb.VAKEY and DATBI = ''99991231'' and subtb.LOEVM_KO != ''X'')
+				')
+			where material_num = #{material_num} and knumh = #{knumh}
+    	]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listSupplyConfirm" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+			select
+			    oritb.orderfor_key
+				, maintb.shipping_key
+				, maintb.supply_dt /* 남품일자 */
+				, oritb.company_cd /* 업체코드 */
+				, saptb.company_nm company_nm /*업체명*/
+				, oritb.material_num material_num /* 품번 */
+				, maintb.supply_qty as supply_qty /* 납품수량 */
+				, oritb.unit_price
+				, oritb.unit_price * maintb.supply_qty as total_price
+
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				WHERE  maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
+				and maintb.process_cd = #{process_cd} and left(maintb.supply_dt,7) = #{supply_month}
+		]]>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			order by maintb.supply_dt DESC, saptb.company_nm asc, oritb.material_num asc
+    	]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listSupplyResheet" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+				select maintb.supply_dt /* 남품일자 */
+				, oritb.company_cd /* 업체코드 */
+				, saptb.company_nm /* 업체코드 */
+				, plc.place_key
+				, plc.place_nm /*업체명*/
+				, SUM(maintb.supply_qty) as supply_qty /* 납품수량 */
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_place plc on oritb.place_key = plc.place_key
+				WHERE  maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
+				and maintb.process_cd = #{process_cd} and left(maintb.supply_dt,7) = #{supply_month}
+		]]>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			group by maintb.supply_dt , oritb.company_cd , saptb.company_nm , plc.place_nm , plc.place_key
+			order by maintb.supply_dt DESC, saptb.company_nm asc
+    	]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listSupplyResheetDetail" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+			select
+				oritb.material_num  /* 품번 */
+				, maintb.supply_qty /* 납품수량 */
+				, oritb.unit_price
+				, 'EA' as unit_type
+				, maintb.supply_qty * oritb.unit_price as total_price
+				, maintb.supply_qty * oritb.unit_price*0.1 as tax_price
+				, ROW_NUMBER() OVER (ORDER BY oritb.material_num ASC) as rownum
+				, saptb.company_nm
+				, saptb.company_addr
+				, case when len(saptb.stcd2  COLLATE Korean_Wansung_CI_AS) = 10
+					then concat(left(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,3),'-',substring(saptb.stcd2 COLLATE SQL_Latin1_General_CP1_CI_AS,3,2),'-',right(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,5))
+					else '' end regster_no
+				, saptb.j_1kfrepre
+				, saptb.j_uptae
+				, saptb.j_jongmok
+				, plc.place_nm
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct
+						a.ID
+						, b.NAME1 as company_nm
+						, concat(b.ORT01, '' '',b.STRAS) as company_addr
+						, b.STCD2 stcd2
+						, b.J_1KFREPRE j_1kfrepre
+						, b.J_1KFTBUS j_uptae
+						, b.J_1KFTIND j_jongmok
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_place plc on oritb.place_key = plc.place_key
+				WHERE  maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
+				and maintb.process_cd = #{process_cd} and maintb.supply_dt = #{supply_dt}
+				and oritb.place_key = #{place_key}
+				order by oritb.material_num
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 자재코드목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listMaterialOrderAll" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
+		<![CDATA[
+			SELECT distinct oritb.material_num
+  			FROM market.dbo.tb_orderfor oritb inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+  			WHERE maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
+  				and maintb.process_cd = #{process_cd} and left(maintb.supply_dt,7) = #{supply_month}
+			ORDER BY oritb.material_num ASC
+    	]]>
+	</select>
+
+</mapper>

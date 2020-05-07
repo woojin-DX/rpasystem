@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+     <!-- 
+     <context:component-scan base-package="apexerp.*" use-default-filters="false">
+      -->
+    <ehcache:annotation-driven />
+
+    <ehcache:config cache-manager="cacheManager">
+        <ehcache:evict-expired-elements interval="60" />
+    </ehcache:config>
+    <!-- ehCache bean -->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" >
+        <property name="configLocation"  value="/WEB-INF/ehcache.xml"/>
+    </bean>
+
+    <context:component-scan base-package="com.woojin.commercial">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"	expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="aspectj"      expression="commercial..*Impl"/>
+    </context:component-scan>
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.woojin.commercial.common.CustomMapArgumentResolver" />
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+   <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="0" />
+    </bean>
+    
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="order" value="1" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <mvc:resources mapping="/**" location="/" cache-period="31556926"/>
+
+    <!-- AspectJ -->
+    <!--
+    -->
+    <aop:aspectj-autoproxy />
+    <bean id="authorizationAspect" class="com.woojin.commercial.framework.aop.AuthorizationAspect">
+        <description>true : 서버 접근권한 검사, false : 검사하지 않음. Log에 Param 정보 출력</description>
+        <constructor-arg index="0" type="boolean">
+            <value>true</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <list>
+                <value>/login</value>
+                <value>/loginProcess</value>
+                <value>/admin/exceldata</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <util:properties id="envir" location="classpath:config/framework.properties" />
+                       
+    <!-- MultipartResolver 설정 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="50000000" />
+        <property name="maxInMemorySize" value="500000000" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <context:component-scan base-package="com.woojin.commercial.batchjob.scheduling" />
+    <task:scheduler id="jobScheduler" pool-size="10" />
+    <task:annotation-driven scheduler="jobScheduler" />
+
+
+</beans>

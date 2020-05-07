@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.admin.commoncode.CommonCodeDAO">
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCommonCode" parameterType="hashmap" resultType="com.woojin.commercial.admin.commoncode.CommonCodeVO">
+		<![CDATA[
+			SELECT 
+				  maintb.common_cd                                            /* 공통코드 */
+				, maintb.division_cd                                          /* 구분코드 */
+				, maintb.division_nm                                          /* 구분명 */
+				, maintb.status_cd                                            /* 상태코드 */
+				, maintb.status_nm                                            /* 상태명 */
+				, maintb.status_seq                                           /* 정렬순서 */
+				, maintb.register_id                                          /* 등록자아이디 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 수정일자 */
+    		, ROW_NUMBER() OVER (
+    	]]>
+    	<trim prefix="ORDER BY" suffixOverrides=",">
+    	<![CDATA[
+    		maintb.common_cd  DESC,maintb.division_cd  DESC,maintb.status_cd DESC,
+    	]]>
+    	</trim>
+		<![CDATA[
+    		) AS rownum
+			FROM tb_common_code maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="common_cd != '' and common_cd != null">
+				and maintb.division_cd = #{common_cd}
+			</if>
+			<if test="srhDivision_cd != '' and srhDivision_cd != null">
+	    		and maintb.division_cd = #{srhDivision_cd}
+    		</if>
+			<if test="division_cd != '' and division_cd != null">
+				and maintb.division_cd = #{division_cd}
+			</if>
+			<if test='role != null and role.equals("SUPPLY")'>
+				and maintb.status_cd != 'ING'
+			</if>
+			<if test="status_cd != '' and status_cd != null">
+	    		and maintb.status_cd = #{status_cd}
+    		</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.division_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.status_nm like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    	<trim prefix="ORDER BY" suffixOverrides=",">
+    		<![CDATA[	
+			maintb.division_cd  ASC,maintb.status_seq  ASC, maintb.status_cd ASC,
+    	    ]]>
+    	</trim>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+    			<![CDATA[	
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+    		</if>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountCommonCode" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as totalcount
+			FROM tb_common_code maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="division_cd != '' and division_cd != null">
+	    			and maintb.division_cd = #{division_cd}
+    			</if>
+			<if test="status_cd != '' and status_cd != null">
+	    			and maintb.status_cd = #{status_cd}
+    			</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.division_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.status_nm like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountCommonCode" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_common_code')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailCommonCode" parameterType="hashmap" resultType="com.woojin.commercial.admin.commoncode.CommonCodeVO">
+		<![CDATA[
+			SELECT 
+				  maintb.common_cd                                            /* 공통코드 */
+				, maintb.division_cd                                          /* 구분코드 */
+				, maintb.division_nm                                          /* 구분명 */
+				, maintb.status_cd                                            /* 상태코드 */
+				, maintb.status_nm                                            /* 상태명 */
+				, maintb.status_seq                                           /* 정렬순서 */
+				, maintb.register_id                                          /* 등록자아이디 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 수정일자 */
+			FROM tb_common_code maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="common_cd != '' and common_cd != null">
+				and maintb.common_cd = #{common_cd}
+			</if>
+			<if test="division_cd != '' and division_cd != null">
+	    			and maintb.division_cd = #{division_cd}
+    			</if>
+			<if test="status_cd != '' and status_cd != null">
+	    			and maintb.status_cd = #{status_cd}
+    			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타에서 기존 존재여부
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntCommonCode" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT count(common_cd) as overcnt
+			FROM tb_common_code
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and division_cd = #{division_cd}
+			and status_cd = #{status_cd}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타에서 기존 목록
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabListCommonCode" parameterType="hashmap"  resultType="com.woojin.commercial.admin.commoncode.CommonCodeVO">
+		<![CDATA[
+			SELECT 
+				  maintb.common_cd                                            /* 공통코드 */
+				, maintb.division_cd                                          /* 구분코드 */
+				, maintb.division_nm                                          /* 구분명 */
+				, maintb.status_cd                                            /* 상태코드 */
+				, maintb.status_nm                                            /* 상태명 */
+				, maintb.status_seq                                           /* 정렬순서 */
+				, maintb.register_id                                          /* 등록자아이디 */
+				, maintb.modify_id                                            /* 수정자아이디 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 수정일자 */
+			FROM tb_common_code
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and division_cd = #{division_cd}
+			and status_cd = #{status_cd}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 데이타 정렬순서 최고값
+        작  성  자 : 가치노을      작  성  일 : 2020-03-31
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="getCommonCodeMaxSeq" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+        SELECT ISNULL(MAX(status_seq),0)+1 as maxseq
+        FROM tb_common_code
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and division_cd = #{division_cd}
+		</trim>
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertCommonCode" parameterType="java.util.Map">
+		<selectKey resultType="String" keyProperty="new_cd" order="BEFORE">
+			<![CDATA[
+				SELECT concat(#{division_cd},'_',#{status_cd}) as new_cd
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into tb_common_code ( 
+				common_cd,
+				division_cd,
+				division_nm,
+				status_cd,
+				status_nm,
+				status_seq,
+				register_id,
+				modify_id,
+				modify_dt
+			) values (
+				#{new_cd},
+				#{division_cd},
+				#{division_nm},
+				#{status_cd},
+				#{status_nm},
+				#{status_seq},
+				#{register_id},
+				#{modify_id},
+				getdate()
+			)
+		]]>
+	</insert>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateCommonCode" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_common_code
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+				<if test="division_nm != null">division_nm = #{division_nm},</if>
+				<if test="status_nm != null">status_nm = #{status_nm},</if>
+				<if test="status_seq != null">status_seq = #{status_seq},</if>
+				<if test="modify_id != null">modify_id = #{modify_id},</if>
+		</trim>
+		<![CDATA[
+			,modify_dt = getdate()
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="common_cd != '' and common_cd != null">
+	    			and common_cd = #{common_cd}
+    			</if>
+			<if test="division_cd != '' and division_cd != null">
+	    			and division_cd = #{division_cd}
+    			</if>
+			<if test="status_cd != '' and status_cd != null">
+	    			and status_cd = #{status_cd}
+    			</if>
+		</trim>
+	</update>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 데이타 순서 수정
+        작  성  자 : 가치노을      작  성  일 : 2020-03-31
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<update id="setCommonCodeSeqModify" parameterType="java.util.Map">
+		<![CDATA[
+            UPDATE tb_common_code
+            set status_seq = CASE WHEN #{old_seq} >= #{status_seq}
+                             THEN
+                                CASE WHEN status_seq >= #{status_seq}
+                                THEN
+                                   status_seq + 1
+                                ELSE
+                                   status_seq - 1
+                                END
+                             ELSE
+                                CASE WHEN status_seq > #{status_seq}
+                                THEN
+                                   status_seq + 1
+                                ELSE
+                                   status_seq - 1
+                                END
+                             END
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and division_cd = #{division_cd}
+		</trim>
+	</update>
+
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 공통코드 데이타 순서 전체 수정
+        작  성  자 : 가치노을      작  성  일 : 2020-03-31
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<update id="setCommonCodeSeqReset" parameterType="java.util.Map">
+		<![CDATA[
+		MERGE tb_common_code as tar
+		USING(
+			SELECT common_cd, ROW_NUMBER() OVER (ORDER BY status_seq ASC) AS RowNum
+	       	FROM tb_common_code
+	       	WHERE division_cd = #{division_cd}
+		) as scr on tar.common_cd = scr.common_cd
+		WHEN MATCHED THEN
+			UPDATE SET tar.status_seq = scr.RowNum;
+
+		]]>
+	</update>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteCommonCode" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_common_code
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="common_cd != '' and common_cd != null">
+	    			and common_cd = #{common_cd}
+    		</if>
+			<if test="division_cd != '' and division_cd != null">
+	    			and division_cd = #{division_cd}
+    			</if>
+			<if test="status_cd != '' and status_cd != null">
+	    			and status_cd = #{status_cd}
+    			</if>
+		</trim>
+	</delete>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 공통코드 데이타 다중삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="multiDeleteCommonCode" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_common_code
+			WHERE common_cd in
+		]]>
+		<foreach collection="list" item="item"  index="index"  open="(" separator="," close=")" >
+			#{item.common_cd}
+		</foreach>
+	</delete>
+
+</mapper>

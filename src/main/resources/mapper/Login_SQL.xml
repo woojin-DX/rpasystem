@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.login.LoginDAO">
+	<!--*******************************************************************************************
+        쿼리함수명 : 사용자 정보 개별 데이타 상세내역
+        작  성  자 : 안원해      작  성  일 : 2019-11-05
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="detailLogin" parameterType="hashmap" resultType="com.woojin.commercial.login.LoginVO">
+		<![CDATA[
+	        select maintb.user_id
+				, maintb.company_cd
+				, maintb.company_nm
+				, subtb.auth_cd
+			from OPENQUERY(ERP_DL, '
+					select * from (
+						select
+							a.ID as user_id
+							,a.PW as user_pwd
+							,a.WERKS
+							,a.ID as company_cd
+							,b.NAME1 as company_nm
+						from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+						union all
+						SELECT ''woojin'',''woojin@1'',''4600'',''A1000A00'',N''우진''
+					) totuser
+					where user_id = ''${user_id}'' and user_pwd = ''${user_pwd}''
+				') maintb
+			inner join TB_USER_INFO subtb on maintb.user_id COLLATE Korean_Wansung_CI_AS = subtb.user_id
+			WHERE del_fl ='N'
+		]]>
+	</select>
+
+	<!--*******************************************************************************************
+        쿼리함수명 : 사용자 정보 데이타에서 기존 존재여부
+        작  성  자 : 안원해      작  성  일 : 2019-11-05
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="checkUserID" parameterType="hashmap"  resultType="int">
+    	<![CDATA[
+        	SELECT count(user_id) as overcnt
+        	FROM TB_USER_INFO
+        	where user_id = #{user_id}
+		]]>
+    </select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 사용자 정보 데이타 수정
+	작  성  자 : 안원해      작  성  일 : 2019-11-05
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateLogin" parameterType="long">
+		<![CDATA[
+			UPDATE TB_USER_INFO
+			SET lastjoin_dt = getdate()
+			WHERE
+				user_id = #{user_id}
+		]]>
+
+	</update>
+
+	<!--*******************************************************************************************
+    쿼리함수명 : 자동로그인 세션ID 저장
+    작  성  자 : 안원해      작  성  일 : 2018-10-02
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <update id="keepLogin">
+		<![CDATA[
+			UPDATE
+				TB_USER_INFO
+			SET
+				sessionkey = #{sessionid},
+				sessionlimit = #{sessionlimit}
+			WHERE
+				user_id = #{loginInfo.user_id}
+		]]>
+    </update>
+
+    <!--*******************************************************************************************
+	쿼리함수명 : 쿠키 유무에 따른 로그인 정보 조회 쿼리
+	작  성  자 : 안원해      작  성  일 : 2018-10-02
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+
+    <select id="checkUserInfoWithCookie" resultType="HashMap">
+		<![CDATA[
+			SELECT
+				maintb.user_id,                                                      /* 아이디 */
+				maintb.auth_cd,                                                    /* 권한 */
+				subtb.company_cd,                                                    /* 권한 */
+				subtb.company_nm,                                                    /* 권한 */
+			FROM TB_USER_INFO maintb
+				inner join OPENQUERY(ERP_DL, '
+					select * from (
+						select
+							a.ID as user_id
+							,a.PW as user_pwd
+							,a.WERKS
+							,a.ID as company_cd
+							,b.NAME1 as company_nm
+						from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+						union all
+						SELECT ''woojin'',''woojin@1'',''4600'',''A1000A00'',N''우진''
+					) totuser
+					where user_id = ''${user_id}''
+				') subtb
+			WHERE
+				maintb.user_id = #{user_id}
+				and maintb.sessionkey = #{sessionid}
+				AND maintb.sessionlimit > getdate()
+		]]>
+	</select>
+</mapper>
+
+
+
+

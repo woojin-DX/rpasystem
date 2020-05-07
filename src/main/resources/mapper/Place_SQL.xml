@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.supply.PlaceDAO">
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listPlace" parameterType="hashmap" resultType="com.woojin.commercial.supply.PlaceVO">
+		<![CDATA[
+			SELECT 
+				  maintb.place_key                                            /* 출하장소pk */
+				, maintb.company_cd                                           /* 업체코드 */
+				, maintb.place_nm                                             /* 출하장소 */
+				, maintb.place_addr                                           /* 주소 */
+				, maintb.use_fl                                               /* 사용여부 */
+				, case when use_fl = 1 then N'사용' else N'미사용' end use_nm
+			FROM tb_place maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="place_key != '' and place_key != null">
+	    			and maintb.place_key = #{place_key}
+    		</if>
+			<if test="company_cd != '' and company_cd != null">
+	    			and maintb.company_cd = #{company_cd}
+    		</if>
+			<if test="schuser_fl != '' and schuser_fl != null">
+	    			and maintb.use_fl = #{schuser_fl}
+    		</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.place_nm like concat('%',#{schword},'%'))
+	    		]]>
+	    		</trim>
+    		</if>
+		</trim>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+		<![CDATA[
+		maintb.place_key ASC,
+		]]>
+		</trim>
+		<if test="nStart > -1 and nStart != null">
+			<![CDATA[
+				OFFSET #{nStart} ROWS FETCH NEXT #{nLimit} ROWS ONLY
+			]]>
+		</if>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountPlace" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as totalcount
+			FROM tb_place maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="place_key != '' and place_key != null">
+	    			and maintb.place_key = #{place_key}
+    		</if>
+			<if test="company_cd != '' and company_cd != null">
+	    			and maintb.company_cd = #{company_cd}
+    		</if>
+			<if test="use_fl != '' and use_fl != null">
+	    			and maintb.use_fl = #{use_fl}
+    		</if>
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.place_nm like concat('%',#{schword},'%'))
+	    		]]>
+	    		</trim>
+    		</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountPlace" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_place')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailPlace" parameterType="hashmap" resultType="com.woojin.commercial.supply.PlaceVO">
+		<![CDATA[
+			SELECT 
+				  maintb.place_key                                            /* 출하장소pk */
+				, maintb.company_cd                                           /* 업체코드 */
+				, maintb.place_nm                                             /* 출하장소 */
+				, maintb.place_addr                                           /* 주소 */
+				, maintb.use_fl                                               /* 사용여부 */
+			FROM tb_place maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="place_key != '' and place_key != null">
+				and maintb.place_key = #{place_key}
+			</if>
+			<if test="company_cd != '' and company_cd != null">
+				and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="use_fl != '' and use_fl != null">
+				and maintb.use_fl = #{use_fl}
+			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타에서 기존 존재여부
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntPlace" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT count(place_key) as overcnt
+			FROM tb_place
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and company_cd = #{company_cd}
+			and place_nm = #{place_nm}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타에서 기존 목록
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabListPlace" parameterType="hashmap"  resultType="com.woojin.commercial.supply.PlaceVO">
+		<![CDATA[
+			SELECT 
+				  maintb.place_key                                            /* 출하장소pk */
+				, maintb.company_cd                                           /* 업체코드 */
+				, maintb.place_nm                                             /* 출하장소 */
+				, maintb.place_addr                                           /* 주소 */
+				, maintb.use_fl                                               /* 사용여부 */
+			FROM tb_place
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and company_cd = #{company_cd}
+			and place_nm = #{place_nm}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertPlace" parameterType="java.util.Map">
+		<selectKey resultType="String" keyProperty="new_cd" order="BEFORE">
+			<![CDATA[
+				SELECT
+					case when MAX(RIGHT(place_key,3)) IS NULL
+						then
+							concat(#{company_cd},'001')
+						else
+							concat(#{company_cd}, RIGHT(CONCAT('000',MAX(RIGHT(place_key,3)+1)),3))
+					end new_cd
+				 FROM tb_place
+				 where company_cd = #{company_cd}
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into tb_place ( 
+				place_key,
+				company_cd,
+				place_nm,
+				place_addr,
+				use_fl
+			) values (
+				#{new_cd},
+				#{company_cd},
+				#{place_nm},
+				#{place_addr},
+				#{use_fl}
+			)
+		]]>
+	</insert>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updatePlace" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_place
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+				<if test="place_addr != null">place_addr = #{place_addr},</if>
+				<if test="use_fl != null">use_fl = #{use_fl},</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and place_key = #{place_key}
+		</trim>
+	</update>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 납품장소 데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-04-09
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deletePlace" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_place
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and place_key = #{place_key}
+		</trim>
+	</delete>
+
+
+</mapper>

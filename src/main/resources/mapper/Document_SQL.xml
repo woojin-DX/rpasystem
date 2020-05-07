@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.supply.DocumentDAO">
+	<!--*******************************************************************************************
+	쿼리함수명 :  전체 목록(페이징 가능)
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listDocument" parameterType="hashmap" resultType="com.woojin.commercial.supply.DocumentVO">
+		<![CDATA[
+			SELECT 
+				  maintb.doc_num                                              /* 문서번호 */
+				, maintb.company_cd                                           /* 업체코드 */
+				, maintb.confirm_dt                                           /* 확정일 */
+				, maintb.place_key                                            /* 납품처키 */
+				, maintb.publish_dt                                           /* 발행일 */
+				, maintb.company_nm                                           /* 업체명 */
+				, maintb.place_nm                                             /* 납품처 */
+				, maintb.supply_qty                                           /* 수량 */
+				, maintb.file_name                                            /* 파일명 */
+				, maintb.file_path                                            /* 파일경로 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 최종수정일 */
+    		, ROW_NUMBER() OVER (maintb.publish_dt  DESC,maintb.confirm_dt DESC) AS rownum
+			FROM tb_document maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="doc_num != '' and doc_num != null">
+	    			and maintb.doc_num = #{doc_num}
+			</if>
+			<if test="company_cd != '' and company_cd != null">
+	    			and maintb.company_cd = #{company_cd}
+			</if>
+			<if test="place_key != '' and place_key != null">
+	    			and maintb.place_key = #{place_key}
+    			</if>
+			<if test="publish_dt_start != '' and publish_dt_start != null">
+		  	  <![CDATA[  
+		    		and maintb.publish_dt >= #{publish_dt_start}
+	    		]]>
+			</if>
+			<if test="publish_dt_end != '' and publish_dt_end != null">
+		   		<![CDATA[  
+		    		and maintb.publish_dt <= #{publish_dt_end}
+	    		]]>
+			</if> 
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.company_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.place_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.file_name like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    		<trim prefix="ORDER BY" suffixOverrides=",">
+    		<![CDATA[	
+			maintb.publish_dt  ASC,maintb.confirm_dt ASC,
+    	    ]]>
+    		</trim>
+    		<if test="nStart > -1 and nStart != null">
+    			<![CDATA[	
+	    			OFFSET #{nStart} ROWS FETCH NEXT #{nLimit} ROWS ONLY 
+    			]]>
+    		</if>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  전체 목록 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountDocument" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as totalcount
+			FROM tb_document maintb
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="doc_num != '' and doc_num != null">
+	    			and maintb.doc_num = #{doc_num}
+    			</if>
+			<if test="company_cd != '' and company_cd != null">
+	    			and maintb.company_cd = #{company_cd}
+    			</if>
+			<if test="place_key != '' and place_key != null">
+	    			and maintb.place_key = #{place_key}
+    			</if>
+			<if test="publish_dt_start != '' and publish_dt_start != null">
+		  	  <![CDATA[  
+		    		and maintb.publish_dt >= #{publish_dt_start}
+		    		]]>
+			</if>
+			<if test="publish_dt_end != '' and publish_dt_end != null">
+		   		<![CDATA[  
+		    		and maintb.publish_dt <= #{publish_dt_end}
+		    		]]>
+			</if> 
+   	 		<if test="schword != '' and schword != null">
+   	 			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+	   	 		<![CDATA[
+	    				OR (maintb.company_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.place_nm like concat('%',#{schword},'%'))
+	    				OR (maintb.file_name like concat('%',#{schword},'%'))
+	    			]]>
+	    			</trim>
+    			</if>
+		</trim>
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  전체 데이타 갯수
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="totalCountDocument" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT DISTINCT MAX(idx.rows)
+			FROM SYSINDEXES as idx INNER JOIN SYSOBJECTS AS obj ON (idx.id = obj.id)
+			WHERE (obj.type = 'U') AND (obj.name = 'tb_document')
+		]]>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타 상세내역
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="detailDocument" parameterType="hashmap" resultType="com.woojin.commercial.supply.DocumentVO">
+		<![CDATA[
+			SELECT 
+				  maintb.doc_num                                              /* 문서번호 */
+				, maintb.company_cd                                           /* 업체코드 */
+				, maintb.confirm_dt                                           /* 확정일 */
+				, maintb.place_key                                            /* 납품처키 */
+				, maintb.publish_dt                                           /* 발행일 */
+				, maintb.company_nm                                           /* 업체명 */
+				, maintb.place_nm                                             /* 납품처 */
+				, maintb.supply_qty                                           /* 수량 */
+				, maintb.file_name                                            /* 파일명 */
+				, maintb.file_path                                            /* 파일경로 */
+				, CONVERT(CHAR(19), maintb.modify_dt, 20) as modify_dt        /* 최종수정일 */
+			FROM tb_document maintb
+			WHERE maintb.doc_num = #{doc_num}
+		]]>
+
+    </select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타에서 기존 존재여부
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntDocument" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			SELECT count(doc_num) as overcnt
+			FROM tb_document
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and company_cd = #{company_cd}
+			and confirm_dt = #{confirm_dt}
+			and place_key = #{place_key}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타에서 기존 목록
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabListDocument" parameterType="hashmap"  resultType="com.woojin.commercial.supply.DocumentVO">
+		<![CDATA[
+			SELECT 
+				  doc_num                                              /* 문서번호 */
+				, company_cd                                           /* 업체코드 */
+				, confirm_dt                                           /* 확정일 */
+				, place_key                                            /* 납품처키 */
+				, publish_dt                                           /* 발행일 */
+				, company_nm                                           /* 업체명 */
+				, place_nm                                             /* 납품처 */
+				, supply_qty                                           /* 수량 */
+				, file_name                                            /* 파일명 */
+				, file_path                                            /* 파일경로 */
+				, CONVERT(CHAR(19), modify_dt, 20) as modify_dt        /* 최종수정일 */
+			FROM tb_document
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and company_cd = #{company_cd}
+			and confirm_dt = #{confirm_dt}
+			and place_key = #{place_key}
+		</trim>
+	</select>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타 입력
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<insert id="insertDocument" parameterType="java.util.Map">
+		<selectKey resultType="string" keyProperty="new_cd" order="BEFORE">
+			<![CDATA[
+				SELECT case when keyid is null then
+						concat(SUBSTRING(#{company_cd},2,4),'_',replace(#{confirm_dt},'.',''), '_' , right(concat('0000', '1'),3))
+					else
+						concat(SUBSTRING(#{company_cd},2,4),'_',replace(#{confirm_dt},'.',''), '_' , right(concat('0000', convert(nvarchar,keyid + 1)),3))
+					end new_cd
+				FROM (
+					SELECT max(right(doc_num,3)) as keyid
+					FROM tb_document
+					WHERE company_cd = #{company_cd} and confirm_dt = #{confirm_dt}
+				) NEWKEY
+			]]>
+		</selectKey>
+
+		<![CDATA[
+			insert into tb_document ( 
+				doc_num,
+				company_cd,
+				confirm_dt,
+				place_key,
+				publish_dt,
+				company_nm,
+				place_nm,
+				supply_qty,
+				modify_dt
+			) values (
+				#{new_cd},
+				#{company_cd},
+				#{confirm_dt},
+				#{place_key},
+				#{confirm_dt},
+				#{company_nm},
+				#{place_nm},
+				#{supply_qty},
+				getdate()
+			)
+		]]>
+	</insert>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타 수정
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateDocument" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_document
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+				<if test="supply_qty != null">supply_qty = #{supply_qty},</if>
+				<if test="file_name != null">file_name = #{file_name},</if>
+				<if test="file_path != null">file_path = #{file_path},</if>
+				modify_dt = getdate(),
+		</trim>
+		<![CDATA[
+			WHERE doc_num = #{doc_num}
+		]]>
+	</update>
+
+
+	<!--*******************************************************************************************
+	쿼리함수명 :  데이타 삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-04-28
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<delete id="deleteDocument" parameterType="java.util.Map">
+		<![CDATA[
+			DELETE FROM tb_document
+			WHERE doc_num = #{doc_num}
+		]]>
+	</delete>
+
+
+</mapper>
