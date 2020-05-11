@@ -280,9 +280,9 @@ public class SupplyController {
                             nTotPrice += (listParam.get(i).getTotal_price() + listParam.get(i).getTax_price());
                         }
                     }
-                    sheet.getRow(37).getCell(3).setCellValue(nPrice);
-                    sheet.getRow(37).getCell(10).setCellValue(nTax);
-                    sheet.getRow(37).getCell(18).setCellValue(nTotPrice);
+                    sheet.getRow(40).getCell(3).setCellValue(nPrice);
+                    sheet.getRow(40).getCell(10).setCellValue(nTax);
+                    sheet.getRow(40).getCell(18).setCellValue(nTotPrice);
 
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     workbook.write(bos);

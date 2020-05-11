@@ -170,7 +170,7 @@ ul.topmenu {
     padding: 0;
     overflow: hidden;
 }
-ul.topmenu li {float: left;width : 150px;}
+ul.topmenu li {float: left;width : 130px;}
 ul.topmenu li.title {
     display: block;
     color: #FFFFFF;

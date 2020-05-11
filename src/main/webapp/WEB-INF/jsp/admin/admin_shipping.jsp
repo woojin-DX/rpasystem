@@ -744,11 +744,6 @@
                     if (($("#" + objid).val().trim() != "0") && ($("#" + objid).val().trim().length > 0)) {
                         datanum ++;
                     }
-                    else{
-                    	if(objid == "shipping_method"){
-                    		datanum ++;
-                    	}
-                    }
                     if (!dataFlag) {
                         if (($("#" + objid).val().trim() == "0") || ($("#" + objid).val().trim().length == 0)) {
                             if ((objid == "supply_qty") || (objid == "supplymtm_qty")) {
@@ -843,12 +838,19 @@
                             msg = "수정처리를 하시겠습니까?";
                         }
                     } else {
+
                     	if (parseInt($("#confirm_qty").val().trim()) > 0 && $("#shipping_dt").val().trim().length > 0 && datanum > 2 && datanum < 6) {
-                            msg = "확정대기로 수정처리를 하시겠습니까?";
-                            $("#nextprocess_cd").val("ST_ING");
-                        } else {
-                        	msg = "확정으로 수정처리를 하시겠습니까?"
+                    		if ((datanum == 5) && ($("#shipping_method").val().trim().length == 0)){
+                    			msg = "확정으로 수정처리를 하시겠습니까?";
                                 $("#nextprocess_cd").val("ST_CFM");
+                    		}
+                    		else{
+	                            msg = "확정대기로 수정처리를 하시겠습니까?";
+	                            $("#nextprocess_cd").val("ST_ING");
+                    		}
+                        } else {
+                        	msg = "확정으로 수정처리를 하시겠습니까?";
+                            $("#nextprocess_cd").val("ST_CFM");
                         }
                         
                     }
