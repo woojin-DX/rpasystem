@@ -225,6 +225,50 @@ public class AdminController {
         }
         return mv;
     }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 사용자 정보 목록
+     * 작  성  자 : 안원해      작  성  일 : 2019-11-05
+     * 내      용 : 전체 목록 및 갯수
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @RequestMapping(value = "/admin/psvlist", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView psvlist(CommandMap commandMap, HttpSession httpSession) throws Exception{
+        ModelAndView mv = new ModelAndView();
+
+        try {
+            Object object = httpSession.getAttribute("loginInfo");
+            LoginVO userVO = (LoginVO) object;
+            if (userVO.getAuth_cd().equals("ADMIN")) {
+                commandMap.put("company_cd",userVO.getCompany_cd().toString());
+                commandMap.put("role","ADMIN");
+                commandMap.put("common_cd","ST_CFM");
+                Map<String, Object> resultMap = adminService.listShippingPsv(commandMap);
+
+                //jsp 에서 보여줄 정보 추출
+                mv.addObject("pageParam", resultMap.get("pageParam")); //변수값
+                mv.addObject("infoParam", userVO); //변수값
+                mv.addObject("pageNavigater", resultMap.get("pageNavigater")); //페이징 폼
+                mv.addObject("commonList", resultMap.get("commonList")); //검색
+                mv.addObject("packingList", resultMap.get("packingList")); //검색
+                mv.addObject("materialList", resultMap.get("materialList")); //검색
+                mv.addObject("companyList", resultMap.get("companyList")); //검색
+                mv.addObject("shippingList", resultMap.get("shippingList")); //검색
+                mv.setViewName("/admin/admin_sapshipping");
+            }
+            else{
+                mv.setViewName("/login/denied");
+            }
+            mv.addObject("userRole", userVO.getAuth_cd());//변수값
+            mv.addObject("pagecng", "CFMLIST");//변수값
+        }
+        catch(Exception e){
+            log.error(e);
+            mv.setViewName("/login/login");
+        }
+        return mv;
+    }
 
     /* *******************************************************************************************
      * 함수  제목 : 사용자 정보 목록
@@ -995,5 +1039,40 @@ public class AdminController {
             log.error(e);
             throw e;
         }
+    }
+    
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 발주정보 수정
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 단일내용 수정
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @RequestMapping(value="/admin/multiUpdateShippingSupply", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> updateSupplyRecive(HttpSession httpSession,
+                                            CommandMap commandMap) throws Exception {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            Object object = httpSession.getAttribute("loginInfo");
+            LoginVO userVO = (LoginVO) object;
+            if (userVO.getAuth_cd().equals("ADMIN")) {
+                Map<String, Object> msgMap = adminService.multiUpdateShippingSupply(commandMap);
+
+                resultMap.put("status", msgMap.get("status"));
+                resultMap.put("msg", msgMap.get("msg"));
+            }
+            else{
+                resultMap.put("status", 1);
+                resultMap.put("msg", "권한이 업습니다.\r\n관리자에게 문의해주세요");
+            }
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+
+        return resultMap;
     }
 }

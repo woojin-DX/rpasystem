@@ -30,8 +30,11 @@
                 </div>
                 <div id="content_start">
                     <!-- 내용 -->
-                    <div class="listleft">
+                    <div class="listleftall">
                     <div class="bbsL_box">
+                    	<form id="registerForm" name="registerForm" enctype="multipart/form-data">
+                            <input type="hidden" id="shipping_arr" name="shipping_arr" value="" />
+                        </form>
                         <!-- 검색 / 상단 -->
                         <div class="bbsS_TOP">
                             <form id="searchForm" name="searchForm" method="post">
@@ -66,17 +69,20 @@
                         <!-- //검색 / 상단 -->
 
                         <!-- 목록 -->
-                        <table cellspacing="0" border="1" summary="목록정보" max-width="1400px" cellpadding="0" id="tbllist" class="bbsL">
+                        <table cellspacing="0" border="1" summary="목록정보" cellpadding="0" id="tbllist" class="bbsLAll" max-width="1900px" >
                             <caption>게시판 목록</caption>
                             <colgroup>
+                            	<col width="50px" />
                                 <col width="80px" />
                                 <col width="80px" />
                                 <col width="200px" />
                                 <col width="150px" />
+                                <col width="80px" />
+                                <col width="150px" />
                                 <col width="70px" />
                                 <col width="70px" />
-                                <col width="100px" />
-                                <col width="90px" />
+                                <col width="70px" />
+                                <col width="130px" />
                                 <col width="80px" />
                                 <col width="80px" />
                                 <col width="80px" />
@@ -86,20 +92,21 @@
                             </colgroup>
                             <thead>
                             <tr>
+                            	<th scope="col" rowspan="2" nowrap="nowrap" ><input name="checkAll" class="checkBtn" id="checkAll" type="checkbox"></th>
                                 <th scope="col" rowspan="2" >상태</th>
                                 <th scope="col" rowspan="2" >출하일</th>
                                 <th scope="col" rowspan="2" class="ta_l">업체명</th>
                                 <th scope="col" rowspan="2" class="ta_l">자재코드</th>
-                                <th scope="col" colspan="3">SAP 출하정보</th>
+                                <th scope="col" colspan="3" style="background-color:#b2b2b2;">SAP 출하정보</th>
                                 <th scope="col" colspan ="7">시판아이트 정보</th>
                                 <th scope="col" rowspan="2" style="display:none">업체코드</th>
                                 <th scope="col" rowspan="2" style="display:none">발주일</th>
                                 <th scope="col" rowspan="2" style="display:none">품번</th>
                             </tr>
                             <tr>
-                                <th scope="col">출하일자</th>
-                                <th scope="col">자재코드</th>
-                                <th scope="col" class="ta_r">출하수량</th>
+                                <th scope="col" style="background-color:#b2b2b2;">출하일자</th>
+                                <th scope="col" style="background-color:#b2b2b2;">자재코드</th>
+                                <th scope="col" class="ta_r" style="background-color:#b2b2b2;">출하수량</th>
                                 <th scope="col">자재유형</th>
                                 <th scope="col">포장단위</th>
                                 <th scope="col" class="ta_l">납품처</th>
@@ -111,23 +118,24 @@
                             </thead>
                             <tbody>
                             <c:forEach var="result" items="${shippingList}" varStatus="status">
-                                <tr class="row" bgcolor="#${result.trbgcolor}" >
-                                    <td class="col"><c:out value="${result.process_nm}"  default=""/></td>
-                                    <td class="col"><c:out value="${result.supply_dt}"  default=""/></td>
-                                    <td class="col ta_l"><c:out value="${result.company_nm}"  default=""/></td>
-                                    <td class="col ta_l"><c:out value="${result.material_num}"  default=""/></td>
-                                    <td class="col"><c:out value="${result.mtart_nm}"  default=""/></td>
-                                    <td class="col"><c:out value="${result.supply_dt}"  default=""/></td>
-                                    <td class="col"><c:out value="${result.mtart_nm}"  default=""/></td>
-                                    <td class="col ta_r"><fmt:formatNumber value="${result.supply_qty}" pattern="#,###" /></td>
-                                    <td class="col"><c:out value="${result.bstrf}"  default=""/></td>
-                                    <td class="col ta_l"><c:out value="${result.supply_place}"  default=""/></td>
+                                <tr bgcolor="#${result.trbgcolor}" >
+                                	<td nowrap="nowrap" ><input type="checkbox"  id="checkOne${status.count}" name="checkOne" class="checkBtn" value="${result.shipping_key}"></td>
+                                    <td><c:out value="${result.process_nm}"  default=""/></td>
+                                    <td><c:out value="${result.supply_dt}"  default=""/></td>
+                                    <td class="ta_l"><c:out value="${result.company_nm}"  default=""/></td>
+                                    <td class="ta_l"><c:out value="${result.material_num}"  default=""/></td>
+                                    <td style="color:#FF0000;"><c:out value="${result.sap_req_dt}"  default=""/></td>
+                                    <td style="color:#FF0000;"><c:out value="${result.sap_material_code}"  default=""/></td>
+                                    <td class="ta_r" style="color:#FF0000;"><fmt:formatNumber value="${result.sap_qty}" pattern="#,###" /></td>
+                                    <td><c:out value="${result.mtart_nm}"  default=""/></td>
+                                    <td><c:out value="${result.bstrf}"  default=""/></td>
+                                    <td class="ta_l"><c:out value="${result.supply_place}"  default=""/></td>
                                     <c:choose>
                                         <c:when test = "${result.supply_qty == ''}">
-                                            <td class="col ta_r"><c:out value="${result.supply_qty}"  default=""/></td>
+                                            <td class="ta_r"><c:out value="${result.supply_qty}"  default=""/></td>
                                         </c:when>
                                         <c:otherwise>
-                                            <td class="col ta_r"><fmt:formatNumber value="${result.supply_qty}" pattern="#,###" /></td>
+                                            <td class="ta_r"><fmt:formatNumber value="${result.supply_qty}" pattern="#,###" /></td>
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
@@ -135,36 +143,36 @@
                                             <td class="link mtm"><c:out value="${result.packing_nm}"  default=""/></td>
                                         </c:when>
                                         <c:otherwise>
-                                            <td class="col"><c:out value="${result.packing_nm}"  default=""/></td>
+                                            <td><c:out value="${result.packing_nm}"  default=""/></td>
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
                                         <c:when test = "${pagecng == 'CFMLIST'}">
-                                            <td class="col"><input type="text" id="shipping_method${status.count}" name="shipping_method" content_id="<c:out value="${result.shipping_key}"  default=""/>" value="<c:out value="${result.shipping_method}"  default=""/>" /></td>
+                                            <td><input type="text" id="shipping_method${status.count}" name="shipping_method" content_id="<c:out value="${result.shipping_key}"  default=""/>" value="<c:out value="${result.shipping_method}"  default=""/>" /></td>
 		                                    <c:choose>
 		                                        <c:when test = "${result.packing_flag == 'Y'}">
-		                                            <td class="col"><input type="checkbox" id="packing_flag${status.count}" checked name="packing_flag" value="<c:out value="${result.shipping_key}"  default=""/>"/></td>
+		                                            <td><input type="checkbox" id="packing_flag${status.count}" checked name="packing_flag" value="<c:out value="${result.shipping_key}"  default=""/>"/></td>
 		                                        </c:when>
 		                                        <c:otherwise>
 			                                        <c:choose>
 				                                        <c:when test = "${result.packing_cd == 'OM_MPM' || result.packing_cd == 'OM_MTM' || result.packing_cd == 'OM_PKG'}">
-				                                            <td class="col"><input type="checkbox" id="packing_flag${status.count}" name="packing_flag" value="<c:out value="${result.shipping_key}"  default=""/>"/></td>
+				                                            <td><input type="checkbox" id="packing_flag${status.count}" name="packing_flag" value="<c:out value="${result.shipping_key}"  default=""/>"/></td>
 				                                        </c:when>
 				                                        <c:otherwise>
-				                                            <td class="col"> </td>
+				                                            <td> </td>
 				                                        </c:otherwise>
 				                                    </c:choose>
 		                                        </c:otherwise>
 		                                    </c:choose>
                                         </c:when>
                                         <c:otherwise>
-                                            <td class="col"><c:out value="${result.shipping_method}"  default=""/></td>
+                                            <td><c:out value="${result.shipping_method}"  default=""/></td>
 	                                        <c:choose>
 		                                        <c:when test = "${result.packing_cd == 'OM_MPM' || result.packing_cd == 'OM_MTM' || result.packing_cd == 'OM_PKG'}">
-		                                            <td class="col"><c:out value="${result.packing_flag}"  default=""/></td>
+		                                            <td><c:out value="${result.packing_flag}"  default=""/></td>
 		                                        </c:when>
 		                                        <c:otherwise>
-		                                            <td class="col"> </td>
+		                                            <td> </td>
 		                                        </c:otherwise>
 		                                    </c:choose>
                                         </c:otherwise>
@@ -180,12 +188,9 @@
                         </table>
                         <!-- //목록 -->
                         <!-- 버튼 -->
-                        <div class="bbsB ta_r mt_10">
+                        <div class="bbsB ta_l mt_10">
                             <ul class="btn_all">
-                                <li style="display:none;" id="btnShppingExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingExcel">목록엑셀다운</a></span>&nbsp;&nbsp;</li>
-                                <li style="display:none;" id="btnPlaceExcel"><span class="button medium"><a href="javascript:void(0)" id="placeExcel">납품처엑셀다운</a></span></li>
-                                <!--li id="btnShippingDelete"><span class="button medium">삭제</span></li>
-                                <li id="btnShippingFinish"><span class="button medium">완료</span></li-->
+                                <li id="btnShpping"><span class="button medium"><a href="javascript:void(0)" id="shippingConfirm">출하등록</a></span>&nbsp;&nbsp;</li>
                             </ul>
                         </div>
 
@@ -207,21 +212,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).prop('title', '${pageTitle} ${localPageTitle}');
-        if ("${userRole}" == "ADMIN" && "${pagecng}" == "CFMLIST") {
-            $("#shippingcfm").attr('class', 'current');
-            $('#btnShppingExcel').attr('style', "display:;");
-            $('#btnPlaceExcel').attr('style', "display:;");
-        }
-        else if ("${userRole}" == "ADMIN" && "${pagecng}" == "SPGLIST") {
-            $("#shippingspg").attr('class', 'current');
-            $('#btnShppingExcel').attr('style', "display:none;");
-            $('#btnPlaceExcel').attr('style', "display:none;");
-        }
-        else {
-            $("#shipping").attr('class', 'current');
-            $('#btnShppingExcel').attr('style', "display:;");
-            $('#btnPlaceExcel').attr('style', "display:;");
-        }
+        $("#shippingpsv").attr('class', 'current');
 
         $("#supply_dt_start").datepicker({
             dateFormat: 'yy.mm.dd' //Input Display Format 변경
@@ -296,29 +287,53 @@
         $('#searchBtn').on("click", function(e){
             $("#pagemode").val("search");
             var comSubmit = new ComSubmit("searchForm");
-            if ("${userRole}" == "ADMIN" && "${pagecng}" == "CFMLIST") {
-                comSubmit.setUrl("/admin/cfmlist");
-            }
-            else if ("${userRole}" == "ADMIN" && "${pagecng}" == "SPGLIST") {
-                comSubmit.setUrl("/admin/spglist");
-            }
-            else {
-                comSubmit.setUrl("/shipping");
-            }
+            comSubmit.setUrl("/admin/psvlist");
             comSubmit.submit();
         });
 
-        $('#shippingExcel').on("click", function(e){
-            var comSubmit = new ComSubmit("searchForm");
-            comSubmit.setUrl("/shipping/shippingexcel");
-            comSubmit.submit();
-        });
+        $('#shippingConfirm').on("click", function(e){
+        	var checkCnt = $("input:checkbox[name='checkOne']:checked").length;
+            var items=[]; $('input[name="checkOne"]:checkbox:checked').each(function(){
+                items.push($(this).val());
+            });
+            var tmp = items.join(',');
 
-        $('#placeExcel').on('click', function() {
-            var comSubmit = new ComSubmit("searchForm");
-            comSubmit.setUrl("/shipping/placeexcel");
-            comSubmit.submit();
+            if (checkCnt == 0){
+                alert("수동출하할 항목을 선택해주세요.");
+                return false;
+            }
+            $("#shipping_arr").val(tmp);
+            if (window.confirm("수동출하를 진행하시겠습니까?")) {
+                $("#registerForm").ajaxForm({
+                    type: 'POST',
+                    url: "/admin/multiUpdateShippingSupply",
+                    dataType: "json",
+                    enctype: "multipart/form-data",
+                    contentType: false,
+                    processData: false,
+                    timeout: 30000,
+                    success: function(result) {
+                        if (result.status == 0) {
+                            alert(result.msg);
+                            var comSubmit = new ComSubmit("searchForm");
+                            comSubmit.setUrl("/admin/psvlist");
+                            comSubmit.submit();
+                            //location.reload();
 
+                        }
+                        else if (result.status == 1) {
+                            alert(result.msg);
+                        }
+                    },
+                    error: function(data, status, err) {
+                        alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n"
+                            + "code: " + data.status + "\n"
+                            + "message :" + data.responseText + "\n"
+                            + "message1 : " + status + "\n"
+                            + "error: " + err);
+                    }
+                }).submit();
+            }
         });
         
         $('input[name=shipping_method]').keydown(function(key) {
@@ -393,8 +408,134 @@
             });
 
         });
+        
+        window.onload = function() { 
+        	var table = [];
+        	var table_count = 1;
+        	var k = 0;
+        	$("#tbllist tbody").find("tr").each(function(i,v) {
+        		table.push($(v).find("td:nth-child(5)").text());
+        	})
+        	for(var i=0; i<table.length; i++) {
+        	  for(var j=i+1; j<table.length; j++) {
+        	    if((table[i] == table[j]) ) {
+        	      table_count +=1;
+        	      k+=1;
+        	    }
+        	  }
+        	  $("#tbllist tbody").find("tr")[i].children[5].setAttribute("rowspan", table_count);
+        	  $("#tbllist tbody").find("tr")[i].children[6].setAttribute("rowspan", table_count);
+        	  $("#tbllist tbody").find("tr")[i].children[7].setAttribute("rowspan", table_count);
+        	  
+        	  if(table_count > 1) {
+        	    for(var q = 1; q < table_count; q++) {
+        	      $("#tbllist tbody").find("tr")[i+q].children[5].style.display = "none";
+        	      $("#tbllist tbody").find("tr")[i+q].children[6].style.display = "none";
+        	      $("#tbllist tbody").find("tr")[i+q].children[7].style.display = "none";
+        	    }
+        	  }
+        	  table_count = 1;
+        	  i=k;
+        	  k++;
+        	}
+		};
+		
+		$("[name=checkAll]").click(function(){
+			allCheckFunc( this );
+		});
+		$("[name=checkOne]").each(function(){
+			$(this).click(function(){
+				oneCheckFunc( $(this) );
+			});
+		});
+        	
 
     });
+    
+    
+    function allCheckFunc( obj ) {
+		//$("[name=checkOne]").prop("checked", $(obj).prop("checked") );
+		if( $(obj).prop("checked") )
+		{
+			var chkValue = new Array;
+			
+			$('input:checkbox[name="checkOne"]').each(function() {
+				var splitDATA = $(this).val();
+				chkValue.push(splitDATA)
+			});
+			
+			var chkValueFnr = new Array;
+			$('input:checkbox[name="checkOne"]').each(function() {
+				var splitSubDATA = $(this).val();
+				if ($.inArray(splitSubDATA, chkValueFnr) == -1){
+					$(this).prop("checked", true);
+					chkValueFnr.push(splitSubDATA[0]);
+				}
+				else{
+					$(this).prop("checked", false);
+				}
+	
+			});
+		}
+		else{
+			$("[name=checkOne]").prop("checked", $(obj).prop("checked") );
+		}
+		
+		checkBoxLength = $("[name=checkOne]").length;
+		checkedLength = $("[name=checkOne]:checked").length;
+
+		if( checkBoxLength == checkedLength ) {
+			$("[name=checkAll]").prop("checked", true);
+		} else {
+			$("[name=checkAll]").prop("checked", false);
+		}
+		
+	}
+	
+	/* 체크박스 체크시 전체선택 체크 여부 */
+	function oneCheckFunc( obj )
+	{
+		var allObj = $("[name=checkAll]");
+		var objName = $(obj).attr("name");
+		
+		var chkValue = new Array;
+		
+		$('input:checkbox[name="checkOne"]').each(function() {
+
+			if ($(this).prop("checked") && $(this).attr("id") != $(obj).attr("id")){
+				var splitDATA = $(this).val().split("-");
+				chkValue.push(splitDATA[0])
+			}
+		});
+		
+	
+		if( $(obj).prop("checked") )
+		{
+			var splitSubDATA = $(obj).val().split("-");
+			var checkResult = splitSubDATA[0];
+			if (splitSubDATA.length > 1){
+				checkResult = splitSubDATA[0] + "-" + splitSubDATA[1];
+			}
+			if ($.inArray(checkResult, chkValue) > -1){
+				alert("동일한 조건유형은 하나만 선택가능합니다.");
+				$(obj).prop("checked", false);
+				return;
+			}
+			
+			checkBoxLength = $("[name="+ objName +"]").length;
+			checkedLength = $("[name="+ objName +"]:checked").length;
+	
+			if( checkBoxLength == checkedLength ) {
+				allObj.prop("checked", true);
+			} else {
+				allObj.prop("checked", false);
+			}
+		}
+		else
+		{
+			allObj.prop("checked", false);
+		}
+	}
 
     function setPostPopupWin(url,params,winnm,winl,wint,nWidth,nHeight,strScroll) {
 

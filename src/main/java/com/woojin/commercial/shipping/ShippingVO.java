@@ -112,6 +112,10 @@ public class ShippingVO {
 	private int remaininvenqty;
 	private int remainmtmqty;
 	private int sum_qty;
+	
+	private String sap_req_dt;                    /* 수령일자 */
+	private String sap_material_code;                    /* 수령일자 */
+	private int sap_qty;                    /* 수령일자 */
 
 	private int verification_qty;
 

@@ -1028,6 +1028,118 @@ public class AdminServiceImpl implements AdminService{
         }
         return resultMap;
     }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 출하정보 목록
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 전체 목록 및 갯수
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @Override
+    public Map<String, Object> listShippingPsv(CommandMap commandMap)  throws Exception {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+            Calendar time = Calendar.getInstance();
+
+            if (commandMap.get("pagemode") == null) {
+                commandMap.put("pagemode", "list");
+            }
+            String common_cd = commandMap.get("common_cd").toString();
+            if (common_cd.equals("ST_CFM")) {
+                if (commandMap.get("supply_dt_start") == null) {
+                    String firstDate = formatter.format(time.getTime());
+                    commandMap.put("supply_dt_start", firstDate);
+                }
+                if (commandMap.get("supply_dt_end") == null) {
+                    time.add(Calendar.DATE , 8);
+                    String lastDate = formatter.format(time.getTime());
+                    commandMap.put("supply_dt_end", lastDate);
+                }
+            }
+            else{
+                if (commandMap.get("supply_dt_start") == null) {
+                    String firstDate = formatter.format(time.getTime());
+                    commandMap.put("supply_dt_start", firstDate);
+                }
+                if (commandMap.get("supply_dt_end") == null) {
+                    String lastDate = formatter.format(time.getTime());
+                    commandMap.put("supply_dt_end", lastDate);
+                }
+            }
+/*
+            //조회 하려는 페이지
+            int nCurrpage = (commandMap.get("nCurrpage") != null ? Integer.parseInt(commandMap.get("nCurrpage").toString()) : 1);
+            //한페이지에 보여줄 리스트 수
+            int pageRecordCount = (commandMap.get("pageRecordCount") != null ? Integer.parseInt(commandMap.get("pageRecordCount").toString()) : 20);
+
+            int nStartRecord = 0;
+            //페이지 시작 레코드 위치 구하기
+            if (nCurrpage == 1) {
+                nStartRecord = 0;
+            }
+            else {
+                nStartRecord = (nCurrpage - 1) * pageRecordCount;
+            }
+
+            commandMap.put("nCurrpage", nCurrpage);
+            commandMap.put("nStartRecord", nStartRecord);
+            commandMap.put("pageRecordCount", pageRecordCount);
+ */
+            commandMap.remove("pageaction");
+            commandMap.remove("company_cd");
+            commandMap.remove("accept_dt");
+            commandMap.remove("material_num");
+            commandMap.remove("shipping_seq");
+
+            CommandMap newCommandMap = new CommandMap();
+            newCommandMap.put("division_cd","ST");
+            Map<String, Object> dataCommonMap =  commonCodeDAO.listCommonCode(newCommandMap.getMap());
+            List<CommonCodeVO> listCommonParam = (List<CommonCodeVO>) dataCommonMap.get("datalist");
+
+            newCommandMap.put("division_cd","OM");
+            Map<String, Object> dataPackingMap =  commonCodeDAO.listCommonCode(newCommandMap.getMap());
+            List<PackingCodeVO> packingCommonParam = (List<PackingCodeVO>) dataPackingMap.get("datalist");
+
+            Map<String, Object> dataMaterialMap =  shippingDAO.listMaterialAll(commandMap.getMap());
+            List<MeterialNumVO> listMaterialParam = (List<MeterialNumVO>) dataMaterialMap.get("datalist");
+
+            Map<String, Object> dataCompanyMap =  userInfoDAO.listCompany(commandMap.getMap());
+            List<CompanyVO> listCompanyParam = (List<CompanyVO>) dataCompanyMap.get("companylist");
+
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  shippingDAO.listShippingPsv(commandMap.getMap());
+
+            List<ShippingVO> listParam = (List<ShippingVO>) dataMap.get("datalist");
+
+//            int nTotCnt = (int)dataMap.get("totalcnt");
+/*
+            HashMap<String, Object> pageMap = new HashMap<String, Object>();
+            pageMap.put("iPageRecord", pageRecordCount);
+            pageMap.put("iTotRecord", nTotCnt);
+            pageMap.put("iCurPage", nCurrpage);
+            pageMap.put("bFirstLast", true);
+
+            String pageNavigater = PageNavigater.getPageForm(pageMap);
+*/
+            JSONObject pageParam = StringUtil.getJsonStringFromMap(commandMap.getMap());
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("pageParam", pageParam); //변수값
+            //resultMap.put("pageNavigater", pageNavigater); //페이징 폼
+            resultMap.put("commonList", listCommonParam); //목록
+            resultMap.put("packingList", packingCommonParam); //목록
+            resultMap.put("materialList", listMaterialParam); //목록
+            resultMap.put("companyList", listCompanyParam); //목록
+            resultMap.put("shippingList", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+        return resultMap;
+    }
 
     /* *******************************************************************************************
      * 함수  제목 : mtm정보 목록
@@ -1092,6 +1204,51 @@ public class AdminServiceImpl implements AdminService{
 
             //jsp 에서 보여줄 정보 추출
             resultMap.put("shippingList", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+        return resultMap;
+    }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 발주정보 수정
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 조건에 따른 단일 데이타 수정
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @Override
+    public Map<String, Object> multiUpdateShippingSupply(CommandMap commandMap) throws Exception {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            int process = 0;
+
+            String arrShipping = commandMap.get("shipping_arr").toString();
+            String[] shippingArray = arrShipping.split(",");
+
+            List<Map<String, Object>> shippingList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> map = new HashMap<String,Object>();
+            for (int n = 0; n < shippingArray.length; n ++){
+                map = new HashMap<String,Object>();
+                map.put("shipping_key", shippingArray[n]);
+                shippingList.add(map);
+            }
+            commandMap.put("list", shippingList);
+
+            process += shippingDAO.multiUpdateShippingSupply(commandMap.getMap());
+            process += shippingDAO.updateShippingSupplyPross();
+            process += shippingDAO.updateShippingOrderPross();
+
+            if (process > 0) {
+                resultMap.put("status", 0);
+                resultMap.put("msg", "수동출하 등록이 완료되었습니다.");
+            }
+            else{
+                resultMap.put("status", 1);
+                resultMap.put("msg", "수동출하 등록 등록에 실패했습니다.\r\n관리자에게 문의해 주세요.");
+            }
         }
         catch(Exception e){
             log.error(e);

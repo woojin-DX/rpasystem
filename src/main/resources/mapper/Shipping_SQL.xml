@@ -736,6 +736,142 @@
     			]]>
 		</if>
 	</select>
+	
+	
+	<!--*******************************************************************************************
+        쿼리함수명 : 출하정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listShippingPsv" parameterType="hashmap" resultType="com.woojin.commercial.shipping.ShippingVO">
+		<![CDATA[
+		SELECT
+		    tot.orderfor_key
+			,tot.shipping_key
+			,tot.company_cd
+			,tot.company_nm
+			,tot.material_num
+			,tot.process_nm
+			,tot.supply_place
+			,tot.confirm_qty
+			,tot.shipping_method
+			,tot1.COMMON_CD as packing_cd
+			,tot1.STATUS_NM as packing_nm
+			,tot.packing_flag
+			,tot.supply_req_qty
+			,tot.supply_qty
+			,tot.supply_dt
+			,tot.bstrf
+			,tot.mtart_nm
+			,tot.order_dt
+			,packing_flag_nm
+			,convert(date,convert(char(8),sap.DELIV_REQ_DT),102) sap_req_dt
+			,sap.MATERIALCODE as sap_material_code
+			,sap.QUANTITY as sap_qty
+			, case when
+				DENSE_RANK() OVER(order by tot.supply_dt ASC, tot.company_nm DESC, tot.supply_place DESC, tot.material_num DESC) % 2 = 0 then 'FEFFE8'
+			else 'FFFFFF' end as trbgcolor
+		FROM(
+			select
+			    oritb.orderfor_key
+				,maintb.shipping_key
+				, oritb.company_cd /* 업체코드 */
+				, saptb.company_nm company_nm /*업체명*/
+				, oritb.material_num material_num /* 품번 */
+				, subtb2.status_nm as process_nm /* 상태명 */
+				, subtb3.place_nm as supply_place /*납품처*/
+				, oritb.confirm_qty as confirm_qty                                          /* 확정수량 */
+				, subtb1.status_seq as packing_seq /* 상태코드 */
+				, maintb.shipping_method as shipping_method /* 출하방법 */
+				, maintb.packing_flag
+				, oritb.supply_req_qty as supply_req_qty                                       /* 납품요청수량 */
+				, maintb.supply_qty as supply_qty /* 납품수량 */
+				, maintb.supply_dt /* 남품일자 */
+				, saptb2.BSTRF as bstrf     /*포장단위*/
+				, case saptb3.MTART
+						when 'ROH' then N'원자재'
+						when 'HAWA' then N'상품'
+						when 'FERT' then N'제품'
+						when 'HALB' then N'반제품'
+					end mtart_nm
+				,oritb.ORDER_DT as order_dt
+				, case when maintb.packing_flag = 'Y' then N'포장' else '' end packing_flag_nm
+
+			from
+				tb_orderfor oritb
+				inner join OPENQUERY(ERP_DL, '
+					select distinct a.ID,b.NAME1 as company_nm
+					from wjp.ZMMT2010 a
+					inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join tb_common_code subtb2 on subtb2.common_cd = maintb.process_cd
+				left outer join tb_common_code subtb1 on subtb1.common_cd = maintb.packing_cd
+				left outer join ERP_DL.WJP.wjp.MARC saptb2 on oritb.material_num = saptb2.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join tb_place subtb3 on subtb3.place_key = oritb.place_key
+				WHERE maintb.use_fl ! = 'END' and maintb.SHIPPING_SEQ > 0
+		]]>
+		<if test="coperation_cd != '' and coperation_cd != null">
+			and oritb.company_cd = #{coperation_cd}
+		</if>
+		<if test="supply_dt_start != '' and supply_dt_start != null">
+			<![CDATA[
+				and maintb.supply_dt >= #{supply_dt_start}
+				]]>
+		</if>
+		<if test="supply_dt_end != '' and supply_dt_end != null">
+			<![CDATA[
+				and maintb.supply_dt <= #{supply_dt_end}
+				]]>
+		</if>
+		<if test="common_cd != '' and common_cd != null">
+			<choose>
+				<when test='common_cd != null and common_cd.equals("ST_SPG")'>
+					and subtb2.common_cd in('ST_SPG','ST_BCP')
+				</when>
+				<otherwise>
+					and subtb2.common_cd = #{common_cd}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="material_list != '' and material_list != null">
+			and oritb.material_num = #{material_list}
+		</if>
+		<if test="schword != '' and schword != null">
+			<trim prefix="AND (" prefixOverrides="OR" suffix=")">
+				<![CDATA[
+					OR (oritb.material_num like concat('%',#{schword},'%'))
+					OR (saptb.company_nm like concat('%',#{schword},'%'))
+				]]>
+			</trim>
+		</if>
+		<![CDATA[
+			) tot
+			inner join tb_common_code tot1 on tot.packing_seq = tot1.STATUS_SEQ and tot1.DIVISION_CD = 'OM'
+			inner join (
+				SELECT
+					DISTINCT  ORDERS.CUSTOMER_CD
+					, ORDERS.DELIV_REQ_DT
+					, DETAIL.MATL_CD MATERIALCODE
+					, FORMAT(DETAIL.QTY,'#.#') QUANTITY
+					, ORITB.ORDERFOR_KEY
+				FROM  [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER  ORDERS
+					INNER JOIN [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER_DETAIL  DETAIL ON ORDERS.DELIV_ORDER = DETAIL.DELIV_ORDER
+					inner join [dbo].[TB_ORDERFOR] ORITB on ORITB.COMPANY_CD COLLATE Korean_Wansung_CI_AS = ORDERS.CUSTOMER_CD
+						AND DETAIL.MATL_CD COLLATE Korean_Wansung_CI_AS = ORITB.MATERIAL_NUM
+				where ORDERS.DELIV_ITEM_CATE = 'ZTAM' and ORDERS.STATE = 'Shipped'
+					and ORDERS.DELIV_REQ_DT = CONVERT(CHAR(10), getdate(), 112)  and ORITB.PROCESS_CD != 'ST_BCP'
+			) sap on tot.ORDERFOR_KEY = sap.ORDERFOR_KEY
+			order by tot.supply_dt DESC, tot.company_nm asc, tot.material_num asc, tot.supply_place asc
+    	]]>
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    			OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    			]]>
+		</if>
+	</select>
 
 
 	<!--*******************************************************************************************
@@ -1357,5 +1493,21 @@
 		<![CDATA[
 			WHERE shipping_key = #{shipping_key}
 		]]>
+	</update>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 다중삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-14
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="multiUpdateShippingSupply" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE tb_shipping SET PROCESS_CD = 'ST_SPG'
+			WHERE shipping_key in
+		]]>
+		<foreach collection="list" item="item"  index="index"  open="(" separator="," close=")" >
+			#{item.shipping_key}
+		</foreach>
 	</update>
 </mapper>

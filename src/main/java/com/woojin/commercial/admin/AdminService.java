@@ -141,5 +141,10 @@ public interface AdminService {
     Map<String, Object> listShippingMatloc(CommandMap commandMap) throws Exception;
 
 	Map<String, Object> listShippingExcel(CommandMap commandMap) throws Exception;
-
+	
+	Map<String, Object> listShippingPsv(CommandMap commandMap) throws Exception;
+	
+	Map<String, Object> multiUpdateShippingSupply(CommandMap commandMap) throws Exception;
+	
+	
 }

@@ -412,7 +412,39 @@ public class ShippingDAO extends AbstractDAO {
         return (int) update("updateShipping_method", paramMap);
     }
     
+    /* *******************************************************************************************
+     * 함수  제목 : 출하정보 목록
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 전체 목록 및 갯수
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    public Map<String, Object> listShippingPsv(Map<String, Object> paramMap) {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        List<ShippingVO> lsListTable = new ArrayList<ShippingVO>();
+        try {
+            //데이타 리스트를 추출.
+            lsListTable = selectList("listShippingPsv", paramMap);
+            resultMap.put("datalist", lsListTable);
 
+        }
+        catch(Exception e){
+            resultMap.put("datalist", lsListTable);
+        }
 
+        return resultMap;
+    }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 출하정보 수정
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 데이타 수정
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    public int multiUpdateShippingSupply(Map<String, Object> paramMap) {
+        return (int) update("multiUpdateShippingSupply", paramMap);
+    }
+    
 }
 
