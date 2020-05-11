@@ -212,7 +212,13 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).prop('title', '${pageTitle} ${localPageTitle}');
-        $("#shippingpsv").attr('class', 'current');
+        if ("${userRole}" == "ADMIN") {
+        	$("#adminpsv").attr('class', 'current');       
+        }
+        else {
+        	$("#shippingpsv").attr('class', 'current');
+        }
+        
 
         $("#supply_dt_start").datepicker({
             dateFormat: 'yy.mm.dd' //Input Display Format 변경
@@ -253,22 +259,6 @@
 
         $("#material_list").select2();
 
-        $("a[name = 'pageMove']").unbind("click").click(function(e) {
-            var comSubmit = new ComSubmit("searchForm");
-            if ("${userRole}" == "ADMIN" && "${pagecng}" == "CFMLIST") {
-                comSubmit.setUrl("/admin/cfmlist");
-            }
-            else if ("${userRole}" == "ADMIN" && "${pagecng}" == "SPGLIST") {
-                comSubmit.setUrl("/admin/spglist");
-            }
-            else {
-                comSubmit.setUrl("/shipping");
-            }
-            $("#nCurrpage").val($(this).attr("content_id"))
-            comSubmit.submit();
-
-        });
-
         $("#tbllist tr td.link.mtm").click(function() {
             var tr = $(this).closest('tr');
             var td = tr.children();
@@ -287,7 +277,12 @@
         $('#searchBtn').on("click", function(e){
             $("#pagemode").val("search");
             var comSubmit = new ComSubmit("searchForm");
-            comSubmit.setUrl("/admin/psvlist");
+            if ("${userRole}" == "ADMIN") {
+            	comSubmit.setUrl("/admin/psvlist");
+            }
+            else {
+            	comSubmit.setUrl("/shipping/psvlist");
+            }
             comSubmit.submit();
         });
 

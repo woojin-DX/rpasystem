@@ -35,7 +35,7 @@
                     <li><a href="/admin/boslist" id="shipping_adminboslist">대기목록정보</a></li>
                     <li><a href="/admin/prelist" id="shipping_adminlist">출하전목록정보</a></li>
                     <li><a href="/admin/cfmlist" id="shippingcfm">확정목록정보</a></li>
-                    <li><a href="/admin/psvlist" id="shippingpsv">수동출하처리</a></li>
+                    <li><a href="/admin/psvlist" id="adminpsv">수동출하처리</a></li>
                     <li><a href="/admin/spglist" id="shippingspg">출하목록정보</a></li>
                     <li><a href="/admin/sumlist" id="sumlist">자재코드 합산</a></li>
                     <li><a href="/admin/mtmlist" id="mtmlist_admin">MTM목록</a></li>
@@ -44,6 +44,7 @@
                 </c:when>
                 <c:when test="${userRole.equals('SHIPPING')}">
                     <li><a href="/shipping" id="shipping">출하정보</a></li>
+                    <li><a href="/shipping/psvlist" id="shippingpsv">수동출하처리</a></li>
                     <li><a href="/shipping/mtmlist" id="mtmlist">MTM목록</a></li>
                 </c:when>
                 <c:when test="${userRole.equals('SUPPLY')}">

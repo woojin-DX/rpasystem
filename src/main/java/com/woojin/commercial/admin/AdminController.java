@@ -1057,7 +1057,7 @@ public class AdminController {
         try {
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;
-            if (userVO.getAuth_cd().equals("ADMIN")) {
+            if (userVO.getAuth_cd().equals("ADMIN") || userVO.getAuth_cd().equals("SHIPPING")) {
                 Map<String, Object> msgMap = adminService.multiUpdateShippingSupply(commandMap);
 
                 resultMap.put("status", msgMap.get("status"));

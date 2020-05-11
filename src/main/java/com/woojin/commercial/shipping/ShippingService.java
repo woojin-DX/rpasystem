@@ -109,6 +109,7 @@ public interface ShippingService {
      * ******************************************************************************************* */
     Map<String, Object> updateShipping_method(CommandMap commandMap) throws Exception;
     
-
+    Map<String, Object> listShippingPsv(CommandMap commandMap) throws Exception;
+	
 }
 
