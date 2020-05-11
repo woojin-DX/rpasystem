@@ -76,7 +76,7 @@
 		</trim>
 		<trim prefix="ORDER BY" suffixOverrides=",">
 			<![CDATA[
-			maintb.company_cd  ASC,maintb.order_dt  ASC,maintb.material_num  ASC, maintb.modify_dt ASC,
+			maintb.company_cd  ASC,maintb.order_dt  DESC,maintb.material_num  ASC, maintb.modify_dt ASC,
     	    ]]>
 		</trim>
 		<if test="nStartRecord > -1 and nStartRecord != null">
