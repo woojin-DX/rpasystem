@@ -746,7 +746,7 @@ public class SupplyController {
             }
             else{
                 resultMap.put("status", "1");
-                resultMap.put("msg", "정상등록 가능합ㄴ다.");
+                resultMap.put("msg", "정상등록 가능합니다.");
             }
         }
         catch(Exception e) {

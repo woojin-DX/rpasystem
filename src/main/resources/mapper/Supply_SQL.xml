@@ -808,43 +808,61 @@
         *******************************************************************************************-->
 	<select id="listSupplyResheetDetail" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
 		<![CDATA[
-			select
-				oritb.material_num  /* 품번 */
-				, maintb.supply_qty /* 납품수량 */
-				, oritb.unit_price
-				, 'EA' as unit_type
-				, maintb.supply_qty * oritb.unit_price as total_price
-				, maintb.supply_qty * oritb.unit_price*0.1 as tax_price
-				, ROW_NUMBER() OVER (ORDER BY oritb.material_num ASC) as rownum
-				, saptb.company_nm
-				, saptb.company_addr
-				, case when len(saptb.stcd2  COLLATE Korean_Wansung_CI_AS) = 10
-					then concat(left(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,3),'-',substring(saptb.stcd2 COLLATE SQL_Latin1_General_CP1_CI_AS,3,2),'-',right(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,5))
-					else '' end regster_no
-				, saptb.j_1kfrepre
-				, saptb.j_uptae
-				, saptb.j_jongmok
-				, plc.place_nm
-			from
-				tb_orderfor oritb
-				inner join OPENQUERY(ERP_DL, '
-					select distinct
-						a.ID
-						, b.NAME1 as company_nm
-						, concat(b.ORT01, '' '',b.STRAS) as company_addr
-						, b.STCD2 stcd2
-						, b.J_1KFREPRE j_1kfrepre
-						, b.J_1KFTBUS j_uptae
-						, b.J_1KFTIND j_jongmok
-					from wjp.ZMMT2010 a
-					inner join wjp.KNA1 b on a.ID = b.KUNNR
-				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
-				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
-				inner join tb_place plc on oritb.place_key = plc.place_key
-				WHERE  maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
-				and maintb.process_cd = #{process_cd} and maintb.supply_dt = #{supply_dt}
-				and oritb.place_key = #{place_key}
-				order by oritb.material_num
+			select 
+				ROW_NUMBER() OVER(order by material_num asc) as rownum
+				, material_num
+				, SUM(supply_qty) as supply_qty
+				, unit_price
+				, unit_type
+				, SUM(total_price) as total_price
+				, SUM(tax_price) as tax_price
+				, company_nm
+				, company_addr
+				, regster_no
+				, j_1kfrepre
+				, j_uptae
+				, j_jongmok
+				, place_nm
+			from(
+				select
+					oritb.material_num  /* 품번 */
+					, maintb.supply_qty /* 납품수량 */
+					, oritb.unit_price
+					, 'EA' as unit_type
+					, maintb.supply_qty * oritb.unit_price as total_price
+					, maintb.supply_qty * oritb.unit_price*0.1 as tax_price
+					, ROW_NUMBER() OVER (ORDER BY oritb.material_num ASC) as rownum
+					, saptb.company_nm
+					, saptb.company_addr
+					, case when len(saptb.stcd2  COLLATE Korean_Wansung_CI_AS) = 10
+						then concat(left(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,3),'-',substring(saptb.stcd2 COLLATE SQL_Latin1_General_CP1_CI_AS,3,2),'-',right(saptb.stcd2  COLLATE SQL_Latin1_General_CP1_CI_AS,5))
+						else '' end regster_no
+					, saptb.j_1kfrepre
+					, saptb.j_uptae
+					, saptb.j_jongmok
+					, plc.place_nm
+				from
+					tb_orderfor oritb
+					inner join OPENQUERY(ERP_DL, '
+						select distinct
+							a.ID
+							, b.NAME1 as company_nm
+							, concat(b.ORT01, '' '',b.STRAS) as company_addr
+							, b.STCD2 stcd2
+							, b.J_1KFREPRE j_1kfrepre
+							, b.J_1KFTBUS j_uptae
+							, b.J_1KFTIND j_jongmok
+						from wjp.ZMMT2010 a
+						inner join wjp.KNA1 b on a.ID = b.KUNNR
+					') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+					inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+					inner join tb_place plc on oritb.place_key = plc.place_key
+					WHERE  maintb.shipping_seq > 0 and oritb.company_cd = #{company_cd}
+					and maintb.process_cd = #{process_cd} and maintb.supply_dt = #{supply_dt}
+					and oritb.place_key = #{place_key}
+			) tot
+			group by material_num, unit_price,unit_type,company_nm,	company_addr,regster_no,j_1kfrepre,j_uptae,j_jongmok,place_nm
+			order by material_num ASC
 		]]>
 	</select>
 
