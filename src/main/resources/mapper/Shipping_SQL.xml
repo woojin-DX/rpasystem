@@ -862,7 +862,8 @@
 					inner join [dbo].[TB_ORDERFOR] ORITB on ORITB.COMPANY_CD COLLATE Korean_Wansung_CI_AS = ORDERS.CUSTOMER_CD
 						AND DETAIL.MATL_CD COLLATE Korean_Wansung_CI_AS = ORITB.MATERIAL_NUM
 				where ORDERS.DELIV_ITEM_CATE = 'ZTAM' and ORDERS.STATE = 'Shipped'
-					and ORDERS.DELIV_REQ_DT = CONVERT(CHAR(10), getdate(), 112)  and ORITB.PROCESS_CD != 'ST_BCP'
+					and ORDERS.DELIV_REQ_DT between replace(#{supply_dt_start},'.','') and replace(#{supply_dt_end},'.','')
+					and ORITB.PROCESS_CD != 'ST_BCP'
 			) sap on tot.ORDERFOR_KEY = sap.ORDERFOR_KEY
 			order by tot.supply_dt DESC, tot.company_nm asc, tot.material_num asc, tot.supply_place asc
     	]]>
