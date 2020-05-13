@@ -14,9 +14,6 @@
 
 package com.woojin.commercial.admin.commoncode;
 
-import com.googlecode.ehcache.annotations.Cacheable;
-import com.googlecode.ehcache.annotations.TriggersRemove;
-import com.googlecode.ehcache.annotations.When;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +103,8 @@ public class CommonCodeDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<CommonCodeVO> overlabListCommonCode(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<CommonCodeVO> overlabListCommonCode(Map<String, Object> paramMap) {
         return (List<CommonCodeVO>) selectList("overlabListCommonCode", paramMap);
     }
 

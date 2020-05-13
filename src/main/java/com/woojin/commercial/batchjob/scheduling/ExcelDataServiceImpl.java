@@ -20,7 +20,8 @@ public class ExcelDataServiceImpl implements ExcelDataService{
     @Resource(name="shippingDAO")
     private ShippingDAO shippingDAO;
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listExcelData() throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -39,7 +40,8 @@ public class ExcelDataServiceImpl implements ExcelDataService{
         return resultMap;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listExcelDataSum() throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {

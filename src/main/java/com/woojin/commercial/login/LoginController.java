@@ -18,7 +18,6 @@
 
 package com.woojin.commercial.login;
 
-import com.woojin.commercial.util.CommonUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.util.ShaUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -82,7 +80,7 @@ public class LoginController {
                 CommandMap commandMap = new CommandMap();
                 commandMap.put("sessionid", "none");
                 // currentTimeMillis()가 1/1000초 단위이므로 (* 1000) 한다.
-                Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * (60*60*24*7)));
+                //Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * (60*60*24*7)));
                 commandMap.put("sessionlimit", new Date());
                 commandMap.put("user_id", loginVO.getUser_id());
                 loginService.keepLogin(commandMap);
@@ -149,7 +147,7 @@ public class LoginController {
                 commandMap1.put("loginInfo", loginInfo);
                 loginService.keepLogin(commandMap1);
             }
-            int process = loginService.updateLogin(commandMap);
+            loginService.updateLogin(commandMap);
 
             resultMap.put("userRole", loginInfo.getAuth_cd());
             resultMap.put("status", 0);

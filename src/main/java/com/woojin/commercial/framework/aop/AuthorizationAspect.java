@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -39,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.login.LoginService;
-import com.woojin.commercial.util.CommonUtils;
 
 @Aspect
 public class AuthorizationAspect {
@@ -75,14 +73,14 @@ public class AuthorizationAspect {
      * @return
      * @throws Throwable
      */
-    @SuppressWarnings("unchecked")
-    @Around("execution(* com.woojin.commercial..*Controller.*(..)) ")
+    @SuppressWarnings("unused")
+	@Around("execution(* com.woojin.commercial..*Controller.*(..)) ")
     public Object checkAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
         // 접근 인증 부분 적용하지 않을 때
 
         // 접근 URL를 구한다.
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse();
+        //HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse();
         Object[] args = joinPoint.getArgs();
 
         if ( log.isDebugEnabled() ) {

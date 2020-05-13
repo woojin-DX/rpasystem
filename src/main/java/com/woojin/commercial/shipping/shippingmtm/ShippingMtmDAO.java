@@ -102,7 +102,8 @@ public class ShippingMtmDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<ShippingMtmVO> overlabListShippingMtm(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<ShippingMtmVO> overlabListShippingMtm(Map<String, Object> paramMap) {
         return (List<ShippingMtmVO>) selectList("overlabListShippingMtm", paramMap);
     }
 
@@ -146,7 +147,8 @@ public class ShippingMtmDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listMaterialMtm(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listMaterialMtm(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ShippingMtmVO> lsListTable = new ArrayList<ShippingMtmVO>();
 
@@ -213,7 +215,8 @@ public class ShippingMtmDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listMaterialLoc(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listMaterialLoc(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ShippingMtmVO> lsListTable = new ArrayList<ShippingMtmVO>();
 

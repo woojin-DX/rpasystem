@@ -1,6 +1,5 @@
 package com.woojin.commercial.common;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data

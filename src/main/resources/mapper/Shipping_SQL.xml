@@ -75,6 +75,7 @@
 	<select id="listShipping" parameterType="hashmap" resultMap="ShippingInfo">
 		<![CDATA[
 		select maintb.*
+			, case when maintb.remain_qty is null then oritb.confirm_qty else maintb.remain_qty end real_remain_qty
 			, case when maintb.packing_flag = 'Y' then '포장' else '' end packing_flag_nm
 			,oritb.company_cd
 			,saptb.company_nm
@@ -277,7 +278,7 @@
 				end mtm_use_qty
 			from ERP_DL.WJP.wjp.MARD a
 			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
-			where  a.LABST > 0 and a.MATNR = #{MATNR}
+			where  a.MATNR = #{MATNR}
 			group by b.MTART
 		) tot
 	]]>
@@ -380,7 +381,7 @@
 			from ERP_DL.WJP.wjp.MARD a
 			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
 			left outer join tb_shipping_mtm d on b.MATNR COLLATE Korean_Wansung_CI_AS = d.MATERIAL_NUM
-			where  a.LABST > 0 and a.MATNR = #{material_num}
+			where  a.MATNR = #{material_num}
 			group by b.MTART
 		) tot
 	]]>
@@ -403,7 +404,7 @@
 			from ERP_DL.WJP.wjp.MARD a
 			inner join ERP_DL.WJP.wjp.MARA b on a.MATNR = b.MATNR
 			left outer join tb_shipping_mtm d on b.MATNR COLLATE Korean_Wansung_CI_AS = d.MATERIAL_NUM  and  shipping_key != #{shipping_key}
-			where  a.LABST > 0 and a.MATNR = #{material_num}
+			where  a.MATNR = #{material_num}
 			group by b.MTART
 		) tot
 	]]>
@@ -442,6 +443,7 @@
 	<select id="listShippingExcel" parameterType="hashmap" resultMap="ShippingInfoExcel">
 		<![CDATA[
 		select maintb.*
+			, case when maintb.remain_qty is null then oritb.confirm_qty else maintb.remain_qty end real_remain_qty
 			, case when maintb.packing_flag = 'Y' then '포장' else '' end packing_flag_nm
 			,oritb.company_cd
 			,saptb.company_nm
@@ -1037,12 +1039,12 @@
 
 		from (
 			select a.material_num as material_num /* 품번 */
-				, SUM(a.supply_req_qty) - ISNULL(SUM(supply_qty),0) as sum_qty
+				, SUM(case when a.confirm_qty = 0 then a.supply_req_qty else a.confirm_qty  end) - ISNULL(SUM(supply_qty),0) as sum_qty
 			from tb_orderfor a
 			left outer join(
 				SELECT orderfor_key, SUM(supply_qty) as supply_qty
 				from tb_shipping
-				where shipping_seq > 0 and process_cd in('ST_BCP','ST_SPG')
+				where shipping_seq > 0 and process_cd in('ST_BCP','ST_SPG','ST_CFM')
 				group by orderfor_key
 			) b on a.orderfor_key = b.orderfor_key
 			where process_cd in('ST_BOS','ST_CFM','ST_OFR')

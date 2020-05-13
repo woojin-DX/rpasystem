@@ -14,7 +14,6 @@
 
 package com.woojin.commercial.admin.userinfo;
 
-import com.googlecode.ehcache.annotations.Cacheable;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,8 @@ public class UserInfoDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<UserInfoVO> overlabListUserInfo(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<UserInfoVO> overlabListUserInfo(Map<String, Object> paramMap) {
         return (List<UserInfoVO>) selectList("overlabListUserInfo", paramMap);
     }
 
@@ -169,7 +169,8 @@ public class UserInfoDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listCompany(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listCompany(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<CompanyVO> lsListTable = new ArrayList<CompanyVO>();
 

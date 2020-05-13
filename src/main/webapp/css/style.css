@@ -567,7 +567,7 @@ div.content_subtitle h3:after{display:block;clear:both;content:''}
 .button.xLarge{background-position:left -69px}
 .button.small{background-position:left -112px}
 .button.medium *{padding:0 10px -0 6px;background-position:right top;font-size:12px}
-.button.large *{padding:0 10px 0 6px;background-position:right -32px;font-size:16px}
+.button.large *{padding:0 10px 0 6px;background-position:right -32px;font-size:15px}
 .button.xLarge *{padding:0 10px 0 6px;background-position:right -69px;font-size:20px}
 .button.small *{padding:0 6px 0 2px;background-position:right -112px;font-size:11px}
 /* Button Hover */

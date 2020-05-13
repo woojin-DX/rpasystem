@@ -1,6 +1,5 @@
 package com.woojin.commercial.admin;
 
-import com.googlecode.ehcache.annotations.Cacheable;
 import com.woojin.commercial.admin.commoncode.CommonCodeDAO;
 import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.admin.commoncode.PackingCodeVO;
@@ -12,7 +11,6 @@ import com.woojin.commercial.shipping.ShippingVO;
 import com.woojin.commercial.shipping.shippingmtm.ShippingMtmDAO;
 import com.woojin.commercial.shipping.shippingmtm.ShippingMtmVO;
 import com.woojin.commercial.supply.MeterialNumVO;
-import com.woojin.commercial.util.CommonUtils;
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
 import org.apache.log4j.Logger;
@@ -48,13 +46,12 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings({ "unused", "unchecked" })
+	@Override
     public Map<String, Object> listShipping(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-            Calendar cal = Calendar.getInstance();
-
             if (commandMap.get("pagemode") == null) {
                 commandMap.put("pagemode", "list");
             }
@@ -231,7 +228,6 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-            String ip = CommonUtils.getClientIP();
             int process = 0;
             String msg = "";
             String status = "0";
@@ -432,7 +428,6 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> updateShipping(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
-            String ip = CommonUtils.getClientIP();
             int process = 0;
             String status = "0";
             String msg = "";
@@ -757,7 +752,8 @@ public class AdminServiceImpl implements AdminService{
         return resultMap;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listMaterialMtm(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -783,7 +779,8 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingMtm(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -809,12 +806,12 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingMtmPage(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-            Calendar cal = Calendar.getInstance();
 
             if (commandMap.get("pagemode") == null) {
                 commandMap.put("pagemode", "list");
@@ -858,7 +855,6 @@ public class AdminServiceImpl implements AdminService{
 
             List<ShippingMtmVO> listParam = (List<ShippingMtmVO>) dataMap.get("datalist");
 
-            int nTotCnt = (int)dataMap.get("totalcnt");
 /*
             HashMap<String, Object> pageMap = new HashMap<String, Object>();
             pageMap.put("iPageRecord", pageRecordCount);
@@ -891,7 +887,8 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingSum(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -924,7 +921,8 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingCfm(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -1001,7 +999,6 @@ public class AdminServiceImpl implements AdminService{
 
             List<ShippingVO> listParam = (List<ShippingVO>) dataMap.get("datalist");
 
-            int nTotCnt = (int)dataMap.get("totalcnt");
 /*
             HashMap<String, Object> pageMap = new HashMap<String, Object>();
             pageMap.put("iPageRecord", pageRecordCount);
@@ -1036,7 +1033,8 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingPsv(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -1053,7 +1051,7 @@ public class AdminServiceImpl implements AdminService{
                     commandMap.put("supply_dt_start", firstDate);
                 }
                 if (commandMap.get("supply_dt_end") == null) {
-                    time.add(Calendar.DATE , 8);
+                    //time.add(Calendar.DATE , 8);
                     String lastDate = formatter.format(time.getTime());
                     commandMap.put("supply_dt_end", lastDate);
                 }
@@ -1148,7 +1146,8 @@ public class AdminServiceImpl implements AdminService{
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingMatloc(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -1180,7 +1179,6 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-            Calendar cal = Calendar.getInstance();
 
             if (commandMap.get("pagemode") == null) {
                 commandMap.put("pagemode", "list");

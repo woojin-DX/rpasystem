@@ -19,7 +19,6 @@ import com.woojin.commercial.admin.authority.AuthorityVO;
 import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import lombok.Builder;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,8 @@ public class UserInfoServiceImpl implements UserInfoService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listUserInfo(SearchVO searchVO,CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -68,8 +68,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             int nCurrpage = (commandMap.get("nCurrpage") != null ? Integer.parseInt(commandMap.get("nCurrpage").toString()) : 1);
             int nMovePage = (commandMap.get("iMovePage") != null ? Integer.parseInt(commandMap.get("iMovePage").toString()) : 1);
             if (nMovePage != 1) nCurrpage = nMovePage;
-            String schword = (commandMap.get("schword") != null ? commandMap.get("schword").toString() : "");
-            String company_cd = (commandMap.get("company_cd") != null ? commandMap.get("company_cd").toString() : "");
 
             //한페이지에 보여줄 리스트 수
             int pageRecordCount = (commandMap.get("pageRecordCount") != null ? Integer.parseInt(commandMap.get("pageRecordCount").toString()) : 15);

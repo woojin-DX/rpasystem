@@ -14,7 +14,6 @@
 
 package com.woojin.commercial.admin.userinfo;
 
-import com.woojin.commercial.admin.authority.AuthorityService;
 import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.login.LoginVO;
 import org.apache.log4j.Logger;
@@ -292,7 +291,7 @@ public class UserInfoController {
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;
             if (userVO.getAuth_cd().equals("ADMIN")) {
-                Map<String, Object> msgMap = userInfoService.insertUpdateCallUserInfo(commandMap);
+                //Map<String, Object> msgMap = userInfoService.insertUpdateCallUserInfo(commandMap);
                 rttr.addAttribute("nCurrpage", searchVO.getNCurrpage());
                 rttr.addAttribute("pagemode", searchVO.getPagemode());
                 rttr.addAttribute("schword", searchVO.getSchword());

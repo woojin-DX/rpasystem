@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.util.CommonUtils;
 import com.woojin.commercial.admin.commoncode.CommonCodeDAO;
 import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.admin.commoncode.CommonCodeService;
@@ -47,7 +46,8 @@ public class CommonCodeServiceImpl implements CommonCodeService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listCommonCode(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -240,7 +240,6 @@ public class CommonCodeServiceImpl implements CommonCodeService {
     public Map<String, Object> updateCommonCode(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
-            String ip = CommonUtils.getClientIP();
             int process = 0;
             process += commonCodeDAO.setCommonCodeSeqModify(commandMap.getMap());
 			process += commonCodeDAO.updateCommonCode(commandMap.getMap());

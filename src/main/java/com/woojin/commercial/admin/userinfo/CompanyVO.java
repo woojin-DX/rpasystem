@@ -1,6 +1,5 @@
 package com.woojin.commercial.admin.userinfo;
 
-import java.math.BigInteger;
 import lombok.Data;
 
 @Data

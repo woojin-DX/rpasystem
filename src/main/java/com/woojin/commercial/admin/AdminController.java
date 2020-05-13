@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -428,13 +426,7 @@ public class AdminController {
     public String processShipping(SearchVO searchVO, HttpSession httpSession,
                                   CommandMap commandMap, RedirectAttributes rttr) throws Exception {
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-        Calendar cal = Calendar.getInstance();
-
         try {
-            String status = "0";
-            String msg = "";
             Object object = httpSession.getAttribute("loginInfo");
             if (object != null) {
                 LoginVO userVO = (LoginVO) object;
@@ -446,20 +438,6 @@ public class AdminController {
                 commandMap.put("process_id", "");
             }
 
-            String firstDate = commandMap.get("accept_dt_start").toString();
-            if (commandMap.get("accept_dt_start") == null) {
-                Calendar mon = Calendar.getInstance();
-                mon.add(Calendar.MONTH , -1);
-                firstDate = formatter.format(mon.getTime());
-            }
-            String lastDate = commandMap.get("accept_dt_end").toString();
-            if (commandMap.get("accept_dt_end") == null) {
-                Calendar time = Calendar.getInstance();
-                lastDate = formatter.format(time.getTime());
-            }
-
-            String process_cd = commandMap.get("process_cd").toString();
-            String nextprocess_cd = commandMap.get("nextprocess_cd").toString();
             String processFlag = commandMap.get("processFlag").toString();
 
             if (processFlag.equals("insert")) {
@@ -514,12 +492,8 @@ public class AdminController {
                                             HttpSession httpSession,
                                             CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-        Calendar cal = Calendar.getInstance();
 
         try {
-            String status = "0";
-            String msg = "";
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;
             if (userVO.getAuth_cd().equals("ADMIN")) {
@@ -719,7 +693,6 @@ public class AdminController {
 	@ResponseBody
     @RequestMapping(value = "/admin/shippingexcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void adminShippingExcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
-        ModelAndView mv = new ModelAndView();
 
         try {
             String excelTitle = "";
@@ -798,7 +771,7 @@ public class AdminController {
             tempMap.put("field", "company_nm");
             tempMap.put("cellTitle", "업체명");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 20*256);
+            tempMap.put("cellWidth", 25*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -812,7 +785,7 @@ public class AdminController {
             tempMap.put("field", "material_num");
             tempMap.put("cellTitle", "자재코드");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 16*256);
+            tempMap.put("cellWidth", 25*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -854,7 +827,7 @@ public class AdminController {
             tempMap.put("field", "place_nm");
             tempMap.put("cellTitle", "납품처");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 25*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -951,7 +924,7 @@ public class AdminController {
             fieldInfoList.add(tempMap);
             
             tempMap = new HashMap<String, Object>();
-            tempMap.put("field", "remain_qty");
+            tempMap.put("field", "real_remain_qty");
             tempMap.put("cellTitle", "잔여수량");
             tempMap.put("fileType", "Int");
             tempMap.put("cellWidth", 13*256);

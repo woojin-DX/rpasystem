@@ -20,9 +20,6 @@ package com.woojin.commercial.login;
 
 import lombok.Data;
 
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Data
 public class  LoginVO {

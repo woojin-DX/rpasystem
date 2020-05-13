@@ -14,13 +14,11 @@
 
 package com.woojin.commercial.shipping.shippingmtm;
 
-import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.util.CommonUtils;
 import com.woojin.commercial.shipping.shippingmtm.ShippingMtmDAO;
 import com.woojin.commercial.shipping.shippingmtm.ShippingMtmVO;
 import com.woojin.commercial.shipping.shippingmtm.ShippingMtmService;
@@ -45,7 +43,8 @@ public class ShippingMtmServiceImpl implements ShippingMtmService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingMtm(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -93,7 +92,7 @@ public class ShippingMtmServiceImpl implements ShippingMtmService {
 
             List<ShippingMtmVO> listParam = (List<ShippingMtmVO>) dataMap.get("datalist");
 
-            int nTotCnt = (int)dataMap.get("totalcnt");
+            //int nTotCnt = (int)dataMap.get("totalcnt");
 /*
             HashMap<String, Object> pageMap = new HashMap<String, Object>();
             pageMap.put("iPageRecord", pageRecordCount);
@@ -126,7 +125,8 @@ public class ShippingMtmServiceImpl implements ShippingMtmService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingMtmPop(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -240,7 +240,6 @@ public class ShippingMtmServiceImpl implements ShippingMtmService {
     public Map<String, Object> insertShippingMtm(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
-            String ip = CommonUtils.getClientIP();
 
             int process = shippingMtmDAO.insertShippingMtm(commandMap.getMap());
             if (process > 0) {

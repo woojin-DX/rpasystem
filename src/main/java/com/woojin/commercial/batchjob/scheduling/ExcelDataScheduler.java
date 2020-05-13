@@ -1,7 +1,6 @@
 package com.woojin.commercial.batchjob.scheduling;
 
 import com.woojin.commercial.util.ExcelBuilder;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,9 +17,9 @@ public class ExcelDataScheduler {
     @Autowired
     ExcelDataService excelDataService;
 
-    @Scheduled(cron = "0 0 9 * * ?")
+    @SuppressWarnings("unchecked")
+	@Scheduled(cron = "0 0 9 * * ?")
     public void autoExcelMake() throws Exception {
-        Map<Object, Object> returnMap = new HashMap<Object, Object>();
         try {
 
             String excelTitle = "";
@@ -34,7 +33,7 @@ public class ExcelDataScheduler {
             SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             Map<String, Object> excelSumMap = excelDataService.listExcelDataSum();
-            List<ExcelDataVO> lstResultSum = (List<ExcelDataVO>) excelSumMap.get("listExcelDataSum");
+            //List<ExcelDataVO> lstResultSum = (List<ExcelDataVO>) excelSumMap.get("listExcelDataSum");
             List<Object> objResultSum = (List<Object>) excelSumMap.get("listExcelDataSum");
 
             excelTitle = "INFO";
@@ -238,11 +237,11 @@ public class ExcelDataScheduler {
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            Sheet sheet = ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, false);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, false);
 
             Map<String, Object> excelMap = excelDataService.listExcelData();
 
-            List<ExcelDataVO> lstResult = (List<ExcelDataVO>) excelMap.get("listExcelData");
+            //List<ExcelDataVO> lstResult = (List<ExcelDataVO>) excelMap.get("listExcelData");
             List<Object> objResult = (List<Object>) excelMap.get("listExcelData");
 
             excelTitle = "DATA";
@@ -360,7 +359,7 @@ public class ExcelDataScheduler {
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            Sheet sheet1 = ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, false);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, false);
 
             String realExcelFilename = null;
             realExcelFilename = URLEncoder.encode(excelTitle, "UTF-8");
@@ -392,10 +391,9 @@ public class ExcelDataScheduler {
 
     @Scheduled(cron = "0 0 14 * * ?")
     public void autoSupplyCheck() throws Exception {
-        Map<Object, Object> returnMap = new HashMap<Object, Object>();
         try {
 
-            int nCheck = excelDataService.autoSupplyCheck();
+            excelDataService.autoSupplyCheck();
         } catch (Exception e) {
             e.printStackTrace();
         }

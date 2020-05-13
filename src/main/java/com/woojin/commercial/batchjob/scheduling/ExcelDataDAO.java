@@ -17,7 +17,8 @@ public class ExcelDataDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listExcelData() {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listExcelData() {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ExcelDataVO> lsListTable = new ArrayList<ExcelDataVO>();
 
@@ -41,7 +42,8 @@ public class ExcelDataDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listExcelDataSum() {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listExcelDataSum() {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ExcelDataVO> lsListTable = new ArrayList<ExcelDataVO>();
 

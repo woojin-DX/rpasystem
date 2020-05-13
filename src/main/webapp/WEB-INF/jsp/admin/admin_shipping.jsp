@@ -362,11 +362,11 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <c:choose>
-                                            <c:when test = "${result.remain_qty == ''}">
-                                                <td class="col ta_r"><c:out value="${result.remain_qty}"  default=""/></td>
+                                            <c:when test = "${result.real_remain_qty == ''}">
+                                                <td class="col ta_r"><c:out value="${result.real_remain_qty}"  default=""/></td>
                                             </c:when>
                                             <c:otherwise>
-                                                <td class="col ta_r"><fmt:formatNumber value="${result.remain_qty}" pattern="#,###" /></td>
+                                                <td class="col ta_r"><fmt:formatNumber value="${result.real_remain_qty}" pattern="#,###" /></td>
                                             </c:otherwise>
                                         </c:choose>
                                         <c:choose>

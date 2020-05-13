@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -275,7 +274,8 @@ public class ShippingMtmController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @ResponseBody
+    @SuppressWarnings("unchecked")
+	@ResponseBody
     @RequestMapping(value = "/shipping/mtmlistExcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void listShippingMtmExcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 

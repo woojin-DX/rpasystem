@@ -65,7 +65,8 @@ public class LoginDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public HashMap<String, Object> checkUserInfoWithCookie(HashMap<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public HashMap<String, Object> checkUserInfoWithCookie(HashMap<String, Object> paramMap) {
         return (HashMap<String, Object>) selectOne("checkUserInfoWithCookie", paramMap);
     }
 }

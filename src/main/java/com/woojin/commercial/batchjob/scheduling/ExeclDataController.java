@@ -1,10 +1,8 @@
 package com.woojin.commercial.batchjob.scheduling;
 
 import com.woojin.commercial.util.ExcelBuilder;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -24,7 +20,8 @@ public class ExeclDataController {
     @Autowired
     ExcelDataService excelDataService;
 
-    @ResponseBody
+    @SuppressWarnings("unchecked")
+	@ResponseBody
     @RequestMapping(value = "/admin/exceldata", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<Object, Object> autoExcelMake(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<Object, Object> returnMap = new HashMap<Object, Object>();
@@ -41,7 +38,7 @@ public class ExeclDataController {
             SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             Map<String, Object> excelSumMap = excelDataService.listExcelDataSum();
-            List<ExcelDataVO> lstResultSum = (List<ExcelDataVO>) excelSumMap.get("listExcelDataSum");
+            //List<ExcelDataVO> lstResultSum = (List<ExcelDataVO>) excelSumMap.get("listExcelDataSum");
             List<Object> objResultSum = (List<Object>) excelSumMap.get("listExcelDataSum");
 
             excelTitle = "INFO";
@@ -245,11 +242,11 @@ public class ExeclDataController {
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            Sheet sheet = ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, true);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, true);
 
             Map<String, Object> excelMap = excelDataService.listExcelData();
 
-            List<ExcelDataVO> lstResult = (List<ExcelDataVO>) excelMap.get("listExcelData");
+            //List<ExcelDataVO> lstResult = (List<ExcelDataVO>) excelMap.get("listExcelData");
             List<Object> objResult = (List<Object>) excelMap.get("listExcelData");
 
             excelTitle = "DATA";
@@ -367,7 +364,7 @@ public class ExeclDataController {
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            Sheet sheet1 = ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, true);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, true);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             Calendar c1 = Calendar.getInstance();

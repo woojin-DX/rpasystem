@@ -76,6 +76,7 @@ public class ShippingVO {
 	private int mtmreg_qty;                    /* MTM가용재고 */
 
 	private String remain_qty;                    /* 잔여수량 */
+	private String real_remain_qty;                    /* 잔여수량 */
 
 	private String supply_dt;                    /* 출하일자 */
 
@@ -116,7 +117,7 @@ public class ShippingVO {
 	private String sap_req_dt;                    /* 수령일자 */
 	private String sap_material_code;                    /* 수령일자 */
 	private int sap_qty;                    /* 수령일자 */
-
+ 
 	private int verification_qty;
 
 	private Map<String,Object> mtminfo;

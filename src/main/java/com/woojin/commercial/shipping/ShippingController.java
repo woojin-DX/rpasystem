@@ -325,7 +325,8 @@ public class ShippingController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @ResponseBody
+    @SuppressWarnings("unchecked")
+	@ResponseBody
     @RequestMapping(value = "/shipping/shippingexcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void shippingExcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
         ModelAndView mv = new ModelAndView();
@@ -574,10 +575,10 @@ public class ShippingController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @ResponseBody
+    @SuppressWarnings("unchecked")
+	@ResponseBody
     @RequestMapping(value = "/shipping/placeexcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void placeExcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
-        ModelAndView mv = new ModelAndView();
 
         try {
             String excelTitle = "";

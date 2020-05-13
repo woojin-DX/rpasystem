@@ -32,7 +32,6 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelStyleBuilder {
 
@@ -59,10 +58,10 @@ public class ExcelStyleBuilder {
             nBCellColor = Integer.valueOf( styleColor.substring( 4, 6 ), 16 );
         }
 
-        XSSFFont fontStyle = (XSSFFont) wb.createFont();
+        Font fontStyle = wb.createFont();
 
         fontStyle.setFontName("맑은 고딕");
-        fontStyle.setFamily(FontFamily.MODERN);
+        //((XSSFFont) fontStyle).setFamily(FontFamily.MODERN);
         if (fontType.equals("title")) {
             fontStyle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             fontStyle.setFontHeightInPoints((short)15);
@@ -98,8 +97,9 @@ public class ExcelStyleBuilder {
             fontStyle.setFontHeightInPoints((short)10);
             fontStyle.setUnderline(XSSFFont.U_NONE);
         }
-        fontStyle.setColor(new XSSFColor(new java.awt.Color(nRFontColor, nGFontColor, nBFontColor)));
-
+        
+        fontStyle.setColor(new XSSFColor(new java.awt.Color(nRFontColor, nGFontColor, nBFontColor)).getIndexed());
+        
         XSSFCellStyle cellStyle = (XSSFCellStyle) wb.createCellStyle();
         if (textAlign.equals("left")) {
             cellStyle.setAlignment(XSSFCellStyle.ALIGN_LEFT); //왼쪽
@@ -179,7 +179,7 @@ public class ExcelStyleBuilder {
 
         HSSFFont fontStyle = wb.createFont();
 
-        fontStyle.setFontName("맑은 고딕");
+        //fontStyle.setFontName("맑은 고딕");
         if (fontType.equals("title")) {
             fontStyle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             fontStyle.setFontHeightInPoints((short)15);
@@ -276,44 +276,44 @@ public class ExcelStyleBuilder {
         HSSFPalette palette = wb.getCustomPalette();
 
         HSSFFont fontTitle = wb.createFont();
-        fontTitle.setFontName("돋움");
+        //fontTitle.setFontName("돋움");
         fontTitle.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         fontTitle.setFontHeightInPoints((short)15);
         fontTitle.setUnderline(HSSFFont.U_DOUBLE);
 
         HSSFFont fontBoldTitle = wb.createFont();
-        fontBoldTitle.setFontName("돋움");
+        //fontBoldTitle.setFontName("돋움");
         fontBoldTitle.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         fontBoldTitle.setFontHeightInPoints((short)12);
         fontBoldTitle.setUnderline(HSSFFont.U_NONE);
 
         HSSFFont fontNomal = wb.createFont();
-        fontNomal.setFontName("돋움");
+        //fontNomal.setFontName("돋움");
         fontNomal.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         fontNomal.setFontHeightInPoints((short)8);
         fontNomal.setUnderline(HSSFFont.U_NONE);
 
         HSSFFont fontBold = wb.createFont();
-        fontBold.setFontName("돋움");
+        //fontBold.setFontName("돋움");
         fontBold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         fontBold.setFontHeightInPoints((short)8);
         fontBold.setUnderline(HSSFFont.U_NONE);
 
         HSSFFont fontBoldWhite = wb.createFont();
-        fontBoldWhite.setFontName("돋움");
+        //fontBoldWhite.setFontName("돋움");
         fontBoldWhite.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         fontBoldWhite.setColor(palette.findSimilarColor(255, 255, 255).getIndex());
         fontBoldWhite.setFontHeightInPoints((short)8);
         fontBoldWhite.setUnderline(HSSFFont.U_NONE);
 
         HSSFFont fontNomalLine = wb.createFont();
-        fontNomalLine.setFontName("돋움");
+        //fontNomalLine.setFontName("돋움");
         fontNomalLine.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         fontNomalLine.setFontHeightInPoints((short)10);
         fontNomalLine.setUnderline(HSSFFont.U_SINGLE);
 
         HSSFFont fontSubTitle10 = wb.createFont();
-        fontSubTitle10.setFontName("돋움");
+        //fontSubTitle10.setFontName("돋움");
         fontSubTitle10.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         fontSubTitle10.setColor(palette.findSimilarColor(89, 89, 89).getIndex());
         fontSubTitle10.setFontHeightInPoints((short)12);

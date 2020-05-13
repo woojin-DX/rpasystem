@@ -24,8 +24,6 @@ import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.login.LoginDAO;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.login.LoginService;
-import com.woojin.commercial.util.CommonUtils;
-import com.woojin.commercial.util.ShaUtil;
 
 import javax.annotation.Resource;
 import java.util.HashMap;

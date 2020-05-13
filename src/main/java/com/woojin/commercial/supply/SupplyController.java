@@ -78,6 +78,7 @@ public class SupplyController {
             if (userVO != null) {
 	            if (userVO.getAuth_cd().equals("SUPPLY")) {
 	                commandMap.put("company_cd",userVO.getCompany_cd().toString());
+	                if (commandMap.get("process_cd") == null) commandMap.put("process_cd","ST_BOS");
 	
 	                Map<String, Object> resultMap = supplyService.listSupply(commandMap);
 	

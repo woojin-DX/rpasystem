@@ -51,8 +51,8 @@
                                 <input type="hidden" id="material_num" name="material_num" value="" />
                                 <input type="hidden" id="processFlag" name="processFlag" value="insert" />
                                 <input type="text" style="width:0px; display: none;" />
-                                <div class="bbsL_WRITE_box">
-                                    <table class="bbsL_WRITE">
+                                <div class="bbsCom_WRITE_box">
+                                    <table class="bbsCom_WRITE">
                                         <!-- 헤드부 -->
                                         <thead>
                                         <caption> 출하정보 상세내역 </caption>
@@ -69,7 +69,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">품번</th>
-                                            <td><select name="knumh" id="knumh" style="width:153px;">
+                                            <td><select name="knumh" id="knumh" style="width:165px;">
                                                 <option value="">품번선택</option>
                                                 <c:forEach var="materialList" items="${materialList}" varStatus="status">
                                                     <option value="${materialList.knumh}">${materialList.material_num}</option>
@@ -80,7 +80,7 @@
                                         <tr>
                                             <th scope="row">납품처</th>
                                             <td>
-                                                <select name="place_key" id="place_key" style="width:153px;height:24px;">
+                                                <select name="place_key" id="place_key" style="font-size:14px;font-weight:bold;width:165px;height:24px;">
                                                     <option value="">납품처선택</option>
                                                     <c:forEach var="placeList" items="${placeList}" varStatus="status">
                                                         <option value="${placeList.place_key}">${placeList.place_nm}</option>
@@ -90,23 +90,23 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">수량</th>
-                                            <td><input type="text" maxlength="10" id="supply_req_qty" name="supply_req_qty" size="20" class="input_s1 ta_r" /></td>
+                                            <td><input type="text" maxlength="10" id="supply_req_qty" name="supply_req_qty" size="17" class="input_s1 ta_r" /></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">납품요청일</th>
-                                            <td><input maxlength="10" type="text" id="supply_req_dt" name="supply_req_dt" size="20" class="input_s1 ta_c" value='' ></td>
+                                            <td><input maxlength="10" type="text" id="supply_req_dt" name="supply_req_dt" size="17" class="input_s1 ta_c" value='' ></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">단가</th>
-                                            <td><input type="text" maxlength="8" id="unit_price" name="unit_price" size="20" readonly class="input_r ta_r" /></td>
+                                            <td><input type="text" maxlength="8" id="unit_price" name="unit_price" size="17" readonly class="input_r ta_r" /></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">금액</th>
-                                            <td><input type="text" maxlength="12" id="total_price" name="total_price" size="20" class="input_r ta_r" readonly /></td>
+                                            <td><input type="text" maxlength="12" id="total_price" name="total_price" size="17" class="input_r ta_r" readonly /></td>
                                         </tr>
                                         <tr id="receive" style="display: none;">
                                             <th scope="row">수령일</th>
-                                            <td><input maxlength="10" type="text" id="receive_dt" name="receive_dt" size="20" class="input_s1 ta_c" value='' ></td>
+                                            <td><input maxlength="10" type="text" id="receive_dt" name="receive_dt" size="17" class="input_s1 ta_c" value='' ></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -134,8 +134,11 @@
                         <!-- 목록 -->
                         <div class="bbsL_box">
                             <!-- 검색 / 상단 -->
-                            <div class="bbsS_TOP">
+                            <div class="bbsCom_TOP">
                                 <form id="searchForm" name="searchForm">
+                                	<span class="button large" ><a href="javascript:void(0)" id="btn_bos">&nbsp;&nbsp;&nbsp;대기&nbsp;&nbsp;&nbsp;</a></span>
+                                	<span class="button large"><a href="javascript:void(0)" id="btn_all">&nbsp;&nbsp;&nbsp;전체&nbsp;&nbsp;&nbsp;</a></span>
+                                	<label style="font-size:20px;font-weight:bold;">${infoParam.company_nm}</label>
                                     <input type="text" style="width:0px; visibility: hidden;">
                                     <input type="hidden" id="pagemode" name="pagemode" value="${pageParam.pagemode}" />
                                     <input type="hidden" id="nCurrpage" name="nCurrpage" value="${pageParam.nCurrpage}" />
@@ -166,27 +169,28 @@
                                 </form>
                             </div>
                             <!-- //검색 / 상단 -->
-                            <table cellspacing="0" border="1" summary="목록정보"  cellpadding="0" id="tbllist" class="bbsL">
+                            
+                            <table cellspacing="0" border="1" summary="목록정보"  cellpadding="0" id="tbllist" class="bbsCom">
                                 <caption>게시판 목록</caption>
                                 <colgroup>
-                                    <col width="80px" />
+                                    <col width="110px" />
+                                    <!-- <col width="230px" />  -->
                                     <col width="230px" />
                                     <col width="200px" />
-                                    <col width="200px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
-                                    <col width="100px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
+                                    <col width="120px" />
                                     <col width="0" />
                                 </colgroup>
                                 <thead>
                                 <tr>
                                     <th scope="col">발주일자</th>
-                                    <th class="ta_l" scope="col">업체명</th>
+                                    <!-- <th class="ta_l" scope="col">업체명</th> -->
                                     <th class="ta_l" scope="col">품번</th>
                                     <th class="ta_l" scope="col">납품처</th>
                                     <th scope="col">납품요청일</th>
@@ -205,8 +209,8 @@
                                 <tbody>
                                 <c:forEach var="result" items="${supplyList}" varStatus="status">
                                     <tr class="row" >
-                                        <td class="col ord"><c:out value="${result.order_dt}"  default=""/></td>
-                                        <td class="col ta_l"><c:out value="${infoParam.company_nm}"  default=""/></td>
+                                        <td class="col ord ta_l"><c:out value="${result.order_dt}"  default=""/></td>
+                                        <!-- <td class="col ta_l"><c:out value="${infoParam.company_nm}"  default=""/></td> -->
                                         <td class="col item ta_l"><c:out value="${result.material_num}"  default=""/></td>
                                         <td class="col splace ta_l"><c:out value="${result.splace.place_nm}"  default=""/></td>
                                         <td class="col sregdt"><c:out value="${result.supply_req_dt}"  default=""/></td>
@@ -384,6 +388,24 @@
             comSubmit.setUrl("/supply");
             comSubmit.submit();
         });
+        
+        $('#btn_bos').on("click", function(e){
+            $("#pagemode").val("search");
+            $("#process_cd").val("ST_BOS");
+            var comSubmit = new ComSubmit("searchForm");
+            comSubmit.setUrl("/supply");
+            comSubmit.submit();
+        });
+        
+        $('#btn_all').on("click", function(e){
+            $("#pagemode").val("search");
+            $("#process_cd").val("");
+            var comSubmit = new ComSubmit("searchForm");
+            comSubmit.setUrl("/supply");
+            comSubmit.submit();
+        });
+        
+        
 
         $("#btnCancle").click(function() {
             $("#knumh").select2().val("").trigger("change");

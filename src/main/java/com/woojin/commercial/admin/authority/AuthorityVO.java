@@ -17,11 +17,6 @@ package com.woojin.commercial.admin.authority;
 import java.math.BigInteger;
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import java.sql.Timestamp;
-
 @Data
 public class AuthorityVO {
 

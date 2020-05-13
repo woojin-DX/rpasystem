@@ -2,7 +2,6 @@ package com.woojin.commercial.admin.commoncode;
 
 import lombok.Data;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 
 @Data

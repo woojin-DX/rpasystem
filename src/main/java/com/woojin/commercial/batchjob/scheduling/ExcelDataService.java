@@ -1,7 +1,5 @@
 package com.woojin.commercial.batchjob.scheduling;
 
-import com.woojin.commercial.common.CommandMap;
-
 import java.util.Map;
 
 public interface ExcelDataService {

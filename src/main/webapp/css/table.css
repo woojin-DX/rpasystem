@@ -45,6 +45,39 @@ table.bbsL tbody tr td.link {
 	cursor: pointer;
 }
 
+div.bbsCom_TOP{display:inline-block;float:right;clear:both;width:100%;height:22px;margin-bottom:8px;background:0 none;min-width:500px;font-size:15px;}
+div.bbsCom_TOP:after{display:block;clear:both;content:''}
+div.bbsCom_TOP fieldset{display:inline-block;float:right}
+div.bbsCom_TOP select.sel_v1{margin-right:4px}
+div.bbsCom_TOP input.input_sch{position:relative;margin-right:1px;height:20px;padding:0;border:1px solid #d2d2d2;background-color:#fff;font-size:12px;line-height:21px;color:#545454}
+div.bbsCom_TOP .btn_schok{position:relative;margin-top:-2px}
+
+table.bbsCom thead th{padding:3px 10px 3px 5px;border-top:3px solid #0072BC;border-bottom:1px solid #b8b8b8;font-size:15px;font-weight:bold;color:#545454;text-align:center}
+table.bbsCom thead th.ta_titg01{padding-left:10px;text-align:left}
+table.bbsCom thead th.line_s{background:url(/images/board/bg_line_s.gif) no-repeat 100% 2px}
+table.bbsCom thead td{padding:5px 10px 9px 5px;border-top:1px solid #0072BC;border-bottom:1px solid #e4e4e4;font-weight:normal;color:#545454;text-align:center}
+table.bbsCom thead td.ta_titg01{padding-left:10px;text-align:left}
+table.bbsCom thead td.line_s{background:url(/images/board/bg_line_s.gif) no-repeat 100% 2px}
+table.bbsCom tbody td{padding:5px 10px 9px 5px;border-bottom:1px solid #e4e4e4;line-height:20px;font-size:15px;font-weight:bold;color:#545454;text-align:center;vertical-align:middle}
+table.bbsCom tbody td{color:#545454}
+table.bbsCom tbody td.ta_titg01{text-align:left}
+table.bbsCom tbody tr.row:hover { background-color: cyan; }
+table.bbsCom tbody tr td.col:hover {cursor: pointer; }
+table.bbsCom .notice{background:#fcfbf9}
+table.bbsCom tbody tr:nth-child(2n) {
+    background-color: #eff8fe;
+  }
+table.bbsCom tbody tr:nth-child(2n+1) {
+    background-color: #ffffff;
+  }
+
+
+table.bbsCom tbody tr td.link {
+	text-decoration: underline;
+	color:#003eff;
+	cursor: pointer;
+}
+
 .trbackcolor{background:#fddfdf;}
 
 
@@ -207,6 +240,18 @@ table.bbsL_WRITE th{padding:2px 5px; text-align:center;height:20px;}
 table.bbsL_WRITE td{padding:1px 5px}
 table.bbsL_WRITE td.textarea{padding-top:17px !important;padding-bottom:17px !important;background:0 none !important}
 table.bbsL_WRITE .txt_bu_v1{display:inline-block;font-size:1em;line-height:14px;color:#545454}
+
+/* 게시판(일반) write */
+div.bbsCom_WRITE_box:after{display:block;clear:both;content:''}
+div.bbsCom_WRITE_box{width:100%;height:auto;margin:0;background:none;border-top:3px solid #0072bc}
+table.bbsCom_WRITE th.line_s{background:#fff no-repeat 100% 100%}
+table.bbsCom_WRITE th,table.bbsCom_WRITE td{border-bottom:1px solid #eae9e9;border-right:1px solid #eae9e9;color:#545454}
+table.bbsCom_WRITE .first{border-left:1px solid #eae9e9}
+table.bbsCom_WRITE th{font-size:14px;font-weight:bold;color:#545454}
+table.bbsCom_WRITE th{padding:2px 5px; text-align:center;height:20px;}
+table.bbsCom_WRITE td{font-size:14px;font-weight:bold;padding:1px 5px}
+table.bbsCom_WRITE td.textarea{padding-top:17px !important;padding-bottom:17px !important;background:0 none !important}
+table.bbsCom_WRITE .txt_bu_v1{display:inline-block;font-size:1em;line-height:14px;color:#545454}
 
 div.bbsL_WRITE2_box:after{display:block;clear:both;content:''}
 div.bbsL_WRITE2_box{width:100%;height:auto;margin:0;min-width:600px;background:none;border-top:3px solid #0072bc}
