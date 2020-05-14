@@ -124,6 +124,11 @@
                                     </tbody>
                                 </table>
                                 <!-- //목록 -->
+                                <div class="bbsB ta_r mt_10">
+		                            <ul class="btn_all">
+		                                <li id="btnShppingExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingExcel">목록엑셀다운</a></span>&nbsp;&nbsp;</li>
+		                            </ul>
+		                        </div>
                             </div>
                         </div>
                         <!-- //내용 -->
@@ -151,6 +156,12 @@
             $("#pagemode").val("search");
             var comSubmit = new ComSubmit("searchForm");
             comSubmit.setUrl("/admin/sumlist");
+            comSubmit.submit();
+        });
+        
+        $('#shippingExcel').on("click", function(e){
+            var comSubmit = new ComSubmit("searchForm");
+            comSubmit.setUrl("/admin/sumlistexcel");
             comSubmit.submit();
         });
 

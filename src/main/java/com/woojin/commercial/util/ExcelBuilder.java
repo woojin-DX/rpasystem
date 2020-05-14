@@ -727,6 +727,7 @@ public class ExcelBuilder {
                     Arrays.fill(arrRow, "");
 
                 int nCnt = 0;
+                CellStyle titleStyle;
 
                 for (Object item : result) {
                     Map<String, Object> testMap = new HashMap<String, Object>();
@@ -768,8 +769,10 @@ public class ExcelBuilder {
                         } else {
                             cell.setCellValue(" ");
                         }
+                        
+                        titleStyle = null;
 
-                        CellStyle titleStyle = stylesXss.createExcelCellStylesXSS(workbook
+                        titleStyle = stylesXss.createExcelCellStylesXSS(workbook
                                 , fieldInfoList.get(i).get("fontType").toString(), fieldInfoList.get(i).get("fontColor").toString()
                                 , fieldInfoList.get(i).get("styleColor").toString()
                                 , fieldInfoList.get(i).get("textAlign").toString(), fieldInfoList.get(i).get("textVAlign").toString()
@@ -976,7 +979,7 @@ public class ExcelBuilder {
             }
 
             if (result != null){
-
+            	CellStyle titleStyle;
                 for (Object item : result) {
                     Map<String, Object> testMap = new HashMap<String, Object>();
                     try {
@@ -1016,8 +1019,8 @@ public class ExcelBuilder {
                         } else {
                             cell.setCellValue(" ");
                         }
-
-                        CellStyle titleStyle = stylesXss.createExcelCellStylesXSS(workbook
+                        titleStyle = null;
+                        titleStyle = stylesXss.createExcelCellStylesXSS(workbook
                                 , fieldInfoList.get(i).get("fontType").toString(), fieldInfoList.get(i).get("fontColor").toString()
                                 , fieldInfoList.get(i).get("styleColor").toString()
                                 , fieldInfoList.get(i).get("textAlign").toString(), fieldInfoList.get(i).get("textVAlign").toString()

@@ -59,8 +59,9 @@ public class ExcelStyleBuilder {
         }
 
         Font fontStyle = wb.createFont();
+        fontStyle.setCharSet(HSSFFont.DEFAULT_CHARSET);
+        fontStyle.setFontName("맑은고딕");
 
-        fontStyle.setFontName("맑은 고딕");
         //((XSSFFont) fontStyle).setFamily(FontFamily.MODERN);
         if (fontType.equals("title")) {
             fontStyle.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
@@ -97,10 +98,11 @@ public class ExcelStyleBuilder {
             fontStyle.setFontHeightInPoints((short)10);
             fontStyle.setUnderline(XSSFFont.U_NONE);
         }
-        
         fontStyle.setColor(new XSSFColor(new java.awt.Color(nRFontColor, nGFontColor, nBFontColor)).getIndexed());
-        
         XSSFCellStyle cellStyle = (XSSFCellStyle) wb.createCellStyle();
+
+        cellStyle.setFont(fontStyle);
+
         if (textAlign.equals("left")) {
             cellStyle.setAlignment(XSSFCellStyle.ALIGN_LEFT); //왼쪽
         }
@@ -145,8 +147,6 @@ public class ExcelStyleBuilder {
             cellStyle.setBorderTop(XSSFCellStyle.BORDER_THIN);
             cellStyle.setBorderBottom(XSSFCellStyle.BORDER_THIN);
         }
-
-        cellStyle.setFont(fontStyle);
 
         return cellStyle;
 

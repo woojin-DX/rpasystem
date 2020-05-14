@@ -49,9 +49,6 @@
 	</resultMap>
 
 	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingSum">
-		<id column="material_num" property="material_num"/>
-		<association property="mtm_use_qty" column="{MATNR=material_num}" javaType="int" select="selectMTMQty"/>
-		<association property="prod_order_qty" column="{MATL_CD=material_num}" javaType="int" select="selectProdOrderQty"/>
 	</resultMap>
 	
 	<resultMap type="com.woojin.commercial.shipping.ShippingVO" id="ShippingInfoExcel">
@@ -1030,12 +1027,14 @@
             *******************************************************************************************-->
 	<select id="listShippingSum" parameterType="hashmap" resultMap="ShippingSum">
 		<![CDATA[
-		select material_num
+		select oritb.material_num
 			, saptb3.MTART as mtart    /*자재유형*/
 			, saptb2.BSTRF as bstrf     /*포장단위*/
 			, oritb.sum_qty
 			, ISNULL(saptb4.INVEN_USE_QTY,0) as inven_use_qty
 			, ISNULL(saptb4.INVEN_USE_QTY,0) - ISNULL(oritb.sum_qty,0) as verification_qty
+			, isnull(mat.mtm_use_qty,0) as mtm_use_qty
+			, isnull(yma.prod_order_qty,0) as prod_order_qty
 
 		from (
 			select a.material_num as material_num /* 품번 */
@@ -1063,6 +1062,28 @@
 				where  a.LABST > 0
 				group by a.MATNR, b.MTART
 			) saptb4 on oritb.material_num = saptb4.MATNR COLLATE Korean_Wansung_CI_AS
+			left outer join (
+				SELECT MATERIAL_NUM,ISNULL(MAX(mtm_use_qty),0) as mtm_use_qty
+				 from(
+					select a.MATERIAL_NUM, 
+						(
+							select case when bb.MTART = 'HAWA' then 0 else SUM(aa.LABST) end mtm_qty
+							from ERP_DL.WJP.wjp.MARD aa
+							inner join ERP_DL.WJP.wjp.MARA bb on aa.MATNR = bb.MATNR
+							where  bb.MTART = 'FERT' and aa.LABST > 0
+								and LEFT(aa.MATNR,LEN(aa.MATNR)-2) collate SQL_Latin1_General_CP1_CI_AS = LEFT(a.MATERIAL_NUM,LEN(a.MATERIAL_NUM)-2) and aa.MATNR collate SQL_Latin1_General_CP1_CI_AS != a.MATERIAL_NUM
+							group by bb.MTART
+						)  mtm_use_qty
+					from tb_orderfor a
+	
+				) tot
+				group by MATERIAL_NUM
+			) mat on oritb.material_num = mat.MATERIAL_NUM
+			left outer join (
+				SELECT MATL_CD, ISNULL(SUM(PLAN_QTY-GOODISH_QTY),0) as prod_order_qty
+				FROM [192.9.200.159].[IMES].[dbo].[V_MARKET_ALIVE] A
+				group by MATL_CD
+			) yma on oritb.material_num = yma.MATL_CD collate Korean_Wansung_CI_AS
 		]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="material_list != '' and material_list != null">
@@ -1449,11 +1470,11 @@
 					  , 0 as[SHIPPING_SEQ]
 				FROM [dbo].[TB_ORDERFOR] oritb
 					inner join [dbo].[TB_SHIPPING] shptb on oritb.[ORDERFOR_KEY] = shptb.[ORDERFOR_KEY]
-				WHERE shptb.[PROCESS_CD] = 'ST_SPG' and shptb.[SHIPPING_SEQ] != 0
+				WHERE shptb.[PROCESS_CD] in ('ST_SPG','ST_BCP') and shptb.[SHIPPING_SEQ] != 0
 				GROUP BY oritb.[ORDERFOR_KEY] ,oritb.CONFIRM_QTY
 			) AS S ON (T.ORDERFOR_KEY = S.ORDERFOR_KEY
-				AND S.SHIPPING_SEQ  = T.SHIPPING_SEQ)
-			WHEN MATCHED  AND S.PROCESS_FLAG = 'ST_SPG' THEN
+				AND S.SHIPPING_SEQ  = T.SHIPPING_SEQ) and T.PROCESS_CD not in ('ST_SPG','ST_BCP')
+			WHEN MATCHED  AND S.PROCESS_FLAG = 'ST_SPG' and T.PROCESS_CD != 'ST_BCP' THEN
 				UPDATE SET T.PROCESS_CD = 'ST_SPG';
 		]]>
 	</update>
@@ -1470,11 +1491,12 @@
 			USING (
 				SELECT DISTINCT oritb.[ORDERFOR_KEY]
 				  ,shptb.PROCESS_CD
+				  ,oritb.PROCESS_CD as TOTPROCESS_CD
 			  FROM [dbo].[TB_ORDERFOR] oritb
 				inner join [dbo].[TB_SHIPPING] shptb on oritb.[ORDERFOR_KEY] = shptb.[ORDERFOR_KEY]
-			  WHERE shptb.[PROCESS_CD] = 'ST_SPG' and oritb.[PROCESS_CD] not in('ST_SPG','ST_BCP') AND shptb.SHIPPING_SEQ = 0
+			  WHERE shptb.[PROCESS_CD] in ('ST_SPG','ST_BCP') and oritb.[PROCESS_CD] not in('ST_SPG','ST_BCP') AND shptb.SHIPPING_SEQ = 0
 			) AS S ON (T.ORDERFOR_KEY = S.ORDERFOR_KEY)
-			WHEN MATCHED  AND S.PROCESS_CD = 'ST_SPG' THEN
+			WHEN MATCHED  AND S.PROCESS_CD in ('ST_SPG','ST_BCP') and S.TOTPROCESS_CD != 'ST_BCP' THEN
 				UPDATE SET T.PROCESS_CD = 'ST_SPG';
 		]]>
 	</update>

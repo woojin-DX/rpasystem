@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -346,6 +347,196 @@ public class AdminController {
         return mv;
     }
 
+    /* *******************************************************************************************
+     * 함수  제목 : 사용자 정보 목록
+     * 작  성  자 : 안원해      작  성  일 : 2019-11-05
+     * 내      용 : 전체 목록 및 갯수
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping(value = "/admin/sumlistexcel", method = {RequestMethod.GET, RequestMethod.POST})
+    public void sumlistexcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        try {
+            String excelTitle = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+
+            Map<String, Object> tempMap = new HashMap<String, Object>();
+
+            Map<String, Object> titleStyleMap = new HashMap<String, Object>();
+            List<Map<String, Object>> fieldInfoList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> excelInfpMap = new HashMap<String, Object>();
+
+            Map<String, Object> resultMap = adminService.listShippingSum(commandMap);
+            List<Object> objResult = (List<Object>) resultMap.get("shippingList");
+
+            excelTitle = "자재코드합산";
+
+            //첫Row,마지막Row,첫cell,마지막cell, row높이, 스타일, 내용
+            Map<String, Object> headerMap = new HashMap<String, Object>();
+
+            headerMap.put("sRow", "1");
+            headerMap.put("eRow", "1");
+            headerMap.put("sCol", "0");
+            headerMap.put("eCol", "6");
+            headerMap.put("fontType", "titleLine");
+            headerMap.put("fontColor", "000000");
+            headerMap.put("styleColor", "FFFFFF");
+            headerMap.put("textAlign", "center");
+            headerMap.put("textVAlign", "center");
+            headerMap.put("line", "none");
+            headerMap.put("title", excelTitle);
+
+            titleStyleMap.put("sRow", "3");
+            titleStyleMap.put("eRow", "3");
+            titleStyleMap.put("sCol", "0");
+            titleStyleMap.put("eCol", "6");
+            titleStyleMap.put("fontType", "subtitle");
+            titleStyleMap.put("fontColor", "000000");
+            titleStyleMap.put("styleColor", "ECF5FC");
+            titleStyleMap.put("textAlign", "center");
+            titleStyleMap.put("textVAlign", "center");
+            titleStyleMap.put("line", "line");
+
+            fieldInfoList = new ArrayList<Map<String, Object>>();
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "material_num");
+            tempMap.put("cellTitle", "자재코드");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "mtart");
+            tempMap.put("cellTitle", "자재유형");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "sum_qty");
+            tempMap.put("cellTitle", "발주수량");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "inven_use_qty");
+            tempMap.put("cellTitle", "가용재고");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
+            fieldInfoList.add(tempMap);  
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "verification_qty");
+            tempMap.put("cellTitle", "발주수량검증");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
+            fieldInfoList.add(tempMap);  
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "mtm_use_qty");
+            tempMap.put("cellTitle", "MTM가용재고");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
+            fieldInfoList.add(tempMap);            
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "prod_order_qty");
+            tempMap.put("cellTitle", "생산오더수량");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
+            fieldInfoList.add(tempMap);            
+            
+            excelInfpMap = new HashMap<String, Object>();
+            excelInfpMap.put("headerMap", headerMap);
+            excelInfpMap.put("titleStyleMap", titleStyleMap);
+            excelInfpMap.put("fieldInfoList", fieldInfoList);
+
+            SXSSFWorkbook workbook = ExcelBuilder.buildExcelXSSNon(excelTitle, excelInfpMap, objResult, false);
+
+
+            String realExcelFilename = null;
+            realExcelFilename = URLEncoder.encode(excelTitle + "_"  + strToday, "UTF-8");
+            realExcelFilename = realExcelFilename.replaceAll("\\+", " ");
+
+            /*
+             * HTTP Header 설정.
+             */
+            response.setContentType("application/vnd.ms-excel; name=\"" + realExcelFilename + ".xlsx\"");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + realExcelFilename + ".xlsx\"");
+            response.setHeader("Content-Transfer-Encoding", "binary");
+//            response.setHeader("Content-Length", Long.toString(fileDownLoadInputVO.getlFileSize()));
+            response.setHeader("Cache-Control", "no-cahe, no-store, must-revalidate\r\n");
+            response.setHeader("Connection", "close");
+
+            //FileOutputStream fileOut = new FileOutputStream(realExcelFilename + ".xlsx");
+            //OutputStream out = response.getOutputStream();
+            OutputStream fileOut = response.getOutputStream();
+
+            workbook.write(fileOut);
+            fileOut.close();
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+    }
+    
 
     /* *******************************************************************************************
      * 함수  제목 : 사용자 정보 목록
@@ -848,7 +1039,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);
             
             tempMap = new HashMap<String, Object>();
@@ -862,7 +1053,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);
 
 
@@ -920,7 +1111,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);
             
             tempMap = new HashMap<String, Object>();
@@ -934,7 +1125,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);            
 
             tempMap = new HashMap<String, Object>();
@@ -948,7 +1139,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);            
 
             tempMap = new HashMap<String, Object>();
@@ -962,7 +1153,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);            
 
             tempMap = new HashMap<String, Object>();
@@ -976,7 +1167,7 @@ public class AdminController {
             tempMap.put("textAlign", "right");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
-            tempMap.put("fomule", "");
+            tempMap.put("fomule", "* #,##0_-;-* #,##0_-;_-@_-");
             fieldInfoList.add(tempMap);            
             
             excelInfpMap = new HashMap<String, Object>();
