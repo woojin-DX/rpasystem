@@ -69,7 +69,7 @@ public class ExcelDataScheduler {
             tempMap.put("field", "mtart");
             tempMap.put("cellTitle", "자재유형");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 20*256);
+            tempMap.put("cellWidth", 15*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
