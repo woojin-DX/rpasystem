@@ -74,7 +74,7 @@ public class ExeclDataController {
             tempMap.put("field", "mtart");
             tempMap.put("cellTitle", "자재유형");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -88,7 +88,7 @@ public class ExeclDataController {
             tempMap.put("field", "prdgrp_nm");
             tempMap.put("cellTitle", "아이템유형");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 15*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -214,7 +214,7 @@ public class ExeclDataController {
             tempMap.put("field", "docnum");
             tempMap.put("cellTitle", "납품문서번호");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 15*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -228,7 +228,7 @@ public class ExeclDataController {
             tempMap.put("field", "supply_num");
             tempMap.put("cellTitle", "출하지시번호");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 15*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -242,7 +242,7 @@ public class ExeclDataController {
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, true);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, false);
 
             Map<String, Object> excelMap = excelDataService.listExcelData();
 
@@ -253,7 +253,7 @@ public class ExeclDataController {
             titleStyleMap.put("sRow", "0");
             titleStyleMap.put("eRow", "0");
             titleStyleMap.put("sCol", "0");
-            titleStyleMap.put("eCol", "6");
+            titleStyleMap.put("eCol", "9");
             titleStyleMap.put("fontType", "subtitle");
             titleStyleMap.put("fontColor", "000000");
             titleStyleMap.put("styleColor", "ECF5FC");
@@ -360,11 +360,52 @@ public class ExeclDataController {
             tempMap.put("fomule", "");
             fieldInfoList.add(tempMap);
 
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "");
+            tempMap.put("cellTitle", "");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "company_nm");
+            tempMap.put("cellTitle", "업체명");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "place_nm");
+            tempMap.put("cellTitle", "납품처");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);            
             excelInfpMap = new HashMap<String, Object>();
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
 
-            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, true);
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResult, false);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             Calendar c1 = Calendar.getInstance();

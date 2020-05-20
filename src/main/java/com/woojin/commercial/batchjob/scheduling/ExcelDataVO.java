@@ -11,4 +11,6 @@ public class ExcelDataVO {
     private String supply_qty;
     private String supply_place;
     private String supply_dt;
+    private String company_nm;
+    private String place_nm;
 }

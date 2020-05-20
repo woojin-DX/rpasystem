@@ -1102,6 +1102,7 @@ public class ExcelBuilder {
                     }
                     //sheet.autoSizeColumn(n);    //너비를 자동으로 다시 설정
                     //sheet.setColumnWidth(n, (sheet.getColumnWidth(n))+512 );
+                    sheet.setColumnWidth(n, Integer.parseInt(fieldInfoList.get(n).get("cellWidth").toString()) );
                     row.setHeightInPoints((sheet.getDefaultRowHeightInPoints()));
                     row.setHeight((short)300);
                 }
@@ -1178,8 +1179,8 @@ public class ExcelBuilder {
                                 , fieldInfoList.get(i).get("line").toString(), fieldInfoList.get(i).get("fomule").toString());
                         cell.setCellStyle(titleStyle);
 
-                        sheet.autoSizeColumn(i);    //너비를 자동으로 다시 설정
-                        sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );
+                        //sheet.autoSizeColumn(i);    //너비를 자동으로 다시 설정
+                        //sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );
 
                     }
                     nCnt++;

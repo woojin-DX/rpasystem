@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.batchjob.scheduling.GpsiDataDAO">
+   <!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix0Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO">
+		<![CDATA[
+			SELECT 'PSIX0' as data_type
+				, 'A4600001' as base_code
+				, tot.matnr
+				, 'DUMMY' as inven_status
+				, 'DUMMY' as lot
+				, tot.supply_div
+				, SUM(tot.inven_qty) as inven_qty
+				, tot.meins
+				, CONVERT(CHAR(10), getdate(), 102) as data_dt
+				, '' as reserve1
+				, '' as reserve2
+				, '' as reserve3
+				, '' as reserve4
+				, '' as reserve5
+			FROM(
+				SELECT
+					mara.[MATNR] matnr
+					, supply_div
+					, inven_qty
+					, case when mara.MEINS = 'EA' then 'PC' else mara.MEINS end meins
+				  FROM [ERP_DL].[WJP].[wjp].[MARA] mara
+					inner join 
+						(SELECT distinct MATNR,case when LIFNR = 'A1000A01' then 1 else 0 end supply_div 
+							FROM [ERP_DL].[WJP].[wjp].[EINA]
+						) eina on mara.MATNR = eina.MATNR
+					inner join 
+						(SELECT [MATNR] ,SUM([LABST] + [UMLME] + [INSME]) inven_qty
+						  FROM [ERP_DL].[WJP].[wjp].[MARD] sub 
+						  where concat([LFGJA],[LFMON]) = (SELECT MAX(concat([LFGJA],[LFMON])) FROM [ERP_DL].[WJP].[wjp].[MARD] where MATNR = sub.MATNR and LGORT = sub.LGORT)
+						   and [LABST] + [UMLME] + [INSME] > 0
+						  group by [MATNR])	mard on mara.MATNR = mard.MATNR
+				  where mara.MTART in ('ROH', 'HAWA', 'FERT') 
+			) tot
+			group by tot.matnr, tot.supply_div, tot.meins
+			order by tot.matnr
+    	]]>
+	</select>
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix1Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix1VO">
+		<![CDATA[
+			SELECT 
+				'PSIX1' as data_type
+				, 'A4600001' as base_code
+				, 'DUMMY' as base_code1
+				, matnr
+				, psttr
+				, pedtr
+				, SUM(gsmng) as gsmng
+				, meins
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+			from(
+				select mara.matnr,plaf.PSTTR,plaf.PEDTR, plaf.GSMNG, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
+				from [ERP_DL].[WJP].[wjp].[MARA] mara
+					inner join [ERP_DL].[WJP].[wjp].[PLAF] plaf on mara.MATNR = plaf.MATNR
+				where mara.MTART in ('ROH', 'HAWA', 'FERT') and plaf.GSMNG > 0
+			
+			) tot
+			group by matnr,psttr,pedtr,meins
+			order by psttr,pedtr,matnr
+    	]]>
+	</select>
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix3Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO">
+		<![CDATA[
+			SELECT 
+				'PSIX3' as data_type
+				, 'A4600001' as base_code
+				, matnr
+				, psttr
+				, pedtr
+				, SUM(gsmng) as gsmng
+				, meins
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+			from(
+				select mara.matnr,plaf.PSTTR,plaf.PEDTR, plaf.GSMNG, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
+				from [ERP_DL].[WJP].[wjp].[MARA] mara
+					inner join [ERP_DL].[WJP].[wjp].[PLAF] plaf on mara.MATNR = plaf.MATNR
+				where mara.MTART = 'FERT' and plaf.GSMNG > 0
+			
+			) tot
+			group by matnr,psttr,pedtr,meins
+			order by psttr,pedtr,matnr
+    	]]>
+	</select>	
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix4Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO">
+		<![CDATA[
+			SELECT  
+				'PSIX4' as data_type
+				,MBLNR mblnr
+				, 'A4600001' as base_code
+				,MATNR matnr
+				, BUDAT budat
+				,SUM(ERFMG) as erfmg
+				, ERFME erfme
+				, 'DUMMY' as lot
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+				, '' as reserve1
+				, '' as reserve2
+				, '' as reserve3
+				, '' as reserve4
+				, '' as reserve5
+			FROM(
+				select mkpf.CPUDT, mseg.MBLNR,mseg.MATNR, mkpf.BUDAT,case when mseg.SHKZG = 'S' then  mseg.ERFMG when  mseg.SHKZG = 'H' then mseg.ERFMG * (-1) end ERFMG, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
+				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
+					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
+					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
+				where mkpf.VGART = 'WF' and mara.MTART = 'FERT' and mseg.BWART in ('101','102') and mseg.INSMK != '3'
+			) tot
+			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME
+			having SUM(ERFMG) > 0
+			order by MBLNR,MATNR
+    	]]>
+	</select>
+
+</mapper>

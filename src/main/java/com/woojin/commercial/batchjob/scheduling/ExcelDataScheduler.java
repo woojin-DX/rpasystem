@@ -69,7 +69,7 @@ public class ExcelDataScheduler {
             tempMap.put("field", "mtart");
             tempMap.put("cellTitle", "자재유형");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -83,7 +83,7 @@ public class ExcelDataScheduler {
             tempMap.put("field", "prdgrp_nm");
             tempMap.put("cellTitle", "아이템유형");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 15*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -209,7 +209,7 @@ public class ExcelDataScheduler {
             tempMap.put("field", "docnum");
             tempMap.put("cellTitle", "납품문서번호");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 15*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -223,7 +223,7 @@ public class ExcelDataScheduler {
             tempMap.put("field", "supply_num");
             tempMap.put("cellTitle", "출하지시번호");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 15*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
@@ -248,7 +248,7 @@ public class ExcelDataScheduler {
             titleStyleMap.put("sRow", "0");
             titleStyleMap.put("eRow", "0");
             titleStyleMap.put("sCol", "0");
-            titleStyleMap.put("eCol", "6");
+            titleStyleMap.put("eCol", "9");
             titleStyleMap.put("fontType", "subtitle");
             titleStyleMap.put("fontColor", "000000");
             titleStyleMap.put("styleColor", "ECF5FC");
@@ -350,6 +350,48 @@ public class ExcelDataScheduler {
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");
             tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "");
+            tempMap.put("cellTitle", "");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "company_nm");
+            tempMap.put("cellTitle", "업체명");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "place_nm");
+            tempMap.put("cellTitle", "납품처");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
             tempMap.put("fomule", "");

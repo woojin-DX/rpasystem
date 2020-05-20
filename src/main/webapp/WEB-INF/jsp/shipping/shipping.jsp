@@ -172,6 +172,7 @@
                         <!-- 버튼 -->
                         <div class="bbsB ta_r mt_10">
                             <ul class="btn_all">
+                            	<li style="display:none;" id="btnShppingCfmExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingCfmExcel">요약정보엑셀다운</a></span>&nbsp;&nbsp;</li>
                                 <li style="display:none;" id="btnShppingExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingExcel">목록엑셀다운</a></span>&nbsp;&nbsp;</li>
                                 <li style="display:none;" id="btnPlaceExcel"><span class="button medium"><a href="javascript:void(0)" id="placeExcel">납품처엑셀다운</a></span></li>
                                 <!--li id="btnShippingDelete"><span class="button medium">삭제</span></li>
@@ -199,16 +200,19 @@
         $(document).prop('title', '${pageTitle} ${localPageTitle}');
         if ("${userRole}" == "ADMIN" && "${pagecng}" == "CFMLIST") {
             $("#shippingcfm").attr('class', 'current');
+            $('#btnShppingCfmExcel').attr('style', "display:;");
             $('#btnShppingExcel').attr('style', "display:;");
             $('#btnPlaceExcel').attr('style', "display:;");
         }
         else if ("${userRole}" == "ADMIN" && "${pagecng}" == "SPGLIST") {
             $("#shippingspg").attr('class', 'current');
+            $('#btnShppingCfmExcel').attr('style', "display:display:none;");
             $('#btnShppingExcel').attr('style', "display:none;");
             $('#btnPlaceExcel').attr('style', "display:none;");
         }
         else {
             $("#shipping").attr('class', 'current');
+            $('#btnShppingCfmExcel').attr('style', "display:display:none;");
             $('#btnShppingExcel').attr('style', "display:;");
             $('#btnPlaceExcel').attr('style', "display:;");
         }
@@ -297,7 +301,12 @@
             }
             comSubmit.submit();
         });
-
+        $('#btnShppingCfmExcel').on("click", function(e){
+            var comSubmit = new ComSubmit("searchForm");
+            comSubmit.setUrl("/admin/exceldata");
+            comSubmit.submit();
+        });
+        
         $('#shippingExcel').on("click", function(e){
             var comSubmit = new ComSubmit("searchForm");
             comSubmit.setUrl("/shipping/shippingexcel");
