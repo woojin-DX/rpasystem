@@ -200,7 +200,7 @@ public class ExeclDataController {
             tempMap.put("field", "ppno");
             tempMap.put("cellTitle", "PO번호");
             tempMap.put("fileType", "String");
-            tempMap.put("cellWidth", 13*256);
+            tempMap.put("cellWidth", 20*256);
             tempMap.put("fontType", "content");
             tempMap.put("fontColor", "000000");
             tempMap.put("styleColor", "FFFFFF");

@@ -62,21 +62,27 @@
 
 			FROM (
 				select
-							oritb.company_cd /* 업체코드 */
-							, db159_1.PRD_GRP_NM as prdgrp_nm
-							, oritb.material_num
-							, maintb.supply_qty
-							, '1000' supply_place
-							, maintb.supply_dt /* 남품일자 */
-							, concat(plc.place_nm,'-',maintb.shipping_method) as ppno
-							, RANK() OVER( ORDER BY oritb.company_cd, concat(plc.place_nm,'-',maintb.shipping_method) , db159_1.PRD_GRP_NM, maintb.supply_dt ) AS NUM
-						from tb_orderfor oritb
-						inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
-						left outer join tb_place plc on oritb.place_key = plc.place_key
-						left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
-						left outer join [192.9.200.159].IMES.dbo.WMAS_PRD_GRP db159_1 on saptb3.SPART COLLATE Korean_Wansung_CI_AS = db159_1.PRD_GRP_CD
-						WHERE maintb.SHIPPING_SEQ > 0  and maintb.supply_dt = CONVERT(CHAR(10), getdate(), 102)
-							and maintb.process_cd = 'ST_CFM'
+					oritb.company_cd /* 업체코드 */
+					, db159_1.PRD_GRP_NM as prdgrp_nm
+					, oritb.material_num
+					, SUM(maintb.supply_qty) as supply_qty
+					, maintb.supply_dt /* 남품일자 */
+					, saptb.company_nm
+					, plc.place_nm
+					, concat(plc.place_nm,'-',maintb.shipping_method) as ppno
+					, RANK() OVER( ORDER BY oritb.company_cd, concat(plc.place_nm,'-',maintb.shipping_method) , db159_1.PRD_GRP_NM, maintb.supply_dt ) AS NUM
+				from tb_orderfor oritb
+				inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key
+				inner join OPENQUERY(ERP_DL, '
+							select distinct a.ID,b.NAME1 as company_nm from wjp.ZMMT2010 a
+							inner join wjp.KNA1 b on a.ID = b.KUNNR
+				') saptb on saptb.ID COLLATE Korean_Wansung_CI_AS = oritb.user_id
+				left outer join tb_place plc on oritb.place_key = plc.place_key
+				left outer join  ERP_DL.WJP.wjp.MARA saptb3 on oritb.material_num = saptb3.MATNR COLLATE Korean_Wansung_CI_AS
+				left outer join [192.9.200.159].IMES.dbo.WMAS_PRD_GRP db159_1 on saptb3.SPART COLLATE Korean_Wansung_CI_AS = db159_1.PRD_GRP_CD
+				WHERE maintb.SHIPPING_SEQ > 0  and maintb.supply_dt = CONVERT(CHAR(10), getdate(), 102)
+					and maintb.process_cd = 'ST_CFM'
+				group by oritb.company_cd,db159_1.PRD_GRP_NM,oritb.material_num,maintb.supply_dt,saptb.company_nm,plc.place_nm,maintb.shipping_method
 			) tot
 			group by company_cd
 				, ppno
