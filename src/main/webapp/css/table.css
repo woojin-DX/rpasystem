@@ -206,7 +206,8 @@ div.bbsB ul:after{display:block;clear:both;content:''}
 div.bbsB ul li{display:inline-block;float:left;height:auto;padding-bottom:1px}
 div.bbsB ul.btn_left{display:inline-block;float:left;margin:0 0 0 1px}
 div.bbsB ul.btn_right{display:inline-block;float:right;margin:0 1px 0 0}
-div.bbsB ul.btn_all{display:inline-block;margin:0 1px 0 0;width:360px;}
+div.bbsB ul.btn_all{display:inline-block;margin:0 1px 0 0;width:260px;}
+div.bbsB ul.btn_allExcel{display:inline-block;margin:0 1px 0 0;width:360px;}
 div.bbsB ul li a{display:inline-block;cursor:pointer}
 div.bbsB ul.btn_left li{margin-right:4px}
 div.bbsB ul.btn_right li{margin-left:4px}

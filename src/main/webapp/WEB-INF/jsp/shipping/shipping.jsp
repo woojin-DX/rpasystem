@@ -171,7 +171,7 @@
                         <!-- //목록 -->
                         <!-- 버튼 -->
                         <div class="bbsB ta_r mt_10">
-                            <ul class="btn_all">
+                            <ul class="btn_allExcel">
                             	<li style="display:none;" id="btnShppingCfmExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingCfmExcel">요약정보엑셀다운</a></span>&nbsp;&nbsp;</li>
                                 <li style="display:none;" id="btnShppingExcel"><span class="button medium"><a href="javascript:void(0)" id="shippingExcel">목록엑셀다운</a></span>&nbsp;&nbsp;</li>
                                 <li style="display:none;" id="btnPlaceExcel"><span class="button medium"><a href="javascript:void(0)" id="placeExcel">납품처엑셀다운</a></span></li>
