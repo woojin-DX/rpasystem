@@ -73,6 +73,8 @@
                 <value>/admin/listPsix1Data</value>
                 <value>/admin/listPsix3Data</value>
                 <value>/admin/listPsix4Data</value>
+                <value>/admin/listPsix5Data</value>
+                <value>/admin/listPsix6Data</value>
             </list>
         </constructor-arg>
     </bean>

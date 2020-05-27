@@ -47,7 +47,7 @@
                                 <input type="hidden" id="company_cd" name="company_cd" value="${infoParam.company_cd}" />
                                 <input type="hidden" id="user_id" name="user_id" value="${infoParam.user_id}" />
                                 <input type="hidden" id="orderfor_key" name="orderfor_key" value="" />
-                                <input type="hidden" id="order_dt" name="order_dt" value="" />
+                                <input type="hidden" id="order_dt" name="order_dt" value="${pageParam.order_dt}" />
                                 <input type="hidden" id="material_num" name="material_num" value="" />
                                 <input type="hidden" id="processFlag" name="processFlag" value="insert" />
                                 <input type="text" style="width:0px; display: none;" />

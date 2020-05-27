@@ -25,6 +25,8 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix1VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
 
 @Controller
 public class GpsiDataController {
@@ -61,10 +63,10 @@ public class GpsiDataController {
             //file을 생성할 폴더가 없으면 생성합니다.
             file.mkdirs(); //폴더 생성합니다.
 
-            String fullPath = path + "\\psix0_" + strToday + ".csv";
+            String fullPath = path + "\\psix0_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-		                    new FileOutputStream(fullPath), "utf-8"))) {
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("데이터 종류별").append("	");
             	strBufOri.append("거점코드").append("	");
@@ -146,10 +148,10 @@ public class GpsiDataController {
             //file을 생성할 폴더가 없으면 생성합니다.
             file.mkdirs(); //폴더 생성합니다.
 
-            String fullPath = path + "\\psix1_" + strToday + ".csv";
+            String fullPath = path + "\\psix1_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-		                    new FileOutputStream(fullPath), "utf-8"))) {
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("데이터 종류별").append("	");
             	strBufOri.append("출하원 거점코드").append("	");
@@ -221,10 +223,10 @@ public class GpsiDataController {
             //file을 생성할 폴더가 없으면 생성합니다.
             file.mkdirs(); //폴더 생성합니다.
 
-            String fullPath = path + "\\psix3_" + strToday + ".csv";
+            String fullPath = path + "\\psix3_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-		                    new FileOutputStream(fullPath), "utf-8"))) {
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("데이터 종류별").append("	");
             	strBufOri.append("거점코드").append("	");
@@ -294,10 +296,10 @@ public class GpsiDataController {
             //file을 생성할 폴더가 없으면 생성합니다.
             file.mkdirs(); //폴더 생성합니다.
 
-            String fullPath = path + "\\psix4_" + strToday + ".csv";
+            String fullPath = path + "\\psix4_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-		                    new FileOutputStream(fullPath), "utf-8"))) {
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("데이터 종류별").append("	");
             	strBufOri.append("사용실적키").append("	");
@@ -320,7 +322,165 @@ public class GpsiDataController {
                 	strBufOri = new StringBuilder();
                 	strBufOri.append("\n");
                 	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getMblnr()).append("	");
+                	strBufOri.append(m.getBase_code()).append("	");
                 	strBufOri.append(m.getMatnr()).append("	");
+                	strBufOri.append(m.getBudat()).append("	");
+                	strBufOri.append(m.getErfmg()).append("	");
+                	strBufOri.append(m.getErfme()).append("	");
+                	strBufOri.append(m.getLot()).append("	");
+                	strBufOri.append(m.getData_dt()).append("	");
+                	strBufOri.append(m.getReserve1()).append("	");
+                	strBufOri.append(m.getReserve2()).append("	");
+                	strBufOri.append(m.getReserve3()).append("	");
+                	strBufOri.append(m.getReserve4()).append("	");
+                	strBufOri.append(m.getReserve5());
+                	
+                	writer.write(strBufOri.toString());
+                }   
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mv.setViewName("/common/error");
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("/common/error");
+        }
+        return mv;
+
+    }
+	
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/admin/listPsix5Data", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView listPsix5Data(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/gpisdata");
+        try {
+
+            Map<String, Object> csvMap = gpsiDataService.listPsix5Data();
+            List<GpsiPsix5VO> lstResult = (List<GpsiPsix5VO>) csvMap.get("listPsix5Data");
+
+            /**
+             * csv 파일을 쓰기위한 설정
+             * 설명
+             * D:\\test.csv : csv 파일저장할 위치+파일명
+             * EUC-KR : 한글깨짐설정을 방지하기위한 인코딩설정(UTF-8로 지정해줄경우 한글깨짐)
+             * ',' : 배열을 나눌 문자열
+             * '"' : 값을 감싸주기위한 문자
+             **/
+            
+            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            
+        	File file = new File(path);
+            //file을 생성할 폴더가 없으면 생성합니다.
+            file.mkdirs(); //폴더 생성합니다.
+
+            String fullPath = path + "\\psix5_" + strToday + ".txt";
+            
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
+            	StringBuilder strBufOri = new StringBuilder();
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("From date").append("	");
+            	strBufOri.append("To Date").append("	");
+            	strBufOri.append("Parts consumption plan quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	writer.write(strBufOri.toString());
+            	
+                for(GpsiPsix5VO m : lstResult) {
+                    //배열을 이용하여 row를 CSVWriter 객체에 write
+                	strBufOri = new StringBuilder();
+                	strBufOri.append("\n");
+                	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getBase_code()).append("	");
+                	strBufOri.append(m.getMatnr()).append("	");
+                	strBufOri.append(m.getPsttr()).append("	");
+                	strBufOri.append(m.getPedtr()).append("	");
+                	strBufOri.append(m.getGsmng()).append("	");
+                	strBufOri.append(m.getMeins()).append("	");
+                	strBufOri.append(m.getData_dt());
+                	
+                	writer.write(strBufOri.toString());
+                }   
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mv.setViewName("/common/error");
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("/common/error");
+        }
+        return mv;
+
+    }
+	
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/admin/listPsix6Data", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView listPsix6Data(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/gpisdata");
+        try {
+
+            Map<String, Object> csvMap = gpsiDataService.listPsix6Data();
+            List<GpsiPsix6VO> lstResult = (List<GpsiPsix6VO>) csvMap.get("listPsix6Data");
+
+            /**
+             * csv 파일을 쓰기위한 설정
+             * 설명
+             * D:\\test.csv : csv 파일저장할 위치+파일명
+             * EUC-KR : 한글깨짐설정을 방지하기위한 인코딩설정(UTF-8로 지정해줄경우 한글깨짐)
+             * ',' : 배열을 나눌 문자열
+             * '"' : 값을 감싸주기위한 문자
+             **/
+            
+            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            
+        	File file = new File(path);
+            //file을 생성할 폴더가 없으면 생성합니다.
+            file.mkdirs(); //폴더 생성합니다.
+
+            String fullPath = path + "\\psix6_" + strToday + ".txt";
+            
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
+            	StringBuilder strBufOri = new StringBuilder();
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Statement number").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Date").append("	");
+            	strBufOri.append("Actual production quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("LOT").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	strBufOri.append("Spare items1").append("	");
+            	strBufOri.append("Spare items2").append("	");
+            	strBufOri.append("Spare items3").append("	");
+            	strBufOri.append("Spare items4").append("	");
+            	strBufOri.append("Spare items5");
+            	writer.write(strBufOri.toString());
+            	
+                for(GpsiPsix6VO m : lstResult) {
+                    //배열을 이용하여 row를 CSVWriter 객체에 write
+                	strBufOri = new StringBuilder();
+                	strBufOri.append("\n");
+                	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getMblnr()).append("	");
                 	strBufOri.append(m.getBase_code()).append("	");
                 	strBufOri.append(m.getMatnr()).append("	");
                 	strBufOri.append(m.getBudat()).append("	");

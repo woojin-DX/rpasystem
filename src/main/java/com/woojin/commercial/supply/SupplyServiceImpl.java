@@ -60,6 +60,7 @@ public class SupplyServiceImpl implements SupplyService {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
             Calendar cal = Calendar.getInstance();
+            String order_dt = formatter.format(cal.getTime());
 
             Map<String, Object> dataMap = new HashMap<String,Object>();
             if (commandMap.get("pagemode") == null) {
@@ -108,6 +109,7 @@ public class SupplyServiceImpl implements SupplyService {
             Map<String, Object> dataCommonMap =  commonCodeDAO.listCommonCode(newCommandMap.getMap());
             List<CommonCodeVO> listCommonParam = (List<CommonCodeVO>) dataCommonMap.get("datalist");
 
+            commandMap.put("order_dt", order_dt);
             Map<String, Object> dataMaterialMap =  supplyDAO.listMaterialNum(commandMap.getMap());
             List<MeterialNumVO> listMaterialParam = (List<MeterialNumVO>) dataMaterialMap.get("datalist");
 
@@ -130,7 +132,7 @@ public class SupplyServiceImpl implements SupplyService {
             pageMap.put("bFirstLast", true);
 
             String pageNavigater = PageNavigater.getPageForm(pageMap);
-
+            
             JSONObject pageParam = StringUtil.getJsonStringFromMap(commandMap.getMap());
 
             //jsp 에서 보여줄 정보 추출

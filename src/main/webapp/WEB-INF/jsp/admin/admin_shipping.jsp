@@ -86,6 +86,8 @@
                                 <input type="hidden" id="nextprocess_cd" name="nextprocess_cd" value="" />
                                 <input type="hidden" id="unit_price" name="unit_price" value="" />
                                 <input type="hidden" id="material_num" name="material_num" value="" />
+                                <input type="hidden" id="supplyOldQty" name="supplyOldQty" value="" />
+                                <input type="hidden" id="supplyOldmtmQty" name="supplyOldmtmQty" value="" />                                
                                 <input type="hidden" id="remainallqty" name="remainallqty" value="" />
                                 <input type="hidden" id="remaininvenqty" name="remaininvenqty" value="" />
                                 <input type="hidden" id="remainmtmqty" name="remainmtmqty" value="" />
@@ -780,9 +782,16 @@
             }
 
 
-            var comfirm_qty = parseInt($("#confirm_qty").val().trim().replace(regExp, ""))
-            var supply_qty = parseInt($("#supply_qty").val().trim().replace(regExp, ""))
-            var supplymtm_qty = parseInt($("#supplymtm_qty").val().trim().replace(regExp, ""))
+            var comfirm_qty = parseInt($("#confirm_qty").val().trim().replace(regExp, ""));
+            var supply_qty = parseInt($("#supply_qty").val().trim().replace(regExp, ""));
+            var supplymtm_qty = parseInt($("#supplymtm_qty").val().trim().replace(regExp, ""));
+            var remaininvenqty = parseInt($("#remaininvenqty").val().trim().replace(regExp, ""));
+            var supplyOldQty = parseInt($("#supplyOldQty").val().trim().replace(regExp, ""));
+            var remainmtmqty = parseInt($("#remainmtmqty").val().trim().replace(regExp, ""));
+            var supplyOldmtmQty = parseInt($("#supplyOldmtmQty").val().trim().replace(regExp, ""));
+            
+            remaininvenqty = remaininvenqty + supplyOldQty;
+            remainmtmqty = remainmtmqty + supplyOldmtmQty;
 
             if (process_cd != "ST_BOS") {
                 if (supply_qty > parseInt($("#remainallqty").val().trim())) {
@@ -791,13 +800,13 @@
                     return;
                 }
 
-                if (supply_qty > parseInt($("#remaininvenqty").val().trim())) {
+                if (supply_qty > remaininvenqty) {
                     alert("출하수량은 가용재고보다 작아야 합니다.");
                     $("#supply_qty").focus();
                     return;
                 }
 
-                if (supplymtm_qty > parseInt($("#remainmtmqty").val().trim())) {
+                if (supplymtm_qty > remainmtmqty) {
                     alert("출하수량은 MTM가용재고보다 작아야 합니다.");
                     $("#supply_qty").focus();
                     return;
@@ -954,6 +963,7 @@
                         var shipping_seq = result.shippingDetail.shipping_seq;
                         if (shipping_seq == "0") {
                             $("#supply_qty").val("0");
+                            $("#supplymtm_qty").val("0");
                         }
                         else{
                             if (result.shippingDetail.packing_cd == "OM_MTM") {
@@ -962,8 +972,12 @@
                             }
                             else{
                                 $("#supply_qty").val(result.shippingDetail.supply_qty);
+                                $("#supplymtm_qty").val("0");
                             }
                         }
+                        $("#supplyOldQty").val($("#supply_qty").val());
+                        $("#supplyOldmtmQty").val($("#supplymtm_qty").val());
+                        
                         $("#supply_dt").val(result.shippingDetail.supply_dt);
                         $("#unit_price").val(result.shippingDetail.unit_price);
 

@@ -672,14 +672,13 @@
 				, material_num  /* 자재코드 */
 				, unit_price  /* 단가 */
 			FROM OPENQUERY(ERP_DL, '
-					SELECT
-						maintb.KNUMH as knumh
-						, RIGHT(maintb.VAKEY,CHARINDEX('' '',REVERSE(maintb.VAKEY))-1) as material_num
-						, ISNULL(ROUND(subtb.KBETR  / subtb.KPEIN *100,0),0) as unit_price
-					FROM wjp.KONH maintb
-					LEFT OUTER JOIN  wjp.KONP subtb ON maintb.KNUMH = subtb.KNUMH
-					where maintb.VAKEY like concat(''460020'',''${company_cd}'',''%'')  and DATBI = ''99991231''
-					      and maintb.DATAB = (select max(DATAB) from wjp.KONH where VAKEY = maintb.VAKEY and DATBI = ''99991231'' and subtb.LOEVM_KO != ''X'')
+					select 
+						a.KNUMH as knumh
+						, a.MATNR as material_num
+						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+					from [wjp].[A305] a 
+					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
+					where a.KUNNR = ''${company_cd}'' and replace(''${order_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
 				')
 			ORDER BY material_num ASC
     	]]>
@@ -698,16 +697,16 @@
 				, material_num  /* 자재코드 */
 				, unit_price  /* 단가 */
 			FROM OPENQUERY(ERP_DL, '
-					SELECT
-						maintb.KNUMH as knumh
-						, RIGHT(maintb.VAKEY,CHARINDEX('' '',REVERSE(maintb.VAKEY))-1) as material_num
-						, ISNULL(ROUND(subtb.KBETR  / subtb.KPEIN *100,0),0) as unit_price
-					FROM wjp.KONH maintb
-					LEFT OUTER JOIN  wjp.KONP subtb ON maintb.KNUMH = subtb.KNUMH
-					where maintb.VAKEY like concat(''460020'',''${company_cd}'',''%'')  and DATBI = ''99991231''
-					      and maintb.DATAB = (select max(DATAB) from wjp.KONH where VAKEY = maintb.VAKEY and DATBI = ''99991231'' and subtb.LOEVM_KO != ''X'')
+					select 
+						a.KNUMH as knumh
+						, a.MATNR as material_num
+						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+					from [wjp].[A305] a 
+					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
+					where a.KUNNR = ''${company_cd}''
+						and a.MATNR = ''${material_num}'' and a.KNUMH = ''${knumh}''
+						and replace(''${order_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
 				')
-			where material_num = #{material_num} and knumh = #{knumh}
     	]]>
 	</select>
 
