@@ -851,18 +851,21 @@
 			inner join tb_common_code tot1 on tot.packing_seq = tot1.STATUS_SEQ and tot1.DIVISION_CD = 'OM'
 			inner join (
 				SELECT
-					DISTINCT  ORDERS.CUSTOMER_CD
+					  ORDERS.CUSTOMER_CD
 					, ORDERS.DELIV_REQ_DT
 					, DETAIL.MATL_CD MATERIALCODE
-					, FORMAT(DETAIL.QTY,'#.#') QUANTITY
+					, FORMAT(SUM(DETAIL.QTY),'#.#') QUANTITY
 					, ORITB.ORDERFOR_KEY
 				FROM  [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER  ORDERS
 					INNER JOIN [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER_DETAIL  DETAIL ON ORDERS.DELIV_ORDER = DETAIL.DELIV_ORDER
 					inner join [dbo].[TB_ORDERFOR] ORITB on ORITB.COMPANY_CD COLLATE Korean_Wansung_CI_AS = ORDERS.CUSTOMER_CD
-						AND DETAIL.MATL_CD COLLATE Korean_Wansung_CI_AS = ORITB.MATERIAL_NUM
+						AND DETAIL.MATL_CD COLLATE Korean_Wansung_CI_AS = ORITB.MATERIAL_NUM 
+					inner join tb_shipping maintb on oritb.orderfor_key = maintb.orderfor_key and ORDERS.DELIV_REQ_DT COLLATE Korean_Wansung_CI_AS = replace(maintb.SUPPLY_DT,'.','')
 				where ORDERS.DELIV_ITEM_CATE = 'ZTAM' and ORDERS.STATE = 'Shipped'
 					and ORDERS.DELIV_REQ_DT between replace(#{supply_dt_start},'.','') and replace(#{supply_dt_end},'.','')
 					and ORITB.PROCESS_CD != 'ST_BCP'
+				group by ORDERS.CUSTOMER_CD,DETAIL.MATL_CD
+					, ORDERS.DELIV_REQ_DT,ORITB.ORDERFOR_KEY
 			) sap on tot.ORDERFOR_KEY = sap.ORDERFOR_KEY
 			order by tot.supply_dt DESC, tot.company_nm asc, tot.material_num asc, tot.supply_place asc
     	]]>
@@ -1449,7 +1452,7 @@
 				AND S.DELIV_REQ_DT COLLATE Korean_Wansung_CI_AS = replace(T.SUPPLY_DT,'.','')
 				AND S.QUANTITY = T.SUPPLY_QTY)
 			WHEN MATCHED THEN
-				UPDATE SET T.PROCESS_CD = 'ST_SPG';
+				UPDATE SET T.PROCESS_CD = 'ST_SPG',T.MODIFY_DT = getdate();
 		]]>
 	</update>
 
@@ -1528,7 +1531,7 @@
 	*******************************************************************************************-->
 	<update id="multiUpdateShippingSupply" parameterType="java.util.Map">
 		<![CDATA[
-			UPDATE tb_shipping SET PROCESS_CD = 'ST_SPG'
+			UPDATE tb_shipping SET PROCESS_CD = 'ST_SPG',MODIFY_DT = getdate()
 			WHERE shipping_key in
 		]]>
 		<foreach collection="list" item="item"  index="index"  open="(" separator="," close=")" >
