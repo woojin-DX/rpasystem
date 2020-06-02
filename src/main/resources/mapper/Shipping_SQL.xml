@@ -1046,7 +1046,7 @@
 			left outer join(
 				SELECT orderfor_key, SUM(supply_qty) as supply_qty
 				from tb_shipping
-				where shipping_seq > 0 and process_cd in('ST_BCP','ST_SPG','ST_CFM')
+				where shipping_seq > 0 and process_cd in('ST_BCP','ST_SPG')
 				group by orderfor_key
 			) b on a.orderfor_key = b.orderfor_key
 			where process_cd in('ST_BOS','ST_CFM','ST_OFR')
