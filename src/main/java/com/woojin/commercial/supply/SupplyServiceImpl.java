@@ -99,9 +99,10 @@ public class SupplyServiceImpl implements SupplyService {
             commandMap.remove("company_cd,order_dt,material_num");
 
             int process = 0;
-            process += shippingDAO.updateShippingPross();
-            process += shippingDAO.updateShippingSupplyPross();
-            process += shippingDAO.updateShippingOrderPross();
+            process += shippingDAO.execureProcedureProcess();
+            //process += shippingDAO.updateShippingPross();
+            //process += shippingDAO.updateShippingSupplyPross();
+            //process += shippingDAO.updateShippingOrderPross();
 
             CommandMap newCommandMap = new CommandMap();
             newCommandMap.put("division_cd","ST");

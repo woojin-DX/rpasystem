@@ -64,9 +64,10 @@ public class ExcelDataServiceImpl implements ExcelDataService{
     public int autoSupplyCheck() throws Exception {
         int process = 0;
         try {
-            process += shippingDAO.updateShippingPross();
-            process += shippingDAO.updateShippingSupplyPross();
-            process += shippingDAO.updateShippingOrderPross();
+        	process += shippingDAO.execureProcedureProcess();
+            //process += shippingDAO.updateShippingPross();
+            //process += shippingDAO.updateShippingSupplyPross();
+            //process += shippingDAO.updateShippingOrderPross();
         }
         catch(Exception e){
             log.error(e);

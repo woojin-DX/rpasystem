@@ -446,5 +446,17 @@ public class ShippingDAO extends AbstractDAO {
         return (int) update("multiUpdateShippingSupply", paramMap);
     }
     
+    /* *******************************************************************************************
+     * 함수  제목 : 출하정보 수정
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 데이타 수정
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    public int execureProcedureProcess() {
+    	return (int)update("execureProcedureProcess","");
+    }
+    
+    
 }
 

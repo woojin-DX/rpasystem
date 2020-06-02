@@ -87,9 +87,10 @@ public class AdminServiceImpl implements AdminService{
             commandMap.remove("pageaction");
 
             int process = 0;
-            process += shippingDAO.updateShippingPross();
-            process += shippingDAO.updateShippingSupplyPross();
-            process += shippingDAO.updateShippingOrderPross();
+            process += shippingDAO.execureProcedureProcess();
+            //process += shippingDAO.updateShippingPross();
+            //process += shippingDAO.updateShippingSupplyPross();
+            //process += shippingDAO.updateShippingOrderPross();
 
             CommandMap newCommandMap = new CommandMap();
             newCommandMap.put("division_cd","ST");
