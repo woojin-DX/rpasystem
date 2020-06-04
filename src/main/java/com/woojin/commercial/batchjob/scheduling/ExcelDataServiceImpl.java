@@ -39,6 +39,26 @@ public class ExcelDataServiceImpl implements ExcelDataService{
         }
         return resultMap;
     }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public Map<String, Object> listExcelData1() throws Exception {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  excelDataDAO.listExcelData1();
+
+            List<ExcelDataVO> listParam = (List<ExcelDataVO>) dataMap.get("datalist");
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("listExcelData", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+        return resultMap;
+    }
 
     @SuppressWarnings("unchecked")
 	@Override

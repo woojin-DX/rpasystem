@@ -559,6 +559,7 @@
 			<if test='modify_id != null and !modify_id.equals("NULL")'>modify_id = #{modify_id},</if>
 		</trim>
 		<![CDATA[
+			,ext_flag = 'U'
 			,modify_dt = getdate()
 		WHERE orderfor_key = #{orderfor_key}
 		]]>
@@ -638,7 +639,7 @@
 				group by maintb.[ORDERFOR_KEY]
 			) src on tar.ORDERFOR_KEY = src.ORDERFOR_KEY and tar.confirm_qty = src.sumqty
 			WHEN MATCHED THEN
-				UPDATE SET tar.PROCESS_CD = 'ST_BCP'
+				UPDATE SET tar.PROCESS_CD = 'ST_BCP',tar.ext_flag = 'U'
 					, tar.LAST_RECEIVE_DT = CONVERT(CHAR(10), getdate(), 102);
 		]]>
 	</update>

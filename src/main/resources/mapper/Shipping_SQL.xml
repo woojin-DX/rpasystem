@@ -1341,6 +1341,7 @@
 			<if test='modify_id != null'>modify_id = #{modify_id},</if>
 		</trim>
 		<![CDATA[
+			,ext_flag = 'U'
 			,modify_dt = getdate()
 		WHERE shipping_key = #{shipping_key}
 		]]>

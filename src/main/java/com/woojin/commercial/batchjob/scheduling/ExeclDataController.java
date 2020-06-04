@@ -244,7 +244,7 @@ public class ExeclDataController {
 
             ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultSum, false);
 
-            Map<String, Object> excelMap = excelDataService.listExcelData();
+            Map<String, Object> excelMap = excelDataService.listExcelData1();
 
             //List<ExcelDataVO> lstResult = (List<ExcelDataVO>) excelMap.get("listExcelData");
             List<Object> objResult = (List<Object>) excelMap.get("listExcelData");
@@ -253,7 +253,7 @@ public class ExeclDataController {
             titleStyleMap.put("sRow", "0");
             titleStyleMap.put("eRow", "0");
             titleStyleMap.put("sCol", "0");
-            titleStyleMap.put("eCol", "9");
+            titleStyleMap.put("eCol", "10");
             titleStyleMap.put("fontType", "subtitle");
             titleStyleMap.put("fontColor", "000000");
             titleStyleMap.put("styleColor", "ECF5FC");
@@ -400,7 +400,22 @@ public class ExeclDataController {
             tempMap.put("textVAlign", "center");
             tempMap.put("line", "dot");
             tempMap.put("fomule", "");
-            fieldInfoList.add(tempMap);            
+            fieldInfoList.add(tempMap);          
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "shipping_method");
+            tempMap.put("cellTitle", "출하방법");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);       
+            
             excelInfpMap = new HashMap<String, Object>();
             excelInfpMap.put("titleStyleMap", titleStyleMap);
             excelInfpMap.put("fieldInfoList", fieldInfoList);
