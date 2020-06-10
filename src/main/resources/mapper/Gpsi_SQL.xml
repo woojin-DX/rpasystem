@@ -226,5 +226,85 @@
 			order by MBLNR,MATNR
     	]]>
 	</select>
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix7Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO">
+		<![CDATA[
+			SELECT 
+				'PSIX7' as data_type
+				, mblnr
+				, 'A4600' as base_code
+				, '' as place_code
+				, matnr
+				, budat
+				, SUM(menge) as menge
+				, meins
+				, ebeln
+				, ebelp
+				, 'DUMMY' as lot
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+				, '' as reserve1
+				, '' as reserve2
+				, '' as reserve3
+				, '' as reserve4
+				, '' as reserve5
+			FROM(
+				select
+					mseg.mblnr
+					,mseg.matnr
+					,case when mseg.shkzg = 'S' then mseg.menge when mseg.shkzg = 'S' then  mseg.menge * (-1) end menge
+					,case when mseg.meins = 'EA' then 'PC' else mseg.meins end meins
+					,case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
+					,mseg.ebelp
+					,mkpf.budat
+			
+				from
+					[ERP_DL].[WJP].[wjp].[MSEG] mseg
+					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR
+				where mseg.lifnr = 'A1000A01' and mseg.bwart in ('101','102','122','123','161','162')
+					and mkpf.vgart = 'WE' and mseg.menge != 0
+			) tot
+			group by mblnr
+				, matnr
+				, budat
+				, meins
+				, ebeln
+				, ebelp
+			order by mblnr,matnr
+    	]]>
+	</select>
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix9Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO">
+		<![CDATA[
+			select
+				'PSIX9' as data_type
+				, ekpo.ebeln collate Korean_Wansung_CI_AS + N' / ' + convert(varchar,ekpo.ebelp collate Korean_Wansung_CI_AS) as orderresult_key
+				, 'A4600' as base_code
+				, case when ekpo.loekz = 'L' then 'DL' when ekpo.elikz = 'X' then 'OC' else 'OI' end status_val
+				, ekpo.matnr
+				, eket.eindt
+				, eket.menge
+				, case when ekpo.lmein = 'EA' then 'PC' else ekpo.lmein end lmein
+				, ekko.aedat
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+			from
+				[ERP_DL].[WJP].[wjp].[EKKO] ekko
+				inner join [ERP_DL].[WJP].[wjp].[EKPO] ekpo on ekko.ebeln = ekpo.ebeln
+				inner join [ERP_DL].[WJP].[wjp].[EKET] eket on ekpo.ebeln = eket.ebeln and ekpo.ebelp = eket.ebelp
+			where ekko.lifnr = 'A1000A01'
+			order by eket.eindt,ekpo.ebeln,ekpo.ebelp,ekpo.matnr
+    	]]>
+	</select>
 
 </mapper>

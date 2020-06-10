@@ -15,6 +15,8 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Service("gpsiDataService")
 public class GpsiDataServiceImpl implements GpsiDataService{
@@ -136,6 +138,46 @@ public class GpsiDataServiceImpl implements GpsiDataService{
 
             //jsp 에서 보여줄 정보 추출
             resultMap.put("listPsix6Data", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+        return resultMap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> listPsix7Data() throws Exception {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  gpsiDataDAO.listPsix7Data();
+
+            List<GpsiPsix7VO> listParam = (List<GpsiPsix7VO>) dataMap.get("datalist");
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("listPsix7Data", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e);
+            throw e;
+        }
+        return resultMap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> listPsix9Data() throws Exception {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  gpsiDataDAO.listPsix9Data();
+
+            List<GpsiPsix9VO> listParam = (List<GpsiPsix9VO>) dataMap.get("datalist");
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("listPsix9Data", listParam); //목록
         }
         catch(Exception e){
             log.error(e);

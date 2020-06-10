@@ -27,6 +27,8 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Controller
 public class GpsiDataController {
@@ -53,7 +55,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -138,7 +140,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -213,7 +215,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -286,7 +288,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -371,7 +373,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -444,7 +446,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi"; //폴더 경로
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -493,6 +495,174 @@ public class GpsiDataController {
                 	strBufOri.append(m.getReserve3()).append("	");
                 	strBufOri.append(m.getReserve4()).append("	");
                 	strBufOri.append(m.getReserve5());
+                	
+                	writer.write(strBufOri.toString());
+                }   
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mv.setViewName("/common/error");
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("/common/error");
+        }
+        return mv;
+
+    }
+	
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/admin/listPsix7Data", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView listPsix7Data(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/gpisdata");
+        try {
+
+            Map<String, Object> csvMap = gpsiDataService.listPsix7Data();
+            List<GpsiPsix7VO> lstResult = (List<GpsiPsix7VO>) csvMap.get("listPsix7Data");
+
+            /**
+             * csv 파일을 쓰기위한 설정
+             * 설명
+             * D:\\test.csv : csv 파일저장할 위치+파일명
+             * EUC-KR : 한글깨짐설정을 방지하기위한 인코딩설정(UTF-8로 지정해줄경우 한글깨짐)
+             * ',' : 배열을 나눌 문자열
+             * '"' : 값을 감싸주기위한 문자
+             **/
+            
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            
+        	File file = new File(path);
+            //file을 생성할 폴더가 없으면 생성합니다.
+            file.mkdirs(); //폴더 생성합니다.
+
+            String fullPath = path + "\\psix7_" + strToday + ".txt";
+            
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
+            	StringBuilder strBufOri = new StringBuilder();
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Statement number").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Shipping agent site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Date").append("	");
+            	strBufOri.append("Actual production quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("P.O. number").append("	");
+            	strBufOri.append("P.O. Detail number").append("	");
+            	strBufOri.append("LOT").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	strBufOri.append("Spare items1").append("	");
+            	strBufOri.append("Spare items2").append("	");
+            	strBufOri.append("Spare items3").append("	");
+            	strBufOri.append("Spare items4").append("	");
+            	strBufOri.append("Spare items5");
+            	writer.write(strBufOri.toString());
+            	
+                for(GpsiPsix7VO m : lstResult) {
+                    //배열을 이용하여 row를 CSVWriter 객체에 write
+                	strBufOri = new StringBuilder();
+                	strBufOri.append("\n");
+                	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getMblnr()).append("	");
+                	strBufOri.append(m.getBase_code()).append("	");
+                	strBufOri.append(m.getPlace_code()).append("	");
+                	strBufOri.append(m.getMatnr()).append("	");
+                	strBufOri.append(m.getBudat()).append("	");
+                	strBufOri.append(m.getMenge()).append("	");
+                	strBufOri.append(m.getMeins()).append("	");
+                	strBufOri.append(m.getEbeln()).append("	");
+                	strBufOri.append(m.getEbelp()).append("	");
+                	strBufOri.append(m.getLot()).append("	");
+                	strBufOri.append(m.getData_dt()).append("	");
+                	strBufOri.append(m.getReserve1()).append("	");
+                	strBufOri.append(m.getReserve2()).append("	");
+                	strBufOri.append(m.getReserve3()).append("	");
+                	strBufOri.append(m.getReserve4()).append("	");
+                	strBufOri.append(m.getReserve5());
+                	
+                	writer.write(strBufOri.toString());
+                }   
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mv.setViewName("/common/error");
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("/common/error");
+        }
+        return mv;
+
+    }
+	
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/admin/listPsix9Data", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView listPsix9Data(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/gpisdata");
+        try {
+
+            Map<String, Object> csvMap = gpsiDataService.listPsix9Data();
+            List<GpsiPsix9VO> lstResult = (List<GpsiPsix9VO>) csvMap.get("listPsix9Data");
+
+            /**
+             * csv 파일을 쓰기위한 설정
+             * 설명
+             * D:\\test.csv : csv 파일저장할 위치+파일명
+             * EUC-KR : 한글깨짐설정을 방지하기위한 인코딩설정(UTF-8로 지정해줄경우 한글깨짐)
+             * ',' : 배열을 나눌 문자열
+             * '"' : 값을 감싸주기위한 문자
+             **/
+            
+            String path = "Z:\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            
+        	File file = new File(path);
+            //file을 생성할 폴더가 없으면 생성합니다.
+            file.mkdirs(); //폴더 생성합니다.
+
+            String fullPath = path + "\\psix9_" + strToday + ".txt";
+            
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
+            	StringBuilder strBufOri = new StringBuilder();
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Order Result Key").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Status").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Delivery Date").append("	");
+            	strBufOri.append("Actual production quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("Statement Register Date").append("	");
+            	strBufOri.append("Extract date");
+            	writer.write(strBufOri.toString());
+            	
+                for(GpsiPsix9VO m : lstResult) {
+                    //배열을 이용하여 row를 CSVWriter 객체에 write
+                	strBufOri = new StringBuilder();
+                	strBufOri.append("\n");
+                	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getOrderresult_key()).append("	");
+                	strBufOri.append(m.getBase_code()).append("	");
+                	strBufOri.append(m.getStatus_val()).append("	");
+                	strBufOri.append(m.getMatnr()).append("	");
+                	strBufOri.append(m.getEindt()).append("	");
+                	strBufOri.append(m.getMenge()).append("	");
+                	strBufOri.append(m.getLmein()).append("	");
+                	strBufOri.append(m.getAedat()).append("	");
+                	strBufOri.append(m.getData_dt());
                 	
                 	writer.write(strBufOri.toString());
                 }   
