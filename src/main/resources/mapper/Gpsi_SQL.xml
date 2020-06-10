@@ -17,7 +17,7 @@
 				, tot.supply_div
 				, SUM(tot.inven_qty) as inven_qty
 				, tot.meins
-				, CONVERT(CHAR(10), getdate(), 102) as data_dt
+				, CONVERT(CHAR(10), getdate(), 112) as data_dt
 				, '' as reserve1
 				, '' as reserve2
 				, '' as reserve3

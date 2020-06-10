@@ -91,7 +91,6 @@ public class GpsiDataScheduler {
                 	strBufOri.append(m.getMatnr()).append("	");
                 	strBufOri.append(m.getInven_status()).append("	");
                 	strBufOri.append(m.getLot()).append("	");
-                	strBufOri.append(m.getInven_status()).append("	");
                 	strBufOri.append(m.getSupply_div()).append("	");
                 	strBufOri.append(m.getInven_qty()).append("	");
                 	strBufOri.append(m.getMeins()).append("	");
