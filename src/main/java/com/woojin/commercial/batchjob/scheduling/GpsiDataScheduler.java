@@ -61,10 +61,10 @@ public class GpsiDataScheduler {
             //file을 생성할 폴더가 없으면 생성합니다.
             file.mkdirs(); //폴더 생성합니다.
 
-            String fullPath = path + "\\psix0_" + strToday + ".csv";
+            String fullPath = path + "\\psix0_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-		                    new FileOutputStream(fullPath), "utf-8"))) {
+                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("데이터 종류별").append("	");
             	strBufOri.append("거점코드").append("	");

@@ -856,6 +856,7 @@
 					, DETAIL.MATL_CD MATERIALCODE
 					, FORMAT(SUM(DETAIL.QTY),'#.#') QUANTITY
 					, ORITB.ORDERFOR_KEY
+					, maintb.SHIPPING_KEY
 				FROM  [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER  ORDERS
 					INNER JOIN [192.9.200.159].[IMES].[dbo].WSLO_DELIV_ORDER_DETAIL  DETAIL ON ORDERS.DELIV_ORDER = DETAIL.DELIV_ORDER
 					inner join [dbo].[TB_ORDERFOR] ORITB on ORITB.COMPANY_CD COLLATE Korean_Wansung_CI_AS = ORDERS.CUSTOMER_CD
@@ -865,8 +866,8 @@
 					and ORDERS.DELIV_REQ_DT between replace(#{supply_dt_start},'.','') and replace(#{supply_dt_end},'.','')
 					and ORITB.PROCESS_CD != 'ST_BCP'
 				group by ORDERS.CUSTOMER_CD,DETAIL.MATL_CD
-					, ORDERS.DELIV_REQ_DT,ORITB.ORDERFOR_KEY
-			) sap on tot.ORDERFOR_KEY = sap.ORDERFOR_KEY
+					, ORDERS.DELIV_REQ_DT,ORITB.ORDERFOR_KEY, maintb.SHIPPING_KEY
+			) sap on tot.ORDERFOR_KEY = sap.ORDERFOR_KEY and tot.SHIPPING_KEY = sap.SHIPPING_KEY
 			order by tot.supply_dt DESC, tot.company_nm asc, tot.material_num asc, tot.supply_place asc
     	]]>
 		<if test="nStartRecord > -1 and nStartRecord != null">
