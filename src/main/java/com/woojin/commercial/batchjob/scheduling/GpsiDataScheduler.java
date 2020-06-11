@@ -35,7 +35,7 @@ public class GpsiDataScheduler {
 	GpsiDataService gpsiDataService;
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0 10 * * ?")
+	@Scheduled(cron = "0 0 6 * * ?")
 	public void schedulerPsix0() throws Exception {
         try {
 
@@ -114,7 +114,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 5 10 * * ?")
+	@Scheduled(cron = "0 5 6 * * ?")
 	public void schedulerPsix1() throws Exception {
         try {
 
@@ -184,7 +184,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 15 10 * * ?")
+	@Scheduled(cron = "0 15 6 * * ?")
 	public void schedulerPsix3() throws Exception {
         try {
 
@@ -252,7 +252,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 20 10 * * ?")
+	@Scheduled(cron = "0 20 6 * * ?")
 	public void schedulerPsix4() throws Exception {
         try {
 
@@ -332,7 +332,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 25 10 * * ?")
+	@Scheduled(cron = "0 25 6 * * ?")
 	public void schedulerPsix5() throws Exception {
         try {
 
@@ -400,7 +400,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 30 10 * * ?")
+	@Scheduled(cron = "0 30 6 * * ?")
 	public void schedulerPsix6() throws Exception {
         try {
 
@@ -480,7 +480,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 35 10 * * ?")
+	@Scheduled(cron = "0 35 6 * * ?")
 	public void schedulerPsix7() throws Exception {
         try {
 
@@ -566,7 +566,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 45 10 * * ?")
+	@Scheduled(cron = "0 45 6 * * ?")
 	public void schedulerPsix9() throws Exception {
         try {
 
