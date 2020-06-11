@@ -10,15 +10,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix1VO;
@@ -35,7 +29,7 @@ public class GpsiDataScheduler {
 	GpsiDataService gpsiDataService;
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0 6 * * ?")
+	@Scheduled(cron = "0 0 5 * * ?")
 	public void schedulerPsix0() throws Exception {
         try {
 
@@ -114,7 +108,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 5 6 * * ?")
+	@Scheduled(cron = "0 5 5 * * ?")
 	public void schedulerPsix1() throws Exception {
         try {
 
@@ -184,7 +178,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 15 6 * * ?")
+	@Scheduled(cron = "0 15 5 * * ?")
 	public void schedulerPsix3() throws Exception {
         try {
 
@@ -252,7 +246,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 20 6 * * ?")
+	@Scheduled(cron = "0 20 5 * * ?")
 	public void schedulerPsix4() throws Exception {
         try {
 
@@ -332,7 +326,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 25 6 * * ?")
+	@Scheduled(cron = "0 25 5 * * ?")
 	public void schedulerPsix5() throws Exception {
         try {
 
@@ -400,7 +394,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 30 6 * * ?")
+	@Scheduled(cron = "0 30 5 * * ?")
 	public void schedulerPsix6() throws Exception {
         try {
 
@@ -480,7 +474,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 35 6 * * ?")
+	@Scheduled(cron = "0 35 5 * * ?")
 	public void schedulerPsix7() throws Exception {
         try {
 
@@ -566,7 +560,7 @@ public class GpsiDataScheduler {
     }
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 45 6 * * ?")
+	@Scheduled(cron = "0 45 5 * * ?")
 	public void schedulerPsix9() throws Exception {
         try {
 
