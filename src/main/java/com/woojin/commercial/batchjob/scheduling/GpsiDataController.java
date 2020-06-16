@@ -139,7 +139,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -214,7 +214,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -287,7 +287,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -372,7 +372,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -445,7 +445,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -530,7 +530,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -621,7 +621,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
