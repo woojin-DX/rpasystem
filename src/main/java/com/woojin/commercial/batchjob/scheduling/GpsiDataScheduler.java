@@ -108,13 +108,13 @@ public class GpsiDataScheduler {
                 	writer.write(strBufOri.toString());
                 }   
                 writer.close();
+                String end_time = sdflog.format(c1log.getTime());
+
+    			System.out.println("Psix0 End : " + end_time);
             } catch (Exception e) {
                 e.printStackTrace();
             } 
             
-            String end_time = sdflog.format(c1log.getTime());
-
-			System.out.println("Psix0 End : " + end_time);
 
         } catch (Exception e) {
             e.printStackTrace();
