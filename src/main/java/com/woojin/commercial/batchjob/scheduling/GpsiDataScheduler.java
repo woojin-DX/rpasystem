@@ -32,16 +32,9 @@ public class GpsiDataScheduler {
 	GpsiDataService gpsiDataService;
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 5 8 * * MON-FRI")
+	@Scheduled(cron = "0 10 8 * * MON-FRI")
 	public void schedulerPsix0() throws Exception {
         try {
-        	SimpleDateFormat sdflog = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Calendar c1log = Calendar.getInstance();
-            String start_time = sdflog.format(c1log.getTime());
-            
-        	System.out.println("Psix0 Start : " + start_time);
-        	
-        	log.info("Psix0 Start : " + start_time);
 
         	Map<String, Object> csvMap = gpsiDataService.listPsix0Data();
             List<GpsiPsix0VO> lstResult = (List<GpsiPsix0VO>) csvMap.get("listPsix0Data");
@@ -108,13 +101,9 @@ public class GpsiDataScheduler {
                 	writer.write(strBufOri.toString());
                 }   
                 writer.close();
-                String end_time = sdflog.format(c1log.getTime());
-
-    			System.out.println("Psix0 End : " + end_time);
             } catch (Exception e) {
                 e.printStackTrace();
             } 
-            
 
         } catch (Exception e) {
             e.printStackTrace();
