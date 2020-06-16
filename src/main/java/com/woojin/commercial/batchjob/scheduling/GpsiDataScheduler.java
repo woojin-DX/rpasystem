@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,13 +26,22 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Component
 public class GpsiDataScheduler {
+	Logger log = Logger.getLogger(this.getClass());
+	
 	@Autowired
 	GpsiDataService gpsiDataService;
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0 6 * * MON-FRI")
+	@Scheduled(cron = "0 5 8 * * MON-FRI")
 	public void schedulerPsix0() throws Exception {
         try {
+        	SimpleDateFormat sdflog = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar c1log = Calendar.getInstance();
+            String start_time = sdflog.format(c1log.getTime());
+            
+        	System.out.println("Psix0 Start : " + start_time);
+        	
+        	log.info("Psix0 Start : " + start_time);
 
         	Map<String, Object> csvMap = gpsiDataService.listPsix0Data();
             List<GpsiPsix0VO> lstResult = (List<GpsiPsix0VO>) csvMap.get("listPsix0Data");
@@ -101,6 +111,10 @@ public class GpsiDataScheduler {
             } catch (Exception e) {
                 e.printStackTrace();
             } 
+            
+            String end_time = sdflog.format(c1log.getTime());
+
+			System.out.println("Psix0 End : " + end_time);
 
         } catch (Exception e) {
             e.printStackTrace();

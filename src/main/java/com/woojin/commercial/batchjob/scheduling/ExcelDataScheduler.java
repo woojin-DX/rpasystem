@@ -1,6 +1,8 @@
 package com.woojin.commercial.batchjob.scheduling;
 
 import com.woojin.commercial.util.ExcelBuilder;
+
+import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +16,9 @@ import java.util.*;
 
 @Component
 public class ExcelDataScheduler {
+	
+	Logger log = Logger.getLogger(this.getClass());
+	
     @Autowired
     ExcelDataService excelDataService;
 
