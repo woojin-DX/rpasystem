@@ -147,7 +147,6 @@ public class AdminController {
     @RequestMapping(value = "/admin/boslist", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView adminBosList(CommandMap commandMap, HttpSession httpSession) throws Exception{
         ModelAndView mv = new ModelAndView();
-
         try {
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;

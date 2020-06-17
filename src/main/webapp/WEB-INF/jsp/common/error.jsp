@@ -13,6 +13,7 @@
     <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td width="100%" height="100%" align="center" valign="middle" style="padding-top: 150px;">
+            	page message : <c:out value="${pageMessage }" /><br />
                 code : <c:out value="${error.STATUS_CODE }" /><br />
                 exception type : <c:out value="${error.EXCEPTION_TYPE }" /><br />
                 message : <c:out value="${error.MESSAGE }" /><br />

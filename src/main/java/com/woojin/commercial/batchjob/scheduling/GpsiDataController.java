@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Controller
 public class GpsiDataController {
+	Logger log = Logger.getLogger(this.getClass());
 	
 	@Autowired
 	GpsiDataService gpsiDataService;
@@ -41,6 +43,9 @@ public class GpsiDataController {
     public ModelAndView listPsix0Data(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/gpisdata");
+		log.error("Psix0 End error : ");
+        log.info("Psix0 End info: ");
+        log.debug("Psix0 End debug: ");
         try {
 
             Map<String, Object> csvMap = gpsiDataService.listPsix0Data();
@@ -110,11 +115,19 @@ public class GpsiDataController {
                 writer.close();
             } catch (Exception e) {
                 e.printStackTrace();
+                log.error("Psix0 End error : " + e);
+                log.info("Psix0 End info: " + e);
+                log.debug("Psix0 End debug: " + e);
+                mv.addObject("pageMessage", "오류" + e.toString()); //변수값
                 mv.setViewName("/common/error");
             } 
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("Psix0 End error1 : " + e);
+            log.info("Psix0 End info1: " + e);
+            log.debug("Psix0 End debug1: " + e);
+            mv.addObject("pageMessage", "오류1" + e.toString()); //변수값
             mv.setViewName("/common/error");
         }
         return mv;

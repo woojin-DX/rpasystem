@@ -56,7 +56,7 @@ public class ShippingController {
     @RequestMapping(value = "/shipping", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView listShipping(CommandMap commandMap, HttpSession httpSession) throws Exception{
         ModelAndView mv = new ModelAndView();
-
+        log.info("Psix0 End : " );
         try {
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;

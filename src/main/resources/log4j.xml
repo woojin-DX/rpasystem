@@ -26,7 +26,7 @@
 
     <!-- 날짜별 로그 파일 생성 -->
     <appender name="rollingFile" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="D:\IdeaProjects\project\logs\all.log"/>
+        <param name="File" value="/logs/Dailyall.log"/> 
         <param name="Append" value="true"/>
         <!-- param name="MaxFileSize" value="100MB"/ -->
         <!-- param name="MaxBackupIndex" value="2"></param -->
@@ -38,7 +38,7 @@
 
     <!-- 날짜별 로그 파일 생성 -->
     <appender name="springFile" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="D:\IdeaProjects\project\logs\spring.log"/>
+        <param name="File" value="/logs/Dailyspring.log"/>
         <param name="Append" value="true"/>
         <!-- param name="MaxFileSize" value="100MB"/ -->
         <!-- param name="MaxBackupIndex" value="2"></param -->
@@ -51,7 +51,7 @@
     <!-- 날짜별 로그 파일 생성(에러만) -->
     <appender name="errFile" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="Threshold" value="ERROR"/>
-        <param name="File" value="D:\IdeaProjects\project\logs\error.log"/>
+        <param name="File" value="/logs/Dailyerror.log"/>
         <param name="Append" value="true"/>
         <!-- param name="MaxFileSize" value="100MB"/ -->
         <!-- param name="MaxBackupIndex" value="2"></param -->
@@ -63,7 +63,7 @@
 
     <!-- 특정 패키지 출력 설정 -->
     <logger name="rpa" additivity="false">
-        <level value="OFF" />
+        <level value="DEBUG" />
         <appender-ref ref="console"/>
         <appender-ref ref="rollingFile"/>
     </logger>
@@ -82,6 +82,15 @@
      - jdbc.resultset : ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다.
      - jdbc.resultsettable : SQL 결과 조회된 데이터의 table을 로그로 남긴다.
      -->
+    <logger name="org.apache.ibatis">
+        <level value="ERROR"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="ERROR"/>
+        <appender-ref ref="springFile" />
+    </logger>
+    
     <logger name="jdbc.sqlonly" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="console-infolog"/>
