@@ -67,7 +67,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            FileUtil.nioFileMove("//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\psix0_20200610.txt","//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9\\psix0_20200610.txt");
+            //FileUtil.nioFileMove("//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\psix0_20200610.txt","//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9\\psix0_20200610.txt");
             
             String path1 = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
