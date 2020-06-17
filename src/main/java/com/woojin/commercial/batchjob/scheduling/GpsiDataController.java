@@ -63,13 +63,16 @@ public class GpsiDataController {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
+            String path1 = "Z:\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
             String fullPath = path + "\\psix0_" + strToday + ".txt";
-            File file = new File(fullPath);
+            
+            String fullPath1 = path1 + "\\psix0_" + strToday + ".txt";
+            File file = new File(fullPath1);
             if (!file.getParentFile().mkdirs())
                     throw new IOException("Unable to create " + file.getParentFile());
             BufferedWriter out = new BufferedWriter(new FileWriter(file,true));
