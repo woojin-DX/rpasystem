@@ -48,7 +48,7 @@ public class AdminController {
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView adminList(CommandMap commandMap, HttpSession httpSession) throws Exception{
         ModelAndView mv = new ModelAndView();
-
+        log.error("Psix0 End error : ");
         try {
             Object object = httpSession.getAttribute("loginInfo");
             LoginVO userVO = (LoginVO) object;

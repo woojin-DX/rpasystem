@@ -92,7 +92,7 @@
         <Logger name="egovframework" level="ERROR" additivity="false">
             <AppenderRef ref="console_com" />
         </Logger>
-        <Logger name="com.woojin.commercial" level="ERROR" additivity="false">
+        <Logger name="com.woojin.commercial" level="ERROR" additivity="true">
             <AppenderRef ref="console_com" />
         </Logger>
         <Logger name="org.springframework" level="ERROR" additivity="false">
@@ -100,6 +100,8 @@
         </Logger>
         <Root level="OFF">
             <AppenderRef ref="Console" />
+            <AppenderRef ref="debugLog" />
+            <AppenderRef ref="infoLog" />
             <AppenderRef ref="errorLog" />
         </Root>
  

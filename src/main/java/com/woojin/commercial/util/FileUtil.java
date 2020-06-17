@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class FileUtil {
 	public	static  void fileMove(String filepath,String copypath, String fileName) 
@@ -46,7 +51,7 @@ public class FileUtil {
 			}
 		}
 	}
-
+	
 	public	static  void delete(File sourceF) 
 	{
 		try 
@@ -60,4 +65,44 @@ public class FileUtil {
 			e.getStackTrace();
 		}
 	}
+	
+	
+	public static boolean nioFileMove(String inFileName, String outFileName) {
+        Path source = Paths.get(inFileName);
+        Path target = Paths.get(outFileName);
+        
+        if (source == null) {
+            throw new IllegalArgumentException("source must be specified");
+        }
+        if (target == null) {
+            throw new IllegalArgumentException("target must be specified");
+        }
+        
+        if (!Files.exists(source, new LinkOption[] {})) {
+            throw new IllegalArgumentException("Source file doesn't exist: " + source.toString());
+        }
+        
+        try {
+            Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);    // 파일 이동
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+        
+        if(Files.exists(target, new LinkOption[]{})){
+            // System.out.println("File Moved");
+            return true;
+        } else {
+            System.out.println("File Move Failed");
+            return false;
+        }
+    }  
+
+
+
+
+
+	
 }
