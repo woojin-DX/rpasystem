@@ -29,6 +29,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
+import com.woojin.commercial.util.FileUtil;
 
 @Controller
 public class GpsiDataController {
@@ -59,17 +60,23 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
+            String path = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
+            String targetpath = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
-            String fullPath = path + "\\psix0_" + strToday + ".txt";
+            String filename = "psix0_" + strToday + ".txt";
+            
+            String fullPath = path + "psix0_" + strToday + ".txt";
             
         	File file = new File(fullPath);
+        	File dir = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!dir.isDirectory()){
+        		dir.mkdirs(); //폴더 생성합니다.
+        	}
 
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -112,6 +119,9 @@ public class GpsiDataController {
                 	writer.write(strBufOri.toString());
                 }   
                 writer.close();
+                if(file.exists()) {
+                	FileUtil.fileMove(path,targetpath, filename);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("Psix0 End error : " + e);
