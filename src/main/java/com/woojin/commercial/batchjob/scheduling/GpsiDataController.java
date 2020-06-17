@@ -61,7 +61,7 @@ public class GpsiDataController {
              **/
             
             String path = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
-            String targetpath = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
+            String targetpath = "Z:\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();

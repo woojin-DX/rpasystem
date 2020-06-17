@@ -98,7 +98,7 @@
         <Logger name="org.springframework" level="ERROR" additivity="false">
             <AppenderRef ref="console_com" />
         </Logger>
-        <Root level="INFO">
+        <Root level="OFF">
             <AppenderRef ref="Console" />
             <AppenderRef ref="errorLog" />
         </Root>
