@@ -60,8 +60,8 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
-            String targetpath = "Z:\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
+            String path1 = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -119,9 +119,9 @@ public class GpsiDataController {
                 	writer.write(strBufOri.toString());
                 }   
                 writer.close();
-                if(file.exists()) {
-                	FileUtil.fileMove(path,targetpath, filename);
-                }
+                //if(file.exists()) {
+                //	FileUtil.fileMove(path,targetpath, filename);
+               // }
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("Psix0 End error : " + e);
