@@ -421,7 +421,9 @@ public class ExcelDataScheduler {
             try {
                 File file = new File(path);
                 //file을 생성할 폴더가 없으면 생성합니다.
-                file.mkdirs(); //폴더 생성합니다.
+                if(!file.isDirectory()){
+            		file.mkdirs(); //폴더 생성합니다.
+            	}
 
                 String fullPath = path + "\\" + strToday + ".xlsx";
 

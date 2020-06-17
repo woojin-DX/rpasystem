@@ -4,14 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
 import java.io.Writer;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -36,7 +29,6 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
-import com.woojin.commercial.util.FileUtil;
 
 @Controller
 public class GpsiDataController {
@@ -67,110 +59,19 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            //FileUtil.nioFileMove("//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\psix0_20200610.txt","//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9\\psix0_20200610.txt");
             
-            String path1 = "D:\\homepage\\upload\\g-psi\\psix0\\"; //폴더 경로
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0\\"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
-            String filename = "psix0_" + strToday + ".txt";
-            
             String fullPath = path + "psix0_" + strToday + ".txt";
             
-            //Path p = Paths.get(fullPath);
-            File p = new File(fullPath);
-            
-            RandomAccessFile file = null;
-
-
-    		// 채널 열기 (읽기/쓰기, 파일 없으면 새로 생성, 기존에 있는 파일이면 내용을 모두 지워줌
-    		try {
-
-    			/* 파일 쓰기 */
-    			file = new RandomAccessFile(p, "rw");
-    			FileChannel ch = file.getChannel();
-
-    			// 버퍼 생성 (Capacity가 10인 버퍼 생성)
-    			ByteBuffer b = ByteBuffer.allocate(100);
-
-    			// 인코딩 타입 변환을 위한 Charset 객체 생성
-    			
-    			Charset charset = Charset.defaultCharset();
-    			
-    			StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("재고상태").append("	");
-            	strBufOri.append("로트").append("	");
-            	strBufOri.append("수급대상구분").append("	");
-            	strBufOri.append("재고수량").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
-            	strBufOri.append("예비항목1").append("	");
-            	strBufOri.append("예비항목2").append("	");
-            	strBufOri.append("예비항목3").append("	");
-            	strBufOri.append("예비항목4").append("	");
-            	strBufOri.append("예비항목5");
-            	b = charset.encode(strBufOri.toString()); // 문자열 ANSI로 인코딩해서 버퍼에 넣어줌
-    			ch.write(b); // 버퍼 내용 파일에다가 쓰기
-            	
-                for(GpsiPsix0VO m : lstResult) {
-                    //배열을 이용하여 row를 CSVWriter 객체에 write
-                	strBufOri = new StringBuilder();
-                	strBufOri.append("\n");
-                	strBufOri.append(m.getData_type()).append("	");
-                	strBufOri.append(m.getBase_code()).append("	");
-                	strBufOri.append(m.getMatnr()).append("	");
-                	strBufOri.append(m.getInven_status()).append("	");
-                	strBufOri.append(m.getLot()).append("	");
-                	strBufOri.append(m.getSupply_div()).append("	");
-                	strBufOri.append(m.getInven_qty()).append("	");
-                	strBufOri.append(m.getMeins()).append("	");
-                	strBufOri.append(m.getData_dt()).append("	");
-                	strBufOri.append(m.getReserve1()).append("	");
-                	strBufOri.append(m.getReserve2()).append("	");
-                	strBufOri.append(m.getReserve3()).append("	");
-                	strBufOri.append(m.getReserve4()).append("	");
-                	strBufOri.append(m.getReserve5());
-                	
-                	b = charset.encode(strBufOri.toString()); // 문자열 ANSI로 인코딩해서 버퍼에 넣어줌
-        			ch.write(b); // 버퍼 내용 파일에다가 쓰기
-                } 
-    		} catch (Exception e) {
-
-    			System.out.println("파일 작업 실패");
-    			e.printStackTrace();
-                log.error("Psix0 End error : " + e);
-                log.info("Psix0 End info: " + e);
-                log.debug("Psix0 End debug: " + e);
-                mv.addObject("pageMessage", "오류" + e.toString()); //변수값
-                mv.setViewName("/common/error");
-    		} finally {
-
-    			try {
-    				file.close();
-    			} catch (Exception e) {
-    				System.out.println("파일 닫기 실패");
-    				e.printStackTrace();
-                    log.error("Psix0 End error : " + e);
-                    log.info("Psix0 End info: " + e);
-                    log.debug("Psix0 End debug: " + e);
-                    mv.addObject("pageMessage", "오류" + e.toString()); //변수값
-                    mv.setViewName("/common/error");
-    			}
-    		}
-
-
-            /*
-        	File file = new File(fullPath);
-        	File dir = new File(path);
+            File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-        	if(!dir.isDirectory()){
-        		dir.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
         	}
 
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
@@ -214,9 +115,6 @@ public class GpsiDataController {
                 	writer.write(strBufOri.toString());
                 }   
                 writer.close();
-                //if(file.exists()) {
-                //	FileUtil.fileMove(path,targetpath, filename);
-               // }
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("Psix0 End error : " + e);
@@ -225,8 +123,6 @@ public class GpsiDataController {
                 mv.addObject("pageMessage", "오류" + e.toString()); //변수값
                 mv.setViewName("/common/error");
             } 
-            */
-           
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,7 +162,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix1_" + strToday + ".txt";
             
@@ -341,7 +239,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix3_" + strToday + ".txt";
             
@@ -414,7 +314,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix4_" + strToday + ".txt";
             
@@ -499,7 +401,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix5_" + strToday + ".txt";
             
@@ -572,7 +476,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix6_" + strToday + ".txt";
             
@@ -657,7 +563,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix7_" + strToday + ".txt";
             
@@ -748,7 +656,9 @@ public class GpsiDataController {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix9_" + strToday + ".txt";
             

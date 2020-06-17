@@ -33,7 +33,7 @@ public class GpsiDataScheduler {
 	GpsiDataService gpsiDataService;
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 15 9 * * MON-FRI")
+	@Scheduled(cron = "0 0 6 * * MON-FRI")
 	public void schedulerPsix0() throws Exception {
 		SimpleDateFormat sdflog = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c1log = Calendar.getInstance();
@@ -63,7 +63,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix0_" + strToday + ".txt";
             
@@ -146,7 +148,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix1_" + strToday + ".txt";
             
@@ -216,7 +220,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix3_" + strToday + ".txt";
             
@@ -284,7 +290,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix4_" + strToday + ".txt";
             
@@ -364,7 +372,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix5_" + strToday + ".txt";
             
@@ -432,7 +442,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix6_" + strToday + ".txt";
             
@@ -512,7 +524,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix7_" + strToday + ".txt";
             
@@ -598,7 +612,9 @@ public class GpsiDataScheduler {
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
-            file.mkdirs(); //폴더 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
 
             String fullPath = path + "\\psix9_" + strToday + ".txt";
             
