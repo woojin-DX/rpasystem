@@ -5,9 +5,10 @@ import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.ExcelBuilder;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 @Controller
 public class AdminController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -87,7 +87,7 @@ public class AdminController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -131,7 +131,7 @@ public class AdminController {
             mv.addObject("pagecng", "PRELIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -174,7 +174,7 @@ public class AdminController {
             mv.addObject("pagecng", "BOSLIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -218,7 +218,7 @@ public class AdminController {
             mv.addObject("pagecng", "CFMLIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -262,7 +262,7 @@ public class AdminController {
             mv.addObject("pagecng", "CFMLIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -306,7 +306,7 @@ public class AdminController {
             mv.addObject("pagecng", "SPGLIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -340,7 +340,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -531,7 +531,7 @@ public class AdminController {
             fileOut.close();
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
     }
@@ -569,7 +569,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -597,7 +597,7 @@ public class AdminController {
             resultMap.put("shippingDetail", pageParam);
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             resultMap.put("status", "1");
             resultMap.put("msg", "데이타 호출에 실패하였습니다");
             //throw e;
@@ -662,7 +662,7 @@ public class AdminController {
             rttr.addFlashAttribute("schword", searchVO.getSchword());
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return "redirect:/admin";
@@ -711,7 +711,7 @@ public class AdminController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -747,7 +747,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -785,7 +785,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -828,7 +828,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -866,7 +866,7 @@ public class AdminController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -1199,7 +1199,7 @@ public class AdminController {
             fileOut.close();
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
     }
@@ -1232,7 +1232,7 @@ public class AdminController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 

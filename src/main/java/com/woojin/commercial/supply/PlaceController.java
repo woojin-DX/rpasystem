@@ -15,7 +15,9 @@
 package com.woojin.commercial.supply;
 
 import com.woojin.commercial.login.LoginVO;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ import java.util.*;
 
 @Controller
 public class PlaceController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -64,7 +66,7 @@ public class PlaceController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -98,7 +100,7 @@ public class PlaceController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -131,7 +133,7 @@ public class PlaceController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 

@@ -102,7 +102,8 @@ public class DocumentDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<DocumentVO> overlabListDocument(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<DocumentVO> overlabListDocument(Map<String, Object> paramMap) {
         return (List<DocumentVO>) selectList("overlabListDocument", paramMap);
     }
 

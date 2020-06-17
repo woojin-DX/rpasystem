@@ -18,7 +18,8 @@
 
 package com.woojin.commercial.login;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired

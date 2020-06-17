@@ -26,11 +26,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,7 +42,7 @@ import com.woojin.commercial.login.LoginService;
 
 @Aspect
 public class AuthorizationAspect {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     private ArrayList<String> excludeUrls;
 
@@ -190,7 +191,7 @@ public class AuthorizationAspect {
                 }
             }
             catch (Exception e) {
-                log.info(e);
+                log.error(e.toString());
                 e.printStackTrace();
                 //return CommonUtils.getErpMessageModelAndView(0, null,null);  // "서버에서 에러가 발생했습니다. 관리자에게 문의해주세요."
                 return "login/login";
@@ -210,7 +211,7 @@ public class AuthorizationAspect {
                 }
             }
             catch (Exception e) {
-                log.info(e);
+                log.error(e.toString());
                 e.printStackTrace();
                 //return CommonUtils.getErpMessageModelAndView(0, null,null);
                 return false;
@@ -219,7 +220,7 @@ public class AuthorizationAspect {
             return retVal;
         }
         catch (Exception e) {
-            log.info(e);
+            log.error(e.toString());
             e.printStackTrace();
             //return CommonUtils.getErpMessageModelAndView(0, null,null);
             return false;

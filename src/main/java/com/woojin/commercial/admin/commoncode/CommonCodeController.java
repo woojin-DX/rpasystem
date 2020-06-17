@@ -15,7 +15,9 @@
 package com.woojin.commercial.admin.commoncode;
 
 import com.woojin.commercial.login.LoginVO;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.admin.commoncode.CommonCodeService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,7 @@ import java.util.*;
 
 @Controller
 public class CommonCodeController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -68,7 +69,7 @@ public class CommonCodeController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -91,7 +92,7 @@ public class CommonCodeController {
             mv.addObject("commonCodeDetail", resultMap.get("commonCodeDetail")); //검색
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -114,7 +115,7 @@ public class CommonCodeController {
             mv.addObject("commonCodeDetail", resultMap.get("commonCodeDetail")); //검색
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -151,7 +152,7 @@ public class CommonCodeController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -184,7 +185,7 @@ public class CommonCodeController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 

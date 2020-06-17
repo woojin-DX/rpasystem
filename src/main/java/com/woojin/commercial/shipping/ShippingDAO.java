@@ -161,7 +161,8 @@ public class ShippingDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<ShippingVO> overlabListShipping(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<ShippingVO> overlabListShipping(Map<String, Object> paramMap) {
         return (List<ShippingVO>) selectList("overlabListShipping", paramMap);
     }
 
@@ -250,7 +251,8 @@ public class ShippingDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Cacheable(cacheName="budgetCache")
+    @SuppressWarnings("unchecked")
+	@Cacheable(cacheName="budgetCache")
     public Map<String, Object> listMaterialAll(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
@@ -329,7 +331,8 @@ public class ShippingDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listShippingSum(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listShippingSum(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ShippingVO> lsListTable = new ArrayList<ShippingVO>();
         try {
@@ -385,7 +388,8 @@ public class ShippingDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listShippingCfmAddr(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listShippingCfmAddr(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ShippingVO> lsListTable = new ArrayList<ShippingVO>();
         try {
@@ -419,7 +423,8 @@ public class ShippingDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listShippingPsv(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listShippingPsv(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<ShippingVO> lsListTable = new ArrayList<ShippingVO>();
         try {

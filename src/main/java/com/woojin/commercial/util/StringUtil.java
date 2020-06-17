@@ -18,14 +18,10 @@
 
 package com.woojin.commercial.util;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
@@ -37,8 +33,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONTokener;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -1075,7 +1069,8 @@ public class StringUtil {
      * @param map Map<String, Object>.
      * @return JSONObject.
      */
-    public static JSONObject getJsonStringFromMap(Map<String, Object> map )
+    @SuppressWarnings("unchecked")
+	public static JSONObject getJsonStringFromMap(Map<String, Object> map )
     {
         JSONObject jsonObject = new JSONObject();
         for( Map.Entry<String, Object> entry : map.entrySet() ) {
@@ -1093,7 +1088,8 @@ public class StringUtil {
      * @param list List<Map<String, Object>>.
      * @return JSONArray.
      */
-    public static JSONArray getJsonArrayFromList(List<Map<String, Object>> list )
+    @SuppressWarnings("unchecked")
+	public static JSONArray getJsonArrayFromList(List<Map<String, Object>> list )
     {
         JSONArray jsonArray = new JSONArray();
         for( Map<String, Object> map : list ) {

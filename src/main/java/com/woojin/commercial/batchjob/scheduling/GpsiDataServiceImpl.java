@@ -6,7 +6,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
@@ -21,7 +22,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 @Service("gpsiDataService")
 public class GpsiDataServiceImpl implements GpsiDataService{
 	// 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="gpsiDataDAO")
     private GpsiDataDAO gpsiDataDAO;
@@ -40,7 +41,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix0Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -60,7 +61,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix1Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -80,7 +81,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix3Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -100,7 +101,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix4Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -120,7 +121,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix5Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -140,7 +141,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix6Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -160,7 +161,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix7Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -180,7 +181,7 @@ public class GpsiDataServiceImpl implements GpsiDataService{
             resultMap.put("listPsix9Data", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

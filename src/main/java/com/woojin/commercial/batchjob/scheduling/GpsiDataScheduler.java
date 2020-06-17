@@ -10,7 +10,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Component
 public class GpsiDataScheduler {
-	Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	GpsiDataService gpsiDataService;

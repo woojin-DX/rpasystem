@@ -18,11 +18,10 @@
 
 package com.woojin.commercial.login;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.login.LoginDAO;
-import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.login.LoginService;
 
 import javax.annotation.Resource;
@@ -31,7 +30,7 @@ import java.util.HashMap;
 @Service("loginService")
 public class LoginServideImpl implements LoginService {
     // 상품코드 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="loginDAO")
     private LoginDAO loginDAO;

@@ -19,13 +19,12 @@ import com.woojin.commercial.admin.authority.AuthorityVO;
 import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.util.CommonUtils;
-import com.woojin.commercial.admin.userinfo.UserInfoDAO;
-import com.woojin.commercial.admin.userinfo.UserInfoVO;
 import com.woojin.commercial.admin.userinfo.UserInfoService;
 
 import javax.annotation.Resource;
@@ -37,7 +36,7 @@ import java.util.Map;
 public class UserInfoServiceImpl implements UserInfoService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="userInfoDAO")
     private UserInfoDAO userInfoDAO;
@@ -115,7 +114,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             resultMap.put("userInfoList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -148,7 +147,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             resultMap.put("userInfoDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -199,7 +198,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             resultMap.put("userInfoList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -231,7 +230,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -265,7 +264,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -297,7 +296,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -335,7 +334,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -370,7 +369,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -401,7 +400,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

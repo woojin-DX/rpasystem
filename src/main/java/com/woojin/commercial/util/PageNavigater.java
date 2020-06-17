@@ -18,9 +18,6 @@
 
 package com.woojin.commercial.util;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import java.util.HashMap;
 
 public class PageNavigater {

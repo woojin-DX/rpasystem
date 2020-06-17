@@ -22,8 +22,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.PageNavigater;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ import java.util.*;
 
 @Controller
 public class CommonController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("#{envir['post.key']}")
     private String POST_KEY;

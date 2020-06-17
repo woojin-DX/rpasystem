@@ -13,8 +13,9 @@ import com.woojin.commercial.shipping.shippingmtm.ShippingMtmVO;
 import com.woojin.commercial.supply.MeterialNumVO;
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,7 +26,7 @@ import java.util.*;
 public class AdminServiceImpl implements AdminService{
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="shippingDAO")
     private ShippingDAO shippingDAO;
@@ -134,7 +135,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -160,7 +161,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -211,7 +212,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -412,7 +413,7 @@ public class AdminServiceImpl implements AdminService{
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -612,7 +613,7 @@ public class AdminServiceImpl implements AdminService{
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -703,7 +704,7 @@ public class AdminServiceImpl implements AdminService{
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -747,7 +748,7 @@ public class AdminServiceImpl implements AdminService{
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -767,7 +768,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("mtmMatrialList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -794,7 +795,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingMtmList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -875,7 +876,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingMtmList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -909,7 +910,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -1021,7 +1022,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -1134,7 +1135,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -1161,7 +1162,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingMaterialList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -1205,7 +1206,7 @@ public class AdminServiceImpl implements AdminService{
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -1250,7 +1251,7 @@ public class AdminServiceImpl implements AdminService{
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

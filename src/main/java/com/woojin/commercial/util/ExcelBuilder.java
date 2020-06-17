@@ -179,7 +179,6 @@ public class ExcelBuilder {
                         testMap = domainToMapWithAccept(item, tempField);
                     } catch (Exception e) {
 
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
 
                     }
@@ -406,7 +405,6 @@ public class ExcelBuilder {
                         testMap = domainToMapWithAccept(item, tempField);
                     } catch (Exception e) {
 
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
 
                     }
@@ -735,7 +733,6 @@ public class ExcelBuilder {
                         testMap = domainToMapWithAccept(item, tempField);
                     } catch (Exception e) {
 
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
 
                     }
@@ -986,7 +983,6 @@ public class ExcelBuilder {
                         testMap = domainToMapWithAccept(item, tempField);
                     } catch (Exception e) {
 
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
 
                     }
@@ -1051,7 +1047,7 @@ public class ExcelBuilder {
      * rows 실제 Data
      * XSSFWorkbook
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     public static Sheet buildExcelXSSSheet(SXSSFWorkbook workbook, String sheetTitle, Map<String, Object> excelInfpMap
             , List<Object> result, boolean excelOption)
             throws Exception {
@@ -1139,7 +1135,6 @@ public class ExcelBuilder {
                         testMap = domainToMapWithAccept(item, tempField);
                     } catch (Exception e) {
 
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
 
                     }

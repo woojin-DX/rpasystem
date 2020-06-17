@@ -14,8 +14,6 @@
 
 package com.woojin.commercial.supply;
 
-import java.math.BigInteger;
-
 import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.shipping.ShippingVO;
 import lombok.Data;

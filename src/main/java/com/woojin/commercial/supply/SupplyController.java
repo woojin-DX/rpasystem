@@ -22,10 +22,11 @@ import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConv
 import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.ExcelStyleBuilder;
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ import java.util.*;
 
 @Controller
 public class SupplyController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -104,7 +105,7 @@ public class SupplyController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -151,7 +152,7 @@ public class SupplyController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -164,7 +165,8 @@ public class SupplyController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @RequestMapping(value = "/supply/resheet", method = {RequestMethod.GET, RequestMethod.POST})
+    @SuppressWarnings({ "unchecked", "unused" })
+	@RequestMapping(value = "/supply/resheet", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView listSupplyResheet(CommandMap commandMap, HttpSession httpSession) throws Exception{
         ModelAndView mv = new ModelAndView();
         FileOutputStream outStream = null;
@@ -193,7 +195,7 @@ public class SupplyController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -205,7 +207,8 @@ public class SupplyController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @ResponseBody
+    @SuppressWarnings({ "unused", "unchecked" })
+	@ResponseBody
     @RequestMapping(value = "/supply/resheetExcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void listSupplyResheetExcel(CommandMap commandMap, HttpSession httpSession, HttpServletResponse response) throws Exception{
         FileOutputStream outStream = null;
@@ -367,7 +370,7 @@ public class SupplyController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         finally {
@@ -421,7 +424,7 @@ public class SupplyController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             resultMap.put("status", "1");
             resultMap.put("msg", "로그인 종료로 인하여 데이타 호출에 실패하였습니다\n로그인을 다시 해주세요");
         }
@@ -445,7 +448,7 @@ public class SupplyController {
             mv.addObject("supplyDetail", resultMap.get("supplyDetail")); //검색
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -458,7 +461,8 @@ public class SupplyController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @RequestMapping(value="/supply/processSupply", method = {RequestMethod.GET, RequestMethod.POST})
+    @SuppressWarnings("unused")
+	@RequestMapping(value="/supply/processSupply", method = {RequestMethod.GET, RequestMethod.POST})
     public String processSupply(SearchVO searchVO, HttpSession httpSession,
                                              CommandMap commandMap, RedirectAttributes rttr) throws Exception {
 
@@ -535,7 +539,7 @@ public class SupplyController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return "redirect:/supply";
@@ -548,7 +552,8 @@ public class SupplyController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @RequestMapping(value="/supply/insertSupply", method = {RequestMethod.GET, RequestMethod.POST})
+    @SuppressWarnings("unused")
+	@RequestMapping(value="/supply/insertSupply", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Map<String, Object> insertSupply(HttpSession httpSession,
                                            CommandMap commandMap) throws Exception {
@@ -581,7 +586,7 @@ public class SupplyController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -615,7 +620,7 @@ public class SupplyController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -649,7 +654,7 @@ public class SupplyController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -685,7 +690,7 @@ public class SupplyController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -716,7 +721,7 @@ public class SupplyController {
             resultMap.put("msg", "데이타를 정상적으로 호출하였습니다");
         }
         catch(Exception e) {
-            log.error(e);
+            log.error(e.toString());
             resultMap.put("status", "1");
             resultMap.put("msg", "데이타 호출에 실패하였습니다");
         }
@@ -751,7 +756,7 @@ public class SupplyController {
             }
         }
         catch(Exception e) {
-            log.error(e);
+            log.error(e.toString());
             resultMap.put("status", "0");
             resultMap.put("msg", "데이타 호출에 실패하였습니다");
         }

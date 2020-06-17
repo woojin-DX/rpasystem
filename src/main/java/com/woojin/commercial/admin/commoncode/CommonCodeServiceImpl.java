@@ -16,12 +16,11 @@ package com.woojin.commercial.admin.commoncode;
 
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.admin.commoncode.CommonCodeDAO;
-import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.admin.commoncode.CommonCodeService;
 
 import javax.annotation.Resource;
@@ -34,7 +33,7 @@ import java.util.Map;
 public class CommonCodeServiceImpl implements CommonCodeService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="commonCodeDAO")
     private CommonCodeDAO commonCodeDAO;
@@ -101,7 +100,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             resultMap.put("commonCodeList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -134,7 +133,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             resultMap.put("commonCodeDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -185,7 +184,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             resultMap.put("commonCodeList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -223,7 +222,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -256,7 +255,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -289,7 +288,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -333,7 +332,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

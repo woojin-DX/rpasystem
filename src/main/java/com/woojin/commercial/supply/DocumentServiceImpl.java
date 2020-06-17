@@ -16,8 +16,9 @@ package com.woojin.commercial.supply;
 
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.util.CommonUtils;
@@ -31,7 +32,7 @@ import java.util.Map;
 public class DocumentServiceImpl implements DocumentService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="documentDAO")
     private DocumentDAO documentDAO;
@@ -43,7 +44,8 @@ public class DocumentServiceImpl implements DocumentService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listDocument(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -94,7 +96,7 @@ public class DocumentServiceImpl implements DocumentService {
             resultMap.put("documentList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -127,7 +129,7 @@ public class DocumentServiceImpl implements DocumentService {
             resultMap.put("documentDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -178,7 +180,7 @@ public class DocumentServiceImpl implements DocumentService {
             resultMap.put("documentList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -191,7 +193,8 @@ public class DocumentServiceImpl implements DocumentService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public Map<String, Object> insertDocument(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -211,7 +214,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -224,7 +227,8 @@ public class DocumentServiceImpl implements DocumentService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public Map<String, Object> updateDocument(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -242,7 +246,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -274,7 +278,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

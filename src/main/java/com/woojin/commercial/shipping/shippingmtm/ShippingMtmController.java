@@ -16,8 +16,9 @@ package com.woojin.commercial.shipping.shippingmtm;
 
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.ExcelBuilder;
-import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.woojin.commercial.common.CommandMap;
-import com.woojin.commercial.shipping.shippingmtm.ShippingMtmService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +37,7 @@ import java.util.*;
 
 @Controller
 public class ShippingMtmController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -75,7 +75,7 @@ public class ShippingMtmController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -97,7 +97,7 @@ public class ShippingMtmController {
             mv.addObject("shippingMtmDetail", resultMap.get("shippingMtmDetail")); //검색
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -136,7 +136,7 @@ public class ShippingMtmController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -169,7 +169,7 @@ public class ShippingMtmController {
             mv.addObject("userRole", userVO.getAuth_cd());//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -203,7 +203,7 @@ public class ShippingMtmController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -236,7 +236,7 @@ public class ShippingMtmController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -469,7 +469,7 @@ public class ShippingMtmController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
     }

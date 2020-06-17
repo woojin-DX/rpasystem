@@ -3,25 +3,22 @@ package com.woojin.commercial.batchjob.scheduling;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
@@ -35,7 +32,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
 
 @Controller
 public class GpsiDataController {
-	Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	GpsiDataService gpsiDataService;
@@ -63,7 +60,6 @@ public class GpsiDataController {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
-            String path1 = "Z:\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
@@ -71,67 +67,10 @@ public class GpsiDataController {
             
             String fullPath = path + "\\psix0_" + strToday + ".txt";
             
-            String fullPath1 = path1 + "\\psix0_" + strToday + ".txt";
-            File file = new File(fullPath1);
-            if (!file.getParentFile().mkdirs())
-                    throw new IOException("Unable to create " + file.getParentFile());
-            BufferedWriter out = new BufferedWriter(new FileWriter(file,true));
-            try{
-            	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("재고상태").append("	");
-            	strBufOri.append("로트").append("	");
-            	strBufOri.append("수급대상구분").append("	");
-            	strBufOri.append("재고수량").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
-            	strBufOri.append("예비항목1").append("	");
-            	strBufOri.append("예비항목2").append("	");
-            	strBufOri.append("예비항목3").append("	");
-            	strBufOri.append("예비항목4").append("	");
-            	strBufOri.append("예비항목5");
-            	//writer.write(strBufOri.toString());
-            	out.append(strBufOri.toString());
-                out.newLine();
-            	
-                for(GpsiPsix0VO m : lstResult) {
-                    //배열을 이용하여 row를 CSVWriter 객체에 write
-                	strBufOri = new StringBuilder();
-                	strBufOri.append("\n");
-                	strBufOri.append(m.getData_type()).append("	");
-                	strBufOri.append(m.getBase_code()).append("	");
-                	strBufOri.append(m.getMatnr()).append("	");
-                	strBufOri.append(m.getInven_status()).append("	");
-                	strBufOri.append(m.getLot()).append("	");
-                	strBufOri.append(m.getSupply_div()).append("	");
-                	strBufOri.append(m.getInven_qty()).append("	");
-                	strBufOri.append(m.getMeins()).append("	");
-                	strBufOri.append(m.getData_dt()).append("	");
-                	strBufOri.append(m.getReserve1()).append("	");
-                	strBufOri.append(m.getReserve2()).append("	");
-                	strBufOri.append(m.getReserve3()).append("	");
-                	strBufOri.append(m.getReserve4()).append("	");
-                	strBufOri.append(m.getReserve5());
-                	
-                	out.append(strBufOri.toString());
-                    out.newLine();
-                } 
-                out.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            log.error("Psix0 End error : " + e);
-	            log.info("Psix0 End info: " + e);
-	            log.debug("Psix0 End debug: " + e);
-	            mv.addObject("pageMessage", "오류" + e.toString()); //변수값
-	            mv.setViewName("/common/error");
-	        } 
-
-        	//File file = new File(fullPath);
+        	File file = new File(fullPath);
             //file을 생성할 폴더가 없으면 생성합니다.
-            //file.mkdirs(); //폴더 생성합니다.
-/*
+            file.mkdirs(); //폴더 생성합니다.
+
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
@@ -181,7 +120,7 @@ public class GpsiDataController {
                 mv.addObject("pageMessage", "오류" + e.toString()); //변수값
                 mv.setViewName("/common/error");
             } 
-*/            
+           
 
         } catch (Exception e) {
             e.printStackTrace();

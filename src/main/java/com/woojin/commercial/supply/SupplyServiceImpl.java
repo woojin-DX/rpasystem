@@ -19,9 +19,9 @@ import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.shipping.ShippingDAO;
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
 
@@ -33,7 +33,7 @@ import java.util.*;
 public class SupplyServiceImpl implements SupplyService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="supplyDAO")
     private SupplyDAO supplyDAO;
@@ -54,7 +54,8 @@ public class SupplyServiceImpl implements SupplyService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings({ "unchecked", "unused" })
+	@Override
     public Map<String, Object> listSupply(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -145,7 +146,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -158,7 +159,8 @@ public class SupplyServiceImpl implements SupplyService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listSupplyConfirm(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -187,7 +189,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -200,7 +202,8 @@ public class SupplyServiceImpl implements SupplyService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listSupplyResheet(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -226,7 +229,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -239,7 +242,8 @@ public class SupplyServiceImpl implements SupplyService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings({ "unchecked", "unused" })
+	@Override
     public Map<String, Object> listSupplyResheetDetail(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -258,7 +262,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -282,7 +286,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -333,7 +337,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("supplyList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -370,7 +374,7 @@ public class SupplyServiceImpl implements SupplyService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -406,7 +410,7 @@ public class SupplyServiceImpl implements SupplyService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -450,7 +454,7 @@ public class SupplyServiceImpl implements SupplyService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -483,7 +487,7 @@ public class SupplyServiceImpl implements SupplyService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -506,7 +510,7 @@ public class SupplyServiceImpl implements SupplyService {
             resultMap.put("detailMaterialNum", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

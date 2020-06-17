@@ -266,7 +266,8 @@ public class ExcelRead {
 
     }
 
-    public static Map<String, String> headRead(ExcelReadOption excelReadOption) {
+    @SuppressWarnings("unused")
+	public static Map<String, String> headRead(ExcelReadOption excelReadOption) {
         //엑셀 파일 자체
         //엑셀파일을 읽어 들인다.
         //FileType.getWorkbook() <-- 파일의 확장자에 따라서 적절하게 가져온다.
@@ -353,7 +354,8 @@ public class ExcelRead {
 
     }
 
-    private boolean isMerged(org.apache.poi.ss.usermodel.Sheet sheet, int rowIdx, int colIdx) {
+    @SuppressWarnings("unused")
+	private boolean isMerged(org.apache.poi.ss.usermodel.Sheet sheet, int rowIdx, int colIdx) {
 
         for(int i = 0; i < sheet.getNumMergedRegions(); ++i)
         {

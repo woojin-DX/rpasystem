@@ -34,7 +34,8 @@ import java.util.SimpleTimeZone;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,7 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CommonUtils {
 
     // 상품코드 쿼리로그 추출
-    public static Logger log = Logger.getLogger(CommonUtils.class.getClass());
+    public static Logger log = LoggerFactory.getLogger(CommonUtils.class.getClass());
 
     public static String getRandomString(){
         return UUID.randomUUID().toString().replaceAll("-", "");

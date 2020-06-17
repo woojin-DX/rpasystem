@@ -20,10 +20,10 @@ import com.woojin.commercial.admin.commoncode.PackingCodeVO;
 import com.woojin.commercial.admin.userinfo.CompanyVO;
 import com.woojin.commercial.admin.userinfo.UserInfoDAO;
 import com.woojin.commercial.supply.MeterialNumVO;
-import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.util.CommonUtils;
@@ -36,7 +36,7 @@ import java.util.*;
 public class ShippingServiceImpl implements ShippingService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="shippingDAO")
     private ShippingDAO shippingDAO;
@@ -54,7 +54,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings({ "unchecked", "unused" })
+	@Override
     public Map<String, Object> listShipping(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -141,7 +142,7 @@ public class ShippingServiceImpl implements ShippingService {
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -167,7 +168,7 @@ public class ShippingServiceImpl implements ShippingService {
             resultMap.put("shippingDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -218,7 +219,7 @@ public class ShippingServiceImpl implements ShippingService {
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -231,7 +232,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public Map<String, Object> insertShipping(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -258,7 +260,7 @@ public class ShippingServiceImpl implements ShippingService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -271,7 +273,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public Map<String, Object> updateShipping(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -290,7 +293,7 @@ public class ShippingServiceImpl implements ShippingService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -322,7 +325,7 @@ public class ShippingServiceImpl implements ShippingService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -335,7 +338,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingCfmAddr(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -368,7 +372,7 @@ public class ShippingServiceImpl implements ShippingService {
             resultMap.put("placeList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -381,7 +385,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public Map<String, Object> updateShipping_method(CommandMap commandMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -400,7 +405,7 @@ public class ShippingServiceImpl implements ShippingService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -413,7 +418,8 @@ public class ShippingServiceImpl implements ShippingService {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Map<String, Object> listShippingPsv(CommandMap commandMap)  throws Exception {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         try {
@@ -512,7 +518,7 @@ public class ShippingServiceImpl implements ShippingService {
             resultMap.put("shippingList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

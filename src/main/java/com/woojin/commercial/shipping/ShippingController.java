@@ -18,9 +18,10 @@ import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.ExcelBuilder;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ import java.util.*;
 
 @Controller
 public class ShippingController {
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     //상용자정보 서비스 클래스 호출
     @Autowired
@@ -89,7 +90,7 @@ public class ShippingController {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -117,7 +118,7 @@ public class ShippingController {
             resultMap.put("shippingDetail", pageParam);
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             resultMap.put("status", "1");
             resultMap.put("msg", "데이타 호출에 실패하였습니다");
             //throw e;
@@ -142,7 +143,7 @@ public class ShippingController {
             mv.addObject("shippingDetail", resultMap.get("shippingDetail")); //검색
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;
@@ -155,7 +156,8 @@ public class ShippingController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @RequestMapping(value="/shipping/processShipping", method = {RequestMethod.GET, RequestMethod.POST})
+    @SuppressWarnings("unused")
+	@RequestMapping(value="/shipping/processShipping", method = {RequestMethod.GET, RequestMethod.POST})
     public String processShipping(SearchVO searchVO, HttpSession httpSession,
                                 CommandMap commandMap, RedirectAttributes rttr) throws Exception {
 
@@ -216,7 +218,7 @@ public class ShippingController {
 
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return "redirect:/shipping";
@@ -251,7 +253,7 @@ public class ShippingController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -284,7 +286,7 @@ public class ShippingController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -322,7 +324,7 @@ public class ShippingController {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
 	@ResponseBody
     @RequestMapping(value = "/shipping/shippingexcel", method = {RequestMethod.GET, RequestMethod.POST})
     public void shippingExcel(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -560,7 +562,7 @@ public class ShippingController {
             fileOut.close();
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
     }
@@ -711,7 +713,7 @@ public class ShippingController {
             fileOut.close();
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
     }
@@ -735,7 +737,7 @@ public class ShippingController {
             resultMap.put("msg", msgMap.get("msg"));
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
 
@@ -780,7 +782,7 @@ public class ShippingController {
             mv.addObject("pagecng", "CFMLIST");//변수값
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             mv.setViewName("/login/login");
         }
         return mv;

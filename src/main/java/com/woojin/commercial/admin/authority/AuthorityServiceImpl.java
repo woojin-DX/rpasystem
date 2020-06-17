@@ -16,13 +16,12 @@ package com.woojin.commercial.admin.authority;
 
 import com.woojin.commercial.util.PageNavigater;
 import com.woojin.commercial.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.woojin.commercial.common.CommandMap;
 import com.woojin.commercial.util.CommonUtils;
-import com.woojin.commercial.admin.authority.AuthorityDAO;
-import com.woojin.commercial.admin.authority.AuthorityVO;
 import com.woojin.commercial.admin.authority.AuthorityService;
 
 import javax.annotation.Resource;
@@ -34,7 +33,7 @@ import java.util.Map;
 public class AuthorityServiceImpl implements AuthorityService {
 
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="authorityDAO")
     private AuthorityDAO authorityDAO;
@@ -98,7 +97,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             resultMap.put("authorityList", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -131,7 +130,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             resultMap.put("authorityDetail", detailParam); //내용
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -176,7 +175,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -210,7 +209,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -242,7 +241,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             }
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;

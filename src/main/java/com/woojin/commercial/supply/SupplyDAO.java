@@ -102,7 +102,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public List<SupplyVO> overlabListSupply(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public List<SupplyVO> overlabListSupply(Map<String, Object> paramMap) {
         return (List<SupplyVO>) selectList("overlabListSupply", paramMap);
     }
 
@@ -201,7 +202,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listMaterialNum(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listMaterialNum(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
 
@@ -237,7 +239,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listSupplyConfirm(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listSupplyConfirm(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
 
@@ -261,7 +264,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listSupplyResheet(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listSupplyResheet(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
 
@@ -285,7 +289,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listSupplyResheetDetail(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listSupplyResheetDetail(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
 
@@ -309,7 +314,8 @@ public class SupplyDAO extends AbstractDAO {
      * 수  정  자 :             수  정  일 :
      * 수정  내용 :
      * ******************************************************************************************* */
-    public Map<String, Object> listMaterialOrderAll(Map<String, Object> paramMap) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listMaterialOrderAll(Map<String, Object> paramMap) {
         Map<String, Object> resultMap = new HashMap<String,Object>();
         List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
 

@@ -1,7 +1,9 @@
 package com.woojin.commercial.batchjob.scheduling;
 
 import com.woojin.commercial.shipping.ShippingDAO;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +14,7 @@ import java.util.Map;
 @Service("excelDataService")
 public class ExcelDataServiceImpl implements ExcelDataService{
     // 쿼리로그 추출
-    Logger log = Logger.getLogger(this.getClass());
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name="excelDataDAO")
     private ExcelDataDAO excelDataDAO;
@@ -34,7 +36,7 @@ public class ExcelDataServiceImpl implements ExcelDataService{
             resultMap.put("listExcelData", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -54,7 +56,7 @@ public class ExcelDataServiceImpl implements ExcelDataService{
             resultMap.put("listExcelData", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -74,7 +76,7 @@ public class ExcelDataServiceImpl implements ExcelDataService{
             resultMap.put("listExcelDataSum", listParam); //목록
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return resultMap;
@@ -90,7 +92,7 @@ public class ExcelDataServiceImpl implements ExcelDataService{
             //process += shippingDAO.updateShippingOrderPross();
         }
         catch(Exception e){
-            log.error(e);
+            log.error(e.toString());
             throw e;
         }
         return process;

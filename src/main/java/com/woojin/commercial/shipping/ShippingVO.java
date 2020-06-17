@@ -14,16 +14,11 @@
 
 package com.woojin.commercial.shipping;
 
-import java.math.BigInteger;
-
 import com.woojin.commercial.admin.commoncode.CommonCodeVO;
 import com.woojin.commercial.admin.commoncode.PackingCodeVO;
-import com.woojin.commercial.shipping.shippingmtm.ShippingMtmVO;
 import com.woojin.commercial.supply.PlaceVO;
 import lombok.Data;
-import org.springframework.cache.annotation.Cacheable;
 
-import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Map;
 
