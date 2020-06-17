@@ -60,7 +60,7 @@ public class GpsiDataController {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "Z:\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
