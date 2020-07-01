@@ -454,4 +454,317 @@ public class ExeclDataController {
 
         return returnMap;
     }
+    
+    @SuppressWarnings("unchecked")
+	@ResponseBody
+    @RequestMapping(value = "/admin/excelElec", method = {RequestMethod.GET, RequestMethod.POST})
+    public Map<Object, Object> excelElec(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<Object, Object> returnMap = new HashMap<Object, Object>();
+        try {
+
+            String excelTitle = "";
+
+            Map<String, Object> tempMap = new HashMap<String, Object>();
+
+            Map<String, Object> titleStyleMap = new HashMap<String, Object>();
+            List<Map<String, Object>> fieldInfoList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> excelInfpMap = new HashMap<String, Object>();
+
+            SXSSFWorkbook workbook = new SXSSFWorkbook();
+
+            Map<String, Object> excelElectMap = excelDataService.listElectricStatic();
+            //List<ExcelDataVO> lstResultSum = (List<ExcelDataVO>) excelSumMap.get("listExcelDataSum");
+            List<Object> objResultElect = (List<Object>) excelElectMap.get("listElectricStatic");
+
+            excelTitle = "INFO";
+
+            titleStyleMap.put("sRow", "0");
+            titleStyleMap.put("eRow", "0");
+            titleStyleMap.put("sCol", "0");
+            titleStyleMap.put("eCol", "16");
+            titleStyleMap.put("fontType", "subtitle");
+            titleStyleMap.put("fontColor", "000000");
+            titleStyleMap.put("styleColor", "ECF5FC");
+            titleStyleMap.put("textAlign", "center");
+            titleStyleMap.put("textVAlign", "center");
+            titleStyleMap.put("line", "line");
+
+            fieldInfoList = new ArrayList<Map<String, Object>>();
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "ACTUAL_OUTPUT_DT");
+            tempMap.put("cellTitle", "ACTUAL_OUTPUT_DT");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 20*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "PROC_CD");
+            tempMap.put("cellTitle", "PROC_CD");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "WC_GRP_CD");
+            tempMap.put("cellTitle", "WC_GRP_CD");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "WC_CD");
+            tempMap.put("cellTitle", "WC_CD");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_CD");
+            tempMap.put("cellTitle", "MACH_CD");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "center");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_NM");
+            tempMap.put("cellTitle", "MACH_NM");
+            tempMap.put("fileType", "String");
+            tempMap.put("cellWidth", 25*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "left");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "GOOD_QTY");
+            tempMap.put("cellTitle", "GOOD_QTY");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "DEFECT_QTY");
+            tempMap.put("cellTitle", "DEFECT_QTY");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "SUM_QTY");
+            tempMap.put("cellTitle", "SUM_QTY");
+            tempMap.put("fileType", "Int");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "WORK_TM");
+            tempMap.put("cellTitle", "WORK_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_ON_TM");
+            tempMap.put("cellTitle", "MACH_ON_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");            
+            fieldInfoList.add(tempMap);
+            
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_LOAD_TM");
+            tempMap.put("cellTitle", "MACH_LOAD_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_RUN_TM");
+            tempMap.put("cellTitle", "MACH_RUN_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_VALIDOPERATION_TM");
+            tempMap.put("cellTitle", "MACH_VALIDOPERATION_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 23*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_READY_TM");
+            tempMap.put("cellTitle", "MACH_READY_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_IDLE_CNT");
+            tempMap.put("cellTitle", "MACH_IDLE_CNT");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 15*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+
+            tempMap = new HashMap<String, Object>();
+            tempMap.put("field", "MACH_IDLE_TM");
+            tempMap.put("cellTitle", "MACH_IDLE_TM");
+            tempMap.put("fileType", "Float");
+            tempMap.put("cellWidth", 13*256);
+            tempMap.put("fontType", "content");
+            tempMap.put("fontColor", "000000");
+            tempMap.put("styleColor", "FFFFFF");
+            tempMap.put("textAlign", "right");
+            tempMap.put("textVAlign", "center");
+            tempMap.put("line", "dot");
+            tempMap.put("fomule", "");
+            fieldInfoList.add(tempMap);
+            
+            excelInfpMap = new HashMap<String, Object>();
+            excelInfpMap.put("titleStyleMap", titleStyleMap);
+            excelInfpMap.put("fieldInfoList", fieldInfoList);
+
+            ExcelBuilder.buildExcelXSSSheet(workbook, excelTitle, excelInfpMap, objResultElect, false);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+
+            String realExcelFilename = null;
+            realExcelFilename = URLEncoder.encode("electric_" + strToday, "UTF-8");
+            realExcelFilename = realExcelFilename.replaceAll("\\+", " ");
+
+            /*
+             * HTTP Header 설정.
+             */
+            response.setContentType("application/vnd.ms-excel; name=\"" + realExcelFilename + ".xlsx\"");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + realExcelFilename + ".xlsx\"");
+            response.setHeader("Content-Transfer-Encoding", "binary");
+//            response.setHeader("Content-Length", Long.toString(fileDownLoadInputVO.getlFileSize()));
+            response.setHeader("Cache-Control", "no-cahe, no-store, must-revalidate\r\n");
+            response.setHeader("Connection", "close");
+
+            //FileOutputStream fileOut = new FileOutputStream(realExcelFilename + ".xlsx");
+            //OutputStream out = response.getOutputStream();
+            OutputStream fileOut = response.getOutputStream();
+
+            workbook.write(fileOut);
+            fileOut.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return returnMap;
+    }
 }

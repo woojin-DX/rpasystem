@@ -135,5 +135,20 @@
     	]]>
 	</select>
 
+<!--*******************************************************************************************
+	쿼리함수명 : 출하정보 데이타 다중삭제
+	작  성  자 : 가치노을      작  성  일 : 2020-03-14
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="setElectricStatic" statementType="CALLABLE" parameterType="java.util.Map" resultType="com.woojin.commercial.batchjob.scheduling.ElectricStaticVO">
 
+		<![CDATA[
+			{call setElectricStatic(
+				#{start_dt,mode=IN,jdbcType=VARCHAR} 
+				, #{end_dt,mode=IN,jdbcType=VARCHAR} 
+			)}
+		]]>
+	</select>
+	
 </mapper>

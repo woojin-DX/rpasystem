@@ -69,6 +69,7 @@
                 <value>/login</value>
                 <value>/loginProcess</value>
                 <value>/admin/exceldata</value>
+                <value>/admin/excelElec</value>
                 <value>/admin/listPsix0Data</value>
                 <value>/admin/listPsix1Data</value>
                 <value>/admin/listPsix3Data</value>
