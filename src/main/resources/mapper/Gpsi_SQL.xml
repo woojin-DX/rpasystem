@@ -14,7 +14,7 @@
 				, tot.matnr
 				, 'DUMMY' as inven_status
 				, 'DUMMY' as lot
-				, tot.supply_div
+				, ISNULL(tot.supply_div,0) as supply_div
 				, SUM(tot.inven_qty) as inven_qty
 				, tot.meins
 				, CONVERT(CHAR(10), getdate(), 112) as data_dt
@@ -31,16 +31,16 @@
 					, case when mara.MEINS = 'EA' then 'PC' else mara.MEINS end meins
 				  FROM [ERP_DL].[WJP].[wjp].[MARA] mara
 					inner join 
-						(SELECT distinct MATNR,case when LIFNR = 'A1000A01' then 1 else 0 end supply_div 
-							FROM [ERP_DL].[WJP].[wjp].[EINA]
-						) eina on mara.MATNR = eina.MATNR
-					inner join 
 						(SELECT [MATNR] ,SUM([LABST] + [UMLME] + [INSME]) inven_qty
 						  FROM [ERP_DL].[WJP].[wjp].[MARD] sub 
 						  where concat([LFGJA],[LFMON]) = (SELECT MAX(concat([LFGJA],[LFMON])) FROM [ERP_DL].[WJP].[wjp].[MARD] where MATNR = sub.MATNR and LGORT = sub.LGORT)
 						   and [LABST] + [UMLME] + [INSME] > 0
 						  group by [MATNR])	mard on mara.MATNR = mard.MATNR
-				  where mara.MTART in ('ROH', 'HAWA', 'FERT') 
+					left outer join 
+						(SELECT distinct MATNR,case when LIFNR = 'A1000A01' then 1 else 0 end supply_div 
+							FROM [ERP_DL].[WJP].[wjp].[EINA]
+						) eina on mara.MATNR = eina.MATNR
+				  where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') 
 			) tot
 			group by tot.matnr, tot.supply_div, tot.meins
 			order by tot.matnr
