@@ -62,15 +62,32 @@
 				, matnr
 				, psttr
 				, pedtr
-				, SUM(gsmng) as gsmng
+				, SUM(absat) as gsmng
 				, meins
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
 			from(
-				select mara.matnr,plaf.PSTTR,plaf.PEDTR, plaf.GSMNG, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
+				select 
+					mara.matnr
+					,s076.sptag
+					,s076.SPWOC
+					, s076.ABSAT
+					, case when convert(int,s076.SPWOC) != 0 then convert(varchar(10),DATEADD(DAY, right(s076.SPWOC collate SQL_Latin1_General_CP1_CI_AS,2) * 7
+						, DATEADD(DAY, -(DATEPART(WEEKDAY, concat(left(s076.SPWOC collate SQL_Latin1_General_CP1_CI_AS,4),N'-01-01'))) + 1
+						, concat(left(s076.SPWOC collate SQL_Latin1_General_CP1_CI_AS ,4),N'-01-01'))) ,112)
+						else s076.sptag end psttr
+					, case when convert(int,s076.SPWOC) != 0 then convert(varchar(10),DATEADD(DAY, right(s076.SPWOC collate SQL_Latin1_General_CP1_CI_AS,2) * 7 + 6
+						, DATEADD(DAY, -(DATEPART(WEEKDAY, concat(left(s076.SPWOC  collate SQL_Latin1_General_CP1_CI_AS,4),N'-01-01'))) + 1
+						, concat(left(s076.SPWOC  collate SQL_Latin1_General_CP1_CI_AS,4),N'-01-01'))) ,112)
+						else s076.sptag end pedtr
+					, case when s076.BASME = 'EA' then 'PC' else s076.BASME end meins
 				from [ERP_DL].[WJP].[wjp].[MARA] mara
-					inner join [ERP_DL].[WJP].[wjp].[PLAF] plaf on mara.MATNR = plaf.MATNR
-				where mara.MTART in ('ROH', 'HAWA', 'FERT') and plaf.GSMNG > 0
-			
+					inner join [ERP_DL].[WJP].[wjp].[S076] s076 on mara.MATNR = s076.PMNUX
+				where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') and s076.ABSAT != 0
+					and (left(s076.sptag,6) between left(CONVERT(CHAR(10), getdate(), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
+						OR s076.SPWOC between
+						concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), getdate(), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), getdate(), 112),6),'01'))),2)) 
+						and concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6),'01'))),2))
+				)
 			) tot
 			group by matnr,psttr,pedtr,meins
 			order by psttr,pedtr,matnr
@@ -98,7 +115,8 @@
 				select mara.matnr,plaf.PSTTR,plaf.PEDTR, plaf.GSMNG, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
 				from [ERP_DL].[WJP].[wjp].[MARA] mara
 					inner join [ERP_DL].[WJP].[wjp].[PLAF] plaf on mara.MATNR = plaf.MATNR
-				where mara.MTART = 'FERT' and plaf.GSMNG > 0
+				where mara.MTART in('ROH') and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2))  and plaf.GSMNG > 0
+					and left(plaf.PSTTR,6) between left(CONVERT(CHAR(10), DATEADD(month, -1, getdate()), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
 			
 			) tot
 			group by matnr,psttr,pedtr,meins
@@ -134,10 +152,11 @@
 				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
 					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
-				where mkpf.VGART = 'WF' and mara.MTART = 'FERT' and mseg.BWART in ('101','102') and mseg.INSMK != '3'
+				where mkpf.VGART = 'WA' and mara.MTART IN('FERT','HALB','ROH') and mseg.BWART in ('261','262') and mseg.INSMK != '3'
+					and mseg.ERFMG != 0
+					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
 			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME
-			having SUM(ERFMG) > 0
 			order by MBLNR,MATNR
     	]]>
 	</select>
@@ -166,7 +185,8 @@
 						, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end MEINS
 					from [ERP_DL].[WJP].[wjp].[PLAF] plaf
 						inner join [ERP_DL].[WJP].[wjp].[MARA] mara on plaf.MATNR = mara.MATNR
-					where mara.MTART = 'FERT'
+					where mara.MTART in('HALB', 'FERT') and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2))  
+					and left(plaf.PSTTR,6) between left(CONVERT(CHAR(10), DATEADD(month, -1, getdate()), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
 			
 				union all
 			
@@ -177,7 +197,7 @@
 						, case when afko.GMEIN = 'EA' then 'PC' else afko.GMEIN end MEINS
 					from [ERP_DL].[WJP].[wjp].[AFKO] afko
 						inner join [ERP_DL].[WJP].[wjp].[MARA] mara on afko.PLNBEZ = mara.MATNR
-					where mara.MTART = 'FERT' and afko.GSTRS >=  CONVERT(CHAR(8), getdate(), 112)
+					where mara.MTART in('HALB', 'FERT') and afko.GSTRS >=  CONVERT(CHAR(8), getdate(), 112)
 			) tot
 			group by MATNR
 				, PSTTR
@@ -219,10 +239,11 @@
 				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
 					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
-				where mkpf.VGART = 'WF' and mara.MTART = 'FERT' and mseg.BWART in ('101','102') and mseg.INSMK != '3'
+				where mkpf.VGART = 'WF' and mara.MTART in('FERT','HALB') and mseg.BWART in ('101','102') and mseg.INSMK != '3'
+					and mseg.ERFMG != 0
+					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
 			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME
-			having SUM(ERFMG) > 0
 			order by MBLNR,MATNR
     	]]>
 	</select>
