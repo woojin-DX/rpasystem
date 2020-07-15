@@ -26,6 +26,8 @@
 						inner join wjp.KNA1 b on a.ID = b.KUNNR
 						union all
 						SELECT ''woojin'',''woojin@1'',''4600'',''A1000A00'',N''우진''
+						union all
+						SELECT ''gpsi'',''gpsi@1'',''4600'',''A1000A01'',N''GPSI''
 					) totuser
 					where user_id = ''${user_id}'' and user_pwd = ''${user_pwd}''
 				') maintb
@@ -109,6 +111,8 @@
 						inner join wjp.KNA1 b on a.ID = b.KUNNR
 						union all
 						SELECT ''woojin'',''woojin@1'',''4600'',''A1000A00'',N''우진''
+						union all
+						SELECT ''gpsi'',''gpsi@1'',''4600'',''A1000A01'',N''GPSI''
 					) totuser
 					where user_id = ''${user_id}''
 				') subtb

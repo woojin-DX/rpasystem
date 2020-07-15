@@ -70,14 +70,6 @@
                 <value>/loginProcess</value>
                 <value>/admin/exceldata</value>
                 <value>/admin/excelElec</value>
-                <value>/admin/listPsix0Data</value>
-                <value>/admin/listPsix1Data</value>
-                <value>/admin/listPsix3Data</value>
-                <value>/admin/listPsix4Data</value>
-                <value>/admin/listPsix5Data</value>
-                <value>/admin/listPsix6Data</value>
-                <value>/admin/listPsix7Data</value>
-                <value>/admin/listPsix9Data</value>
             </list>
         </constructor-arg>
     </bean>

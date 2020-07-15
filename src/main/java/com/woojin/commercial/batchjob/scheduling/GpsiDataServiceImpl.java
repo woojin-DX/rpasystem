@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix1VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix2VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
@@ -59,6 +60,26 @@ public class GpsiDataServiceImpl implements GpsiDataService{
 
             //jsp 에서 보여줄 정보 추출
             resultMap.put("listPsix1Data", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e.toString());
+            throw e;
+        }
+        return resultMap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> listPsix2Data() throws Exception {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  gpsiDataDAO.listPsix2Data();
+
+            List<GpsiPsix2VO> listParam = (List<GpsiPsix2VO>) dataMap.get("datalist");
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("listPsix2Data", listParam); //목록
         }
         catch(Exception e){
             log.error(e.toString());

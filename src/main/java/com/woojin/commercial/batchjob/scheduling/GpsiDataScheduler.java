@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix1VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix2VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix4VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
@@ -181,6 +182,100 @@ public class GpsiDataScheduler {
                 	strBufOri.append(m.getGsmng()).append("	");
                 	strBufOri.append(m.getMeins()).append("	");
                 	strBufOri.append(m.getData_dt());
+                	
+                	writer.write(strBufOri.toString());
+                }   
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+	
+	@SuppressWarnings("unchecked")
+	@Scheduled(cron = "0 20 6 * * MON-FRI")
+	public void schedulerPsix2() throws Exception {
+        try {
+
+            Map<String, Object> csvMap = gpsiDataService.listPsix2Data();
+            List<GpsiPsix2VO> lstResult = (List<GpsiPsix2VO>) csvMap.get("listPsix2Data");
+
+            /**
+             * csv 파일을 쓰기위한 설정
+             * 설명
+             * D:\\test.csv : csv 파일저장할 위치+파일명
+             * EUC-KR : 한글깨짐설정을 방지하기위한 인코딩설정(UTF-8로 지정해줄경우 한글깨짐)
+             * ',' : 배열을 나눌 문자열
+             * '"' : 값을 감싸주기위한 문자
+             **/
+            
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+            
+        	File file = new File(path);
+            //file을 생성할 폴더가 없으면 생성합니다.
+        	if(!file.isDirectory()){
+        		file.mkdirs(); //폴더 생성합니다.
+        	}
+
+            String fullPath = path + "\\psix2_" + strToday + ".txt";
+            
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		                    new FileOutputStream(fullPath), "euc-kr"))) {
+            	StringBuilder strBufOri = new StringBuilder();
+            	strBufOri.append("데이터 종류별").append("	");
+            	strBufOri.append("판매실적키").append("	");
+            	strBufOri.append("출하원거점코드").append("	");
+            	strBufOri.append("출하처거점코드").append("	");
+            	strBufOri.append("품목코드").append("	");
+            	strBufOri.append("날짜").append("	");
+            	strBufOri.append("사용실적수").append("	");
+            	strBufOri.append("단위").append("	");
+            	strBufOri.append("로트").append("	");
+            	strBufOri.append("PO전표번호").append("	");
+            	strBufOri.append("PO명세번호").append("	");
+            	strBufOri.append("수주실적키").append("	");
+            	strBufOri.append("AIR플래그").append("	");
+            	strBufOri.append("무상출하구분").append("	");
+            	strBufOri.append("데이터 날짜").append("	");
+            	strBufOri.append("예비항목1").append("	");
+            	strBufOri.append("예비항목2").append("	");
+            	strBufOri.append("예비항목3").append("	");
+            	strBufOri.append("예비항목4").append("	");
+            	strBufOri.append("예비항목5");
+            	writer.write(strBufOri.toString());
+            	
+                for(GpsiPsix2VO m : lstResult) {
+                    //배열을 이용하여 row를 CSVWriter 객체에 write
+                	strBufOri = new StringBuilder();
+                	strBufOri.append("\n");
+                	strBufOri.append(m.getData_type()).append("	");
+                	strBufOri.append(m.getMblnr()).append("	");
+                	strBufOri.append(m.getBase_code()).append("	");
+                	strBufOri.append(m.getOut_pls_code()).append("	");
+                	strBufOri.append(m.getMatnr()).append("	");
+                	strBufOri.append(m.getBudat()).append("	");
+                	strBufOri.append(m.getErfmg()).append("	");
+                	strBufOri.append(m.getErfme()).append("	");
+                	strBufOri.append(m.getLot()).append("	");
+                	strBufOri.append(m.getEbeln()).append("	");
+                	strBufOri.append(m.getEbelp()).append("	");
+                	strBufOri.append(m.getResult_key()).append("	");
+                	strBufOri.append(m.getAir_flag()).append("	");
+                	strBufOri.append(m.getFree_flag()).append("	");
+                	strBufOri.append(m.getData_dt()).append("	");
+                	strBufOri.append(m.getReserve1()).append("	");
+                	strBufOri.append(m.getReserve2()).append("	");
+                	strBufOri.append(m.getReserve3()).append("	");
+                	strBufOri.append(m.getReserve4()).append("	");
+                	strBufOri.append(m.getReserve5());
                 	
                 	writer.write(strBufOri.toString());
                 }   

@@ -1228,7 +1228,7 @@ public class AdminController {
             }
             else{
                 resultMap.put("status", 1);
-                resultMap.put("msg", "권한이 업습니다.\r\n관리자에게 문의해주세요");
+                resultMap.put("msg", "권한이 없습니다.\r\n관리자에게 문의해주세요");
             }
         }
         catch(Exception e){

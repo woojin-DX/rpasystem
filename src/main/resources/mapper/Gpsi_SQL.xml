@@ -82,7 +82,7 @@
 					, case when s076.BASME = 'EA' then 'PC' else s076.BASME end meins
 				from [ERP_DL].[WJP].[wjp].[MARA] mara
 					inner join [ERP_DL].[WJP].[wjp].[S076] s076 on mara.MATNR = s076.PMNUX
-				where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') and s076.ABSAT != 0
+				where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') and s076.ABSAT != 0 and s076.VRSIO = concat('2',right(concat('00',month(getdate())),2))
 					and (left(s076.sptag,6) between left(CONVERT(CHAR(10), getdate(), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
 						OR s076.SPWOC between
 						concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), getdate(), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), getdate(), 112),6),'01'))),2)) 
@@ -91,6 +91,58 @@
 			) tot
 			group by matnr,psttr,pedtr,meins
 			order by psttr,pedtr,matnr
+    	]]>
+	</select>
+	
+	<!--*******************************************************************************************
+    쿼리함수명 : 자재코드목록
+    작  성  자 : 가치노을      작  성  일 : 2020-03-26
+    수  정  자 :             수  정  일 :
+    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsix2Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix2VO">
+		<![CDATA[
+			SELECT  
+				'PSIX2' as data_type
+				, MBLNR mblnr
+				, 'A4600001' as base_code
+				, out_pls_code
+				, MATNR matnr
+				, BUDAT budat
+				, SUM(ERFMG) as erfmg
+				, ERFME erfme
+				, 'DUMMY' as lot
+				, 'DUMMY' as ebeln
+				, 'DUMMY' as ebelp
+				, '' as result_key
+				, '0' as air_flag
+				, free_flag
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+				, '' as reserve1
+				, '' as reserve2
+				, '' as reserve3
+				, '' as reserve4
+				, '' as reserve5
+			FROM(
+				select mkpf.CPUDT
+					, mseg.MBLNR
+					, case when mseg.kunnr = 'A1000A01' then mseg.kunnr else 'DUMMY' end out_pls_code
+					, mseg.MATNR
+					, mkpf.BUDAT
+					, case when mseg.SHKZG = 'S' then  mseg.ERFMG when  mseg.SHKZG = 'H' then mseg.ERFMG * (-1) end ERFMG
+					, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
+					, case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
+					, case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
+					, case when mseg.BWART in('951','952') then 1 else 0 end free_flag
+				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
+					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
+					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
+				where /*mkpf.VGART = 'WA' and*/ mara.MTART IN('FERT','HALB','ROH','HAWA') and mseg.BWART in ('601','602','653','654','951','952') and mseg.INSMK != '3'
+					and mseg.ERFMG != 0
+					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+			) tot
+			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,out_pls_code, EBELN,ebelp, free_flag
+			order by MBLNR,MATNR
     	]]>
 	</select>
 	
@@ -281,7 +333,7 @@
 					,case when mseg.shkzg = 'S' then mseg.menge when mseg.shkzg = 'S' then  mseg.menge * (-1) end menge
 					,case when mseg.meins = 'EA' then 'PC' else mseg.meins end meins
 					,case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
-					,mseg.ebelp
+					,case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
 					,mkpf.budat
 			
 				from
@@ -289,6 +341,7 @@
 					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR
 				where mseg.lifnr = 'A1000A01' and mseg.bwart in ('101','102','122','123','161','162')
 					and mkpf.vgart = 'WE' and mseg.menge != 0
+					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
 			group by mblnr
 				, matnr

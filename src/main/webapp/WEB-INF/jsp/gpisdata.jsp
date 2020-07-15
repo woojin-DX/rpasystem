@@ -7,6 +7,7 @@
 <title>GPIS DATA</title>
 </head>
 <body>
-데이타가 정상적으로 생성되었습니다.
+데이타가 정상적으로 생성되었습니다. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</br ></br ><a href = "/pgsi"><돌아가기></a>
 </body>
 </html>

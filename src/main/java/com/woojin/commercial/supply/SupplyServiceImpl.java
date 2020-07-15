@@ -516,7 +516,32 @@ public class SupplyServiceImpl implements SupplyService {
         return resultMap;
 
     }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 발주정보 목록
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 전체 목록 및 갯수
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+	@SuppressWarnings("unchecked")
+	@Override
+    public Map<String, Object> listSupplyHistory(CommandMap commandMap)  throws Exception {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+        	Map<String, Object> dataMap = new HashMap<String,Object>();
+        	
+            dataMap =  supplyDAO.listSupplyHistory(commandMap.getMap());
+            List<SupplyVO> listParam = (List<SupplyVO>) dataMap.get("datalist");
+            resultMap.put("supplyList", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e.toString());
+            throw e;
+        }
+        return resultMap;
+    }
 
-
+    
 }
 

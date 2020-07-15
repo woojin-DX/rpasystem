@@ -53,6 +53,9 @@
                     <li><a href="/supply/resheet" id="supplyresheet">거래명세서 출력</a></li>
                     <li><a href="/supply/listPlace" id="menuplace">납품처 관리</a></li>
                 </c:when>
+                <c:when test="${userRole.equals('GPSI')}">
+                    <li><a href="/pgsi" id="pgsi">G-PSI</a></li>
+                </c:when>
             </c:choose>
             <ul style="float:right; list-style-type:none;">
                 <li><a href="/logout">로그아웃</a></li>

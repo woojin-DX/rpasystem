@@ -124,6 +124,28 @@
                             </div>
                             <!-- //버튼 -->
                         </fieldset>
+                        <div>
+                        	<div class="content_subtitle">
+                             	<h3> &nbsp;&nbsp;▶ 출하로그 </h3>
+                        	</div>
+                        	<table cellspacing="0" border="1" summary="목록정보"  cellpadding="0" id="boardList" class="bbsCom">
+                                <caption>게시판 목록</caption>
+                                <colgroup>
+                                    <col width="80px" />
+                                    <col width="120px" />
+                                    <col width="100px" />
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col">상태</th>
+                                    <th scope="col">출하일</th>
+                                    <th scope="col" class="ta_r">출하수량</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <!-- //내용 -->
                     </div>
@@ -547,6 +569,41 @@
                             $('#btnCancle').attr('style', "display:;");
                         }
 
+                    }
+                    else if (result.status == 1) {
+                        alert(result.msg);
+                        var comSubmit = new ComSubmit("searchForm");
+                        comSubmit.setUrl("/login");
+                        comSubmit.submit();
+                    }
+                },
+                error: function(data, status, err) {
+                    alert("로그인 시간이 종료되었습니다." + "\n" + "다시 로그인을 해주시기 바랍니다." + "\n"
+                        + "code: " + data.status + "\n"
+                        + "message :" + data.responseText + "\n"
+                        + "error: " + err);
+                    return false;
+                }
+            }).submit();
+            
+            $("#registerForm").ajaxForm({
+                type: 'POST',
+                url: '/supply/supplyHistory',
+                dataType: "json",
+                enctype: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                timeout: 30000,
+                success: function(result) {
+                    if (result.status == 0) {
+                    	$("#boardList > tbody").empty();
+                    	var results = result.supplyList;
+                    	var str = '';
+                        $.each(results , function(i){
+                            str += '<TR><TD>' + results[i].process_nm + '</TD><TD>' + results[i].supply_dt + '</TD><TD class="ta_r">' + results[i].supply_qty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</TD>';
+                            str += '</TR>';
+                       });
+                       $("#boardList").append(str); 
                     }
                     else if (result.status == 1) {
                         alert(result.msg);

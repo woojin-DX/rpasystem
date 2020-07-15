@@ -881,5 +881,27 @@
 			ORDER BY oritb.material_num ASC
     	]]>
 	</select>
+	
+	<!--*******************************************************************************************
+        쿼리함수명 : 발주정보 전체 목록(페이징 가능)
+        작  성  자 : 가치노을      작  성  일 : 2020-03-26
+        수  정  자 :             수  정  일 :
+        수정  내용 :
+        *******************************************************************************************-->
+	<select id="listSupplyHistory" parameterType="hashmap" resultType="com.woojin.commercial.supply.SupplyVO">
+		<![CDATA[
+			select comtb.STATUS_NM as process_nm
+				, maintb.SUPPLY_DT as supply_dt
+				, SUM(maintb.SUPPLY_QTY) as supply_qty
+				, SUM(maintb.SUPPLY_QTY) * oritb.unit_price as supply_price
+			from tb_shipping maintb
+				inner join tb_orderfor oritb on maintb.orderfor_key = oritb.orderfor_key
+				left outer join tb_common_code comtb on common_cd = maintb.PROCESS_CD
+				WHERE maintb.orderfor_key = #{orderfor_key} and maintb.use_fl ! = 'END'
+					and maintb.PROCESS_CD in('ST_BCP','ST_CFM','ST_ING','ST_SPG')
+				group by comtb.STATUS_NM,maintb.SUPPLY_DT,oritb.unit_price
+				order by maintb.SUPPLY_DT
+		]]>
+	</select>
 
 </mapper>

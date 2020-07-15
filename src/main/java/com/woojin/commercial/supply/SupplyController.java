@@ -762,5 +762,38 @@ public class SupplyController {
         }
         return resultMap;
     }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 발주정보 상세내역
+     * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
+     * 내      용 : 상세내역
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @RequestMapping(value="/supply/supplyHistory", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> listSupplyHistory(CommandMap commandMap, HttpSession httpSession) throws Exception {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            Object object = httpSession.getAttribute("loginInfo");
+            LoginVO userVO = (LoginVO) object;
+            if (userVO.getAuth_cd().equals("SUPPLY")) {
+                resultMap = supplyService.listSupplyHistory(commandMap);
+                resultMap.put("supplyList", resultMap.get("supplyList")); //내용
+                resultMap.put("status", "0");
+                resultMap.put("msg", "정상적으로 호출하였습니다.");
+            }
+            else{
+                resultMap.put("status", 1);
+                resultMap.put("msg", "권한이 업습니다.\r\n관리자에게 문의해주세요");
+            }
+        }
+        catch(Exception e){
+            log.error(e.toString());
+            resultMap.put("status", "1");
+            resultMap.put("msg", "로그인 종료로 인하여 데이타 호출에 실패하였습니다\n로그인을 다시 해주세요");
+        }
+        return resultMap;
+    }
 
 }

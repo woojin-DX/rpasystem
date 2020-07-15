@@ -62,6 +62,9 @@ public class CommonController {
 	        else if (userVO.getAuth_cd().equals("SUPPLY")) {
 	            reUrl = "redirect:/supply";
 	        }
+	        else if (userVO.getAuth_cd().equals("GPSI")) {
+	            reUrl = "redirect:/pgsi";
+	        }
 	        else{
 	            reUrl = "redirect:/denied";
 	        }

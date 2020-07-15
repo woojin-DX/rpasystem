@@ -41,6 +41,8 @@
 						where isnull(a.WERKS, '''') = ''''
 						union all
 						SELECT ''woojin'',''woojin@1'',N''우진''
+						union all
+						SELECT ''gpsi'',''gpsi@1'',N''GPSI''
 					) totuser
 				') subtb2 on maintb.user_id = subtb2.user_id COLLATE Korean_Wansung_CI_AS
 		]]>
@@ -99,6 +101,8 @@
 						where isnull(a.WERKS, '''') = ''''
 						union all
 						SELECT ''woojin'',''woojin@1'',N''우진''
+						union all
+						SELECT ''gpsi'',''gpsi@1'',N''GPSI''
 					) totuser
 				') subtb2 on maintb.user_id = subtb2.user_id COLLATE Korean_Wansung_CI_AS
 		]]>

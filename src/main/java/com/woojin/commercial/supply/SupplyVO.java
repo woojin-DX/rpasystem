@@ -92,4 +92,6 @@ public @Data class SupplyVO {
 	private	PlaceVO splace;
 	private CommonCodeVO process;
 	private ShippingVO shpping;
+	
+	private long supply_price;
 }
