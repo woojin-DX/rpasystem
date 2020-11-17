@@ -35,6 +35,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 0 6 * * MON-FRI")
+	//"0 0 6 * * MON-FRI"
 	public void schedulerPsix0() throws Exception {
 		SimpleDateFormat sdflog = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c1log = Calendar.getInstance();
@@ -57,8 +58,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -68,26 +69,44 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix0_" + strToday + ".txt";
+            String fullPath = path + "\\psix0_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("재고상태").append("	");
-            	strBufOri.append("로트").append("	");
-            	strBufOri.append("수급대상구분").append("	");
-            	strBufOri.append("재고수량").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
-            	strBufOri.append("예비항목1").append("	");
-            	strBufOri.append("예비항목2").append("	");
-            	strBufOri.append("예비항목3").append("	");
-            	strBufOri.append("예비항목4").append("	");
-            	strBufOri.append("예비항목5");
+//            	strBufOri.append("데이터 종류별").append("	");
+//            	strBufOri.append("거점코드").append("	");
+//            	strBufOri.append("품목코드").append("	");
+//            	strBufOri.append("재고상태").append("	");
+//            	strBufOri.append("로트").append("	");
+//            	strBufOri.append("수급대상구분").append("	");
+//            	strBufOri.append("재고수량").append("	");
+//            	strBufOri.append("단위").append("	");
+//            	strBufOri.append("데이터 날짜").append("	");
+//            	strBufOri.append("예비항목1").append("	");
+//            	strBufOri.append("예비항목2").append("	");
+//            	strBufOri.append("예비항목3").append("	");
+//            	strBufOri.append("예비항목4").append("	");
+//            	strBufOri.append("예비항목5");
+//            	writer.write(strBufOri.toString());
+            	
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Inventory Status").append("	");
+            	strBufOri.append("LOT").append("	");
+            	strBufOri.append("PSI Planning Flag").append("	");
+            	strBufOri.append("Inventory Quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	strBufOri.append("Spare items1").append("	");
+            	strBufOri.append("Spare items2").append("	");
+            	strBufOri.append("Spare items3").append("	");
+            	strBufOri.append("Spare items4").append("	");
+            	strBufOri.append("Spare items5");
             	writer.write(strBufOri.toString());
+            	
+            	
             	
                 for(GpsiPsix0VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
@@ -126,6 +145,7 @@ public class GpsiDataScheduler {
     }
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 10 6 * * MON-FRI")
+	//"0 10 6 * * MON-FRI"
 	public void schedulerPsix1() throws Exception {
         try {
 
@@ -142,8 +162,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -153,21 +173,34 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix1_" + strToday + ".txt";
+            String fullPath = path + "\\psix1_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("출하원 거점코드").append("	");
-            	strBufOri.append("출하처 거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("기간개시날짜").append("	");
-            	strBufOri.append("기간종료날짜").append("	");
-            	strBufOri.append("판매계획수량").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Shipping agent site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("From date").append("	");
+            	strBufOri.append("To Date").append("	");
+            	strBufOri.append("Planned Sales Quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("Extract date").append("	");
             	writer.write(strBufOri.toString());
+            	
+            	
+//            	strBufOri.append("데이터 종류별").append("	");
+//            	strBufOri.append("출하원 거점코드").append("	");
+//            	strBufOri.append("출하처 거점코드").append("	");
+//            	strBufOri.append("품목코드").append("	");
+//            	strBufOri.append("기간개시날짜").append("	");
+//            	strBufOri.append("기간종료날짜").append("	");
+//            	strBufOri.append("판매계획수량").append("	");
+//            	strBufOri.append("단위").append("	");
+//            	strBufOri.append("데이터 날짜").append("	");
+//            	writer.write(strBufOri.toString());
+            	
             	
                 for(GpsiPsix1VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
@@ -198,12 +231,15 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 20 6 * * MON-FRI")
+	//"0 20 6 * * MON-FRI"
 	public void schedulerPsix2() throws Exception {
         try {
 
             Map<String, Object> csvMap = gpsiDataService.listPsix2Data();
             List<GpsiPsix2VO> lstResult = (List<GpsiPsix2VO>) csvMap.get("listPsix2Data");
 
+            
+            
             /**
              * csv 파일을 쓰기위한 설정
              * 설명
@@ -214,8 +250,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "D:\\psi\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -225,39 +261,67 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix2_" + strToday + ".txt";
+            String fullPath = path + "\\psix2_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("판매실적키").append("	");
-            	strBufOri.append("출하원거점코드").append("	");
-            	strBufOri.append("출하처거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("날짜").append("	");
-            	strBufOri.append("사용실적수").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("로트").append("	");
-            	strBufOri.append("PO전표번호").append("	");
-            	strBufOri.append("PO명세번호").append("	");
-            	strBufOri.append("수주실적키").append("	");
-            	strBufOri.append("AIR플래그").append("	");
-            	strBufOri.append("무상출하구분").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
-            	strBufOri.append("예비항목1").append("	");
-            	strBufOri.append("예비항목2").append("	");
-            	strBufOri.append("예비항목3").append("	");
-            	strBufOri.append("예비항목4").append("	");
-            	strBufOri.append("예비항목5");
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Actual Sales Key").append("	");
+            	//strBufOri.append("Actual Sales Detail NO").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Shipping agent site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Sales Date").append("	");
+            	strBufOri.append("Actual Sales Quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("LOT").append("	");
+            	strBufOri.append("P.O. number").append("	");
+            	strBufOri.append("P.O. Detail number").append("	");
+            	strBufOri.append("Sales Order Key").append("	");
+            	strBufOri.append("Air Flag").append("	");
+            	strBufOri.append("Is Free of Charge").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	strBufOri.append("Spare items1").append("	");
+            	strBufOri.append("Spare items2").append("	");
+            	strBufOri.append("Spare items3").append("	");
+            	strBufOri.append("Spare items4").append("	");
+            	strBufOri.append("Spare items5");
             	writer.write(strBufOri.toString());
+            	
+            	
+            	
+//            	strBufOri.append("데이터 종류별").append("	");
+//            	strBufOri.append("판매실적키").append("	");
+//            	strBufOri.append("항목번호").append("	");
+//            	strBufOri.append("출하원거점코드").append("	");
+//            	strBufOri.append("출하처거점코드").append("	");
+//            	strBufOri.append("품목코드").append("	");
+//            	strBufOri.append("날짜").append("	");
+//            	strBufOri.append("사용실적수").append("	");
+//            	strBufOri.append("단위").append("	");
+//            	strBufOri.append("로트").append("	");
+//            	strBufOri.append("PO전표번호").append("	");
+//            	strBufOri.append("PO명세번호").append("	");
+//            	strBufOri.append("수주실적키").append("	");
+//            	strBufOri.append("AIR플래그").append("	");
+//            	strBufOri.append("무상출하구분").append("	");
+//            	strBufOri.append("데이터 날짜").append("	");
+//            	strBufOri.append("예비항목1").append("	");
+//            	strBufOri.append("예비항목2").append("	");
+//            	strBufOri.append("예비항목3").append("	");
+//            	strBufOri.append("예비항목4").append("	");
+//            	strBufOri.append("예비항목5");
+            	
+            	
             	
                 for(GpsiPsix2VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
                 	strBufOri = new StringBuilder();
                 	strBufOri.append("\n");
                 	strBufOri.append(m.getData_type()).append("	");
-                	strBufOri.append(m.getMblnr()).append("	");
+                	strBufOri.append(m.getMblnr()).append(m.getZeile()).append("	");
+                	//strBufOri.append(m.getZeile()).append("	");	//20201027 추가
                 	strBufOri.append(m.getBase_code()).append("	");
                 	strBufOri.append(m.getOut_pls_code()).append("	");
                 	strBufOri.append(m.getMatnr()).append("	");
@@ -292,6 +356,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 30 6 * * MON-FRI")
+	//"0 30 6 * * MON-FRI"
 	public void schedulerPsix3() throws Exception {
         try {
 
@@ -308,8 +373,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -319,20 +384,32 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix3_" + strToday + ".txt";
+            String fullPath = path + "\\psix3_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("기간개시날짜").append("	");
-            	strBufOri.append("기간종료날짜").append("	");
-            	strBufOri.append("판매계획수량").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("From date").append("	");
+            	strBufOri.append("To Date").append("	");
+            	strBufOri.append("Planned Used Quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("Extract date").append("	");
             	writer.write(strBufOri.toString());
+            	
+            	
+//            	strBufOri.append("데이터 종류별").append("	");
+//            	strBufOri.append("거점코드").append("	");
+//            	strBufOri.append("품목코드").append("	");
+//            	strBufOri.append("기간개시날짜").append("	");
+//            	strBufOri.append("기간종료날짜").append("	");
+//            	strBufOri.append("판매계획수량").append("	");
+//            	strBufOri.append("단위").append("	");
+//            	strBufOri.append("데이터 날짜").append("	");
+            	
+            	
             	
                 for(GpsiPsix3VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
@@ -362,6 +439,8 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 40 6 * * MON-FRI")
+	//"0 40 6 * * MON-FRI"
+	
 	public void schedulerPsix4() throws Exception {
         try {
 
@@ -378,8 +457,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -389,26 +468,43 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix4_" + strToday + ".txt";
+            String fullPath = path + "\\psix4_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
-            	strBufOri.append("데이터 종류별").append("	");
-            	strBufOri.append("사용실적키").append("	");
-            	strBufOri.append("거점코드").append("	");
-            	strBufOri.append("품목코드").append("	");
-            	strBufOri.append("날짜").append("	");
-            	strBufOri.append("사용실적수").append("	");
-            	strBufOri.append("단위").append("	");
-            	strBufOri.append("로트").append("	");
-            	strBufOri.append("데이터 날짜").append("	");
-            	strBufOri.append("예비항목1").append("	");
-            	strBufOri.append("예비항목2").append("	");
-            	strBufOri.append("예비항목3").append("	");
-            	strBufOri.append("예비항목4").append("	");
-            	strBufOri.append("예비항목5");
+            	strBufOri.append("Data type").append("	");
+            	strBufOri.append("Actual Usage Key").append("	");
+            	strBufOri.append("Overseas stock site code").append("	");
+            	strBufOri.append("Item code").append("	");
+            	strBufOri.append("Production Date").append("	");
+            	strBufOri.append("Actual Used Quantity").append("	");
+            	strBufOri.append("Unit Of measure").append("	");
+            	strBufOri.append("LOT").append("	");
+            	strBufOri.append("Extract date").append("	");
+            	strBufOri.append("Spare items1").append("	");
+            	strBufOri.append("Spare items2").append("	");
+            	strBufOri.append("Spare items3").append("	");
+            	strBufOri.append("Spare items4").append("	");
+            	strBufOri.append("Spare items5");
             	writer.write(strBufOri.toString());
+            	
+            	
+//            	strBufOri.append("데이터 종류별").append("	");
+//            	strBufOri.append("사용실적키").append("	");
+//            	strBufOri.append("거점코드").append("	");
+//            	strBufOri.append("품목코드").append("	");
+//            	strBufOri.append("날짜").append("	");
+//            	strBufOri.append("사용실적수").append("	");
+//            	strBufOri.append("단위").append("	");
+//            	strBufOri.append("로트").append("	");
+//            	strBufOri.append("데이터 날짜").append("	");
+//            	strBufOri.append("예비항목1").append("	");
+//            	strBufOri.append("예비항목2").append("	");
+//            	strBufOri.append("예비항목3").append("	");
+//            	strBufOri.append("예비항목4").append("	");
+//            	strBufOri.append("예비항목5");
+            	
             	
                 for(GpsiPsix4VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
@@ -419,7 +515,7 @@ public class GpsiDataScheduler {
                 	strBufOri.append(m.getBase_code()).append("	");
                 	strBufOri.append(m.getMatnr()).append("	");
                 	strBufOri.append(m.getBudat()).append("	");
-                	strBufOri.append(m.getErfmg()).append("	");
+                	strBufOri.append(m.getErfmg()).append("	");	//20201027 변경
                 	strBufOri.append(m.getErfme()).append("	");
                 	strBufOri.append(m.getLot()).append("	");
                 	strBufOri.append(m.getData_dt()).append("	");
@@ -444,6 +540,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 50 6 * * MON-FRI")
+	//"0 50 6 * * MON-FRI"
 	public void schedulerPsix5() throws Exception {
         try {
 
@@ -460,8 +557,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -471,7 +568,7 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix5_" + strToday + ".txt";
+            String fullPath = path + "\\psix5_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -514,6 +611,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 0 7 * * MON-FRI")
+	//"0 0 7 * * MON-FRI"
 	public void schedulerPsix6() throws Exception {
         try {
 
@@ -530,8 +628,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -541,7 +639,7 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix6_" + strToday + ".txt";
+            String fullPath = path + "\\psix6_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -596,6 +694,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 10 7 * * MON-FRI")
+	//"0 10 7 * * MON-FRI"
 	public void schedulerPsix7() throws Exception {
         try {
 
@@ -612,8 +711,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -623,13 +722,14 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix7_" + strToday + ".txt";
+            String fullPath = path + "\\psix7_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
             	strBufOri.append("Data type").append("	");
             	strBufOri.append("Statement number").append("	");
+            	//strBufOri.append("Actual production Datail NO").append("	");
             	strBufOri.append("Overseas stock site code").append("	");
             	strBufOri.append("Shipping agent site code").append("	");
             	strBufOri.append("Item code").append("	");
@@ -652,7 +752,8 @@ public class GpsiDataScheduler {
                 	strBufOri = new StringBuilder();
                 	strBufOri.append("\n");
                 	strBufOri.append(m.getData_type()).append("	");
-                	strBufOri.append(m.getMblnr()).append("	");
+                	strBufOri.append(m.getMblnr()).append(m.getZeile()).append("	");
+                	//strBufOri.append(m.getZeile()).append("	");	//20201027 추가
                 	strBufOri.append(m.getBase_code()).append("	");
                 	strBufOri.append(m.getPlace_code()).append("	");
                 	strBufOri.append(m.getMatnr()).append("	");
@@ -684,6 +785,7 @@ public class GpsiDataScheduler {
 	
 	@SuppressWarnings("unchecked")
 	@Scheduled(cron = "0 30 7 * * MON-FRI")
+	//"0 30 7 * * MON-FRI"
 	public void schedulerPsix9() throws Exception {
         try {
 
@@ -700,8 +802,8 @@ public class GpsiDataScheduler {
              **/
             
             String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             
@@ -711,7 +813,7 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
-            String fullPath = path + "\\psix9_" + strToday + ".txt";
+            String fullPath = path + "\\psix9_A4600_" + strToday + ".txt";
             
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {

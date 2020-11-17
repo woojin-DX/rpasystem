@@ -25,5 +25,5 @@ public class GpsiPsix2VO {
 	private String reserve3;
 	private String reserve4;
 	private String reserve5;
-	
+	private String zeile; //20201027 추가 
 }

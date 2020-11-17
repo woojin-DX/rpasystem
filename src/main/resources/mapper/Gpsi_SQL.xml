@@ -123,17 +123,19 @@
 				, '' as reserve3
 				, '' as reserve4
 				, '' as reserve5
+				, ZEILE as zeile
 			FROM(
 				select mkpf.CPUDT
 					, mseg.MBLNR
 					, case when mseg.kunnr = 'A1000A01' then mseg.kunnr else 'DUMMY' end out_pls_code
 					, mseg.MATNR
 					, mkpf.BUDAT
-					, case when mseg.SHKZG = 'S' then  mseg.ERFMG when  mseg.SHKZG = 'H' then mseg.ERFMG * (-1) end ERFMG
+					, case when mseg.SHKZG = 'S' then  mseg.ERFMG * (-1) when  mseg.SHKZG = 'H' then mseg.ERFMG  end ERFMG
 					, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
 					, case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
 					, case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
 					, case when mseg.BWART in('951','952') then 1 else 0 end free_flag
+					, mseg.ZEILE
 				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
 					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
@@ -141,7 +143,7 @@
 					and mseg.ERFMG != 0
 					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
-			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,out_pls_code, EBELN,ebelp, free_flag
+			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,out_pls_code, EBELN,ebelp, free_flag, ZEILE
 			order by MBLNR,MATNR
     	]]>
 	</select>
@@ -154,27 +156,50 @@
     *******************************************************************************************-->
     <select id="listPsix3Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix3VO">
 		<![CDATA[
+			
 			SELECT 
 				'PSIX3' as data_type
 				, 'A4600001' as base_code
 				, matnr
-				, psttr
-				, pedtr
-				, SUM(gsmng) as gsmng
+				, bdter as psttr
+				, bdter as pedtr
+				, sum(bdmng) as gsmng
 				, meins
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
 			from(
-				select mara.matnr,plaf.PSTTR,plaf.PEDTR, plaf.GSMNG, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
+				select mara.matnr,plaf.bdter,plaf.sbter, plaf.bdmng, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
 				from [ERP_DL].[WJP].[wjp].[MARA] mara
-					inner join [ERP_DL].[WJP].[wjp].[PLAF] plaf on mara.MATNR = plaf.MATNR
-				where mara.MTART in('ROH') and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2))  and plaf.GSMNG > 0
-					and left(plaf.PSTTR,6) between left(CONVERT(CHAR(10), DATEADD(month, -1, getdate()), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
-			
+					
+					inner join [ERP_DL].[WJP].[wjp].[MDSM] plaf on mara.MATNR = plaf.MATNR
+
+				where (mara.MTART in('ROH')  or mara.MTART in('HALB'))  and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2)) and plaf.bdmng > 0
+					and left(plaf.bdter,8) between left(CONVERT(CHAR(10), getdate(), 112),8) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),8)
 			) tot
-			group by matnr,psttr,pedtr,meins
-			order by psttr,pedtr,matnr
+			group by matnr,bdter,sbter,meins
+			order by bdter,matnr
     	]]>
 	</select>	
+		<!--  SELECT 
+				'PSIX3' as data_type
+				, 'A4600001' as base_code
+				, matnr
+				, bdter as psttr
+				, bdter as pedtr
+				, sum(bdmng) as gsmng
+				, meins
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+			from(
+				select mara.matnr,plaf.bdter,plaf.sbter, plaf.bdmng, case when plaf.MEINS = 'EA' then 'PC' else plaf.MEINS end meins
+				from [ERP_DL].[WJP].[wjp].[MARA] mara
+					
+					inner join [ERP_DL].[WJP].[wjp].[RESB] plaf on mara.MATNR = plaf.MATNR and plaf.KZEAR <> 'X' and plaf.XLOEK <> 'X'
+
+				where (mara.MTART in('ROH')  or mara.MTART in('HALB'))  and plaf.bdmng > 0
+					and left(plaf.bdter,8) between left(CONVERT(CHAR(10),dateadd(m,-1, dateadd(d,-day(getdate())+1,getdate())), 112),8) and left(CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112),8)
+			) tot
+			group by matnr,bdter,sbter,meins
+			union all  -->
+			
 	
 	<!--*******************************************************************************************
     쿼리함수명 : 자재코드목록
@@ -190,7 +215,7 @@
 				, 'A4600001' as base_code
 				,MATNR matnr
 				, BUDAT budat
-				,SUM(ERFMG) as erfmg
+				,SUM(ERFMG) as erfmg 
 				, ERFME erfme
 				, 'DUMMY' as lot
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
@@ -200,7 +225,7 @@
 				, '' as reserve4
 				, '' as reserve5
 			FROM(
-				select mkpf.CPUDT, mseg.MBLNR,mseg.MATNR, mkpf.BUDAT,case when mseg.SHKZG = 'S' then  mseg.ERFMG when  mseg.SHKZG = 'H' then mseg.ERFMG * (-1) end ERFMG, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
+				select mkpf.CPUDT, mseg.MBLNR,mseg.MATNR, mkpf.BUDAT,case when mseg.SHKZG = 'S' then  mseg.ERFMG * (-1) when  mseg.SHKZG = 'H' then mseg.ERFMG  end ERFMG, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
 				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
 					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
@@ -224,7 +249,7 @@
 			SELECT 'PSIX5' as data_type
 				, 'A4600001' as base_code
 				, MATNR as matnr
-				, PSTTR as psttr
+				, PEDTR as psttr
 				, PEDTR as pedtr
 				, SUM(GSMNG) as gsmng
 				, MEINS as meins
@@ -311,8 +336,8 @@
 			SELECT 
 				'PSIX7' as data_type
 				, mblnr
-				, 'A4600' as base_code
-				, '' as place_code
+				, 'A4600001' as base_code
+				, lifnr as place_code
 				, matnr
 				, budat
 				, SUM(menge) as menge
@@ -326,16 +351,19 @@
 				, '' as reserve3
 				, '' as reserve4
 				, '' as reserve5
+				, ZEILE as zeile
 			FROM(
 				select
 					mseg.mblnr
+					,case when mseg.lifnr ='A1000A01' then 'A1000J99' else 
+					 case when mseg.lifnr ='A4750001' then 'A4750001' else '' end end as lifnr
 					,mseg.matnr
 					,case when mseg.shkzg = 'S' then mseg.menge when mseg.shkzg = 'S' then  mseg.menge * (-1) end menge
 					,case when mseg.meins = 'EA' then 'PC' else mseg.meins end meins
 					,case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
 					,case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
 					,mkpf.budat
-			
+					,mseg.ZEILE
 				from
 					[ERP_DL].[WJP].[wjp].[MSEG] mseg
 					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR
@@ -349,6 +377,8 @@
 				, meins
 				, ebeln
 				, ebelp
+				, ZEILE
+				, lifnr
 			order by mblnr,matnr
     	]]>
 	</select>
@@ -364,7 +394,7 @@
 			select
 				'PSIX9' as data_type
 				, ekpo.ebeln collate Korean_Wansung_CI_AS + N' / ' + convert(varchar,ekpo.ebelp collate Korean_Wansung_CI_AS) as orderresult_key
-				, 'A4600' as base_code
+				, 'A4600001' as base_code
 				, case when ekpo.loekz = 'L' then 'DL' when ekpo.elikz = 'X' then 'OC' else 'OI' end status_val
 				, ekpo.matnr
 				, eket.eindt
@@ -372,10 +402,13 @@
 				, case when ekpo.lmein = 'EA' then 'PC' else ekpo.lmein end lmein
 				, ekko.aedat
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+				, ekpo.KNTTP
 			from
 				[ERP_DL].[WJP].[wjp].[EKKO] ekko
-				inner join [ERP_DL].[WJP].[wjp].[EKPO] ekpo on ekko.ebeln = ekpo.ebeln
+				inner join [ERP_DL].[WJP].[wjp].[EKPO] ekpo on ekko.ebeln = ekpo.ebeln and ekpo.KNTTP = '' and ekpo.loekz <> 'L'	
+				inner join [ERP_DL].[WJP].[wjp].[MARA] mara on ekpo.matnr = mara.matnr and MARA.MTART in ('FERT', 'HALB', 'HAWA', 'ROH')
 				inner join [ERP_DL].[WJP].[wjp].[EKET] eket on ekpo.ebeln = eket.ebeln and ekpo.ebelp = eket.ebelp
+
 			where ekko.lifnr = 'A1000A01'
 			order by eket.eindt,ekpo.ebeln,ekpo.ebelp,ekpo.matnr
     	]]>
