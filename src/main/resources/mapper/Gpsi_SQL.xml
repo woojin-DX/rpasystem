@@ -114,7 +114,7 @@
 				, 'DUMMY' as lot
 				, 'DUMMY' as ebeln
 				, 'DUMMY' as ebelp
-				, '' as result_key
+				, 'DUMMY' as result_key 
 				, '0' as air_flag
 				, free_flag
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
@@ -175,7 +175,7 @@
 				where (mara.MTART in('ROH')  or mara.MTART in('HALB'))  and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2)) and plaf.bdmng > 0
 					and left(plaf.bdter,8) between left(CONVERT(CHAR(10), getdate(), 112),8) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),8)
 			) tot
-			group by matnr,bdter,sbter,meins
+			group by matnr,bdter,meins
 			order by bdter,matnr
     	]]>
 	</select>	
@@ -212,6 +212,7 @@
 			SELECT  
 				'PSIX4' as data_type
 				,MBLNR mblnr
+				, ZEILE as zeile
 				, 'A4600001' as base_code
 				,MATNR matnr
 				, BUDAT budat
@@ -224,8 +225,9 @@
 				, '' as reserve3
 				, '' as reserve4
 				, '' as reserve5
+
 			FROM(
-				select mkpf.CPUDT, mseg.MBLNR,mseg.MATNR, mkpf.BUDAT,case when mseg.SHKZG = 'S' then  mseg.ERFMG * (-1) when  mseg.SHKZG = 'H' then mseg.ERFMG  end ERFMG, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
+				select mkpf.CPUDT, mseg.MBLNR, mseg.ZEILE,mseg.MATNR,mkpf.BUDAT,case when mseg.SHKZG = 'S' then  mseg.ERFMG * (-1) when  mseg.SHKZG = 'H' then mseg.ERFMG  end ERFMG, case when mseg.ERFME = 'EA' then 'PC' else mseg.ERFME end ERFME
 				from [ERP_DL].[WJP].[wjp].[MKPF] mkpf
 					inner join [ERP_DL].[WJP].[wjp].[MSEG] mseg on mseg.MBLNR = mkpf.MBLNR
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
@@ -233,7 +235,7 @@
 					and mseg.ERFMG != 0
 					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
-			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME
+			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,ZEILE
 			order by MBLNR,MATNR
     	]]>
 	</select>
@@ -277,7 +279,6 @@
 					where mara.MTART in('HALB', 'FERT') and afko.GSTRS >=  CONVERT(CHAR(8), getdate(), 112)
 			) tot
 			group by MATNR
-				, PSTTR
 				, PEDTR
 				, MEINS
 			
@@ -320,7 +321,7 @@
 					and mseg.ERFMG != 0
 					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
 			) tot
-			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME
+			group by CPUDT,MBLNR,MATNR, BUDAT, ERFME
 			order by MBLNR,MATNR
     	]]>
 	</select>

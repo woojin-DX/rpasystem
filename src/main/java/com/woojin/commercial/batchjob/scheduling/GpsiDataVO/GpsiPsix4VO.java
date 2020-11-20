@@ -6,6 +6,7 @@ import lombok.Data;
 public class GpsiPsix4VO {
 	private String data_type;
 	private String mblnr;
+	private String zeile; //20201027 추가 
 	private String base_code;
 	private String matnr;
 	private String budat;
@@ -18,5 +19,5 @@ public class GpsiPsix4VO {
 	private String reserve3;
 	private String reserve4;
 	private String reserve5;
-
+	
 }

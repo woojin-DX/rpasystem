@@ -102,7 +102,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -221,7 +221,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -323,7 +323,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
 		            //String path = "D:\\psi\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -462,7 +462,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -561,7 +561,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -614,7 +614,8 @@ public class GpsiDataController {
 		                	strBufOri = new StringBuilder();
 		                	strBufOri.append("\n");
 		                	strBufOri.append(m.getData_type()).append("	");
-		                	strBufOri.append(m.getMblnr()).append("	");
+		                	//strBufOri.append(m.getMblnr()).append("	");
+		                	strBufOri.append(m.getMblnr()).append(m.getZeile()).append("	");
 		                	strBufOri.append(m.getBase_code()).append("	");
 		                	strBufOri.append(m.getMatnr()).append("	");
 		                	strBufOri.append(m.getBudat()).append("	");
@@ -677,7 +678,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -764,7 +765,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -863,7 +864,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
@@ -970,7 +971,7 @@ public class GpsiDataController {
 		            
 		            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
 		            //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            
