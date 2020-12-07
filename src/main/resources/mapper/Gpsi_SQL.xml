@@ -127,7 +127,7 @@
 			FROM(
 				select mkpf.CPUDT
 					, mseg.MBLNR
-					, case when mseg.kunnr = 'A1000A01' then mseg.kunnr else 'DUMMY' end out_pls_code
+					, case when mseg.kunnr = 'A1000A01' then 'A1000J99' else 'DUMMY' end out_pls_code
 					, mseg.MATNR
 					, mkpf.BUDAT
 					, case when mseg.SHKZG = 'S' then  mseg.ERFMG * (-1) when  mseg.SHKZG = 'H' then mseg.ERFMG  end ERFMG
@@ -212,7 +212,7 @@
 			SELECT  
 				'PSIX4' as data_type
 				,MBLNR mblnr
-				, ZEILE as zeile
+				, ZEILE as zeile 
 				, 'A4600001' as base_code
 				,MATNR matnr
 				, BUDAT budat
