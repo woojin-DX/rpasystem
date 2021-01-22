@@ -112,7 +112,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix0_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX0_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -231,7 +231,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix1_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX1_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -333,7 +333,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix2_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX2_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -472,7 +472,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix3_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX3_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -571,7 +571,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix4_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX4_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -688,7 +688,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix5_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX5_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -775,7 +775,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix6_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX6_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -874,7 +874,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix7_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX7_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {
@@ -981,7 +981,7 @@ public class GpsiDataController {
 		        		file.mkdirs(); //폴더 생성합니다.
 		        	}
 
-		            String fullPath = path + "\\psix9_A4600_" + strToday + ".txt";
+		            String fullPath = path + "\\PSIX9_A4600_" + strToday + ".txt";
 		            
 		            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 				                    new FileOutputStream(fullPath), "euc-kr"))) {

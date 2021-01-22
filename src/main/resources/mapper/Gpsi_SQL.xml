@@ -14,7 +14,7 @@
 				, tot.matnr
 				, 'DUMMY' as inven_status
 				, 'DUMMY' as lot
-				, ISNULL(tot.supply_div,0) as supply_div
+				, sum(ISNULL(tot.supply_div,0)) as supply_div
 				, SUM(tot.inven_qty) as inven_qty
 				, tot.meins
 				, CONVERT(CHAR(10), getdate(), 112) as data_dt
@@ -42,7 +42,7 @@
 						) eina on mara.MATNR = eina.MATNR
 				  where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') 
 			) tot
-			group by tot.matnr, tot.supply_div, tot.meins
+			group by tot.matnr, tot.meins
 			order by tot.matnr
     	]]>
 	</select>
@@ -334,7 +334,7 @@
     *******************************************************************************************-->
     <select id="listPsix7Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO">
 		<![CDATA[
-			SELECT 
+				SELECT 
 				'PSIX7' as data_type
 				, mblnr
 				, 'A4600001' as base_code
@@ -365,21 +365,24 @@
 					,case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
 					,mkpf.budat
 					,mseg.ZEILE
+					,mara.mtart
 				from
-					[ERP_DL].[WJP].[wjp].[MSEG] mseg
-					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR
+					([ERP_DL].[WJP].[wjp].[MSEG] mseg
+					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR)
+					left join  [ERP_DL].[WJP].[wjp].[MARA] mara on  mseg.matnr = mara.matnr
 				where mseg.lifnr = 'A1000A01' and mseg.bwart in ('101','102','122','123','161','162')
 					and mkpf.vgart = 'WE' and mseg.menge != 0
 					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+					and mara.mtart  not in('ZERS','UNBW','ERSA')
 			) tot
 			group by mblnr
-				, matnr
-				, budat
-				, meins
-				, ebeln
-				, ebelp
-				, ZEILE
-				, lifnr
+					,matnr
+					,budat
+					,meins
+					,ebeln
+					,ebelp
+					,ZEILE
+					,lifnr
 			order by mblnr,matnr
     	]]>
 	</select>
