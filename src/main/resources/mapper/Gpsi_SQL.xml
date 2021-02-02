@@ -265,7 +265,7 @@
 					from [ERP_DL].[WJP].[wjp].[PLAF] plaf
 						inner join [ERP_DL].[WJP].[wjp].[MARA] mara on plaf.MATNR = mara.MATNR
 					where mara.MTART in('HALB', 'FERT') and plaf.PLSCN = concat('2',right(concat('00',month(getdate())),2))  
-					and left(plaf.PSTTR,6) between left(CONVERT(CHAR(10), DATEADD(month, -1, getdate()), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
+					and plaf.PSTTR between CONVERT(CHAR(8), getdate(), 112) and CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112)
 			
 				union all
 			
