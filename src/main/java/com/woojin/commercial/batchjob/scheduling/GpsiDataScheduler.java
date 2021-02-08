@@ -57,11 +57,14 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix0"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -105,9 +108,7 @@ public class GpsiDataScheduler {
             	strBufOri.append("Spare items4").append("	");
             	strBufOri.append("Spare items5");
             	writer.write(strBufOri.toString());
-            	
-            	
-            	
+
                 for(GpsiPsix0VO m : lstResult) {
                     //배열을 이용하여 row를 CSVWriter 객체에 write
                 	strBufOri = new StringBuilder();
@@ -161,11 +162,15 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix1"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
+            
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -173,8 +178,8 @@ public class GpsiDataScheduler {
         		file.mkdirs(); //폴더 생성합니다.
         	}
 
+            //String fullPath = path + "\\PSIX1_A4600_" + strToday + ".txt";
             String fullPath = path + "\\PSIX1_A4600_" + strToday + ".txt";
-            
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 		                    new FileOutputStream(fullPath), "euc-kr"))) {
             	StringBuilder strBufOri = new StringBuilder();
@@ -249,11 +254,15 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
             //String path = "D:\\psi\\A1. RPA\\02. g-psi\\psix2"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
+            
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -372,11 +381,15 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix3"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
+            
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -456,11 +469,15 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix4"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
+            
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -557,11 +574,14 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix5"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -628,11 +648,15 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix6"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
+            
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -711,11 +735,14 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix7"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -802,11 +829,14 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
+            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
+            String strToday2 = sdf2.format(c1.getTime());
+            String path = "D:\\PSIXdata\\"+ strToday2;
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
@@ -856,7 +886,77 @@ public class GpsiDataScheduler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+	}
+	
 
+	@SuppressWarnings("unchecked")
+	@Scheduled(cron = "0 50 7 * * MON-FRI")
+    	public void scheduler7z() throws Exception {
+            try {
+
+            	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
+            	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+                Calendar c1 = Calendar.getInstance();
+                String strToday = sdf.format(c1.getTime());
+                String strToday2 = sdf2.format(c1.getTime());
+                String strPsixdata = "D:\\PSIXdata\\";
+
+            	File dir = new File(strPsixdata + strToday2); // PSI 데이터 경로
+            	File [] filenames = dir.listFiles();
+            	
+//            	for (int i = 0; i < filenames.length; i++) {
+//            		System.out.println(filenames[i]);
+//            	}
+            	
+            	//압축 파일 이름
+            	String MULTIPLE_RESOURCES_PATH =  "D:\\G-EDItest\\SEND\\PSIX_A4600_" + strToday + ".7z";
+                SevenZ.compress2(MULTIPLE_RESOURCES_PATH, filenames); 
+                //deleteDirectory(new File("D:\\PSIData"));
+                
+                Runtime rt = Runtime.getRuntime();
+                //실행시킬 파일 일음
+                String exeFile = "D:\\G-EDItest\\CMD\\Call_SFTP_PUT_Pre_4600_1000_PSIX0.bat";
+//                System.out.println("exeFile: " + exeFile);
+                Process p;
+                             
+                try {
+                    p = rt.exec(exeFile);
+                    p.waitFor();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
     }
 	
+	//디렉토리 삭제
+	public boolean deleteDirectory(File path) { 
+		
+		if(!path.exists()) { 
+			return false; 
+		} 
+		
+		File[] files = path.listFiles(); 
+		
+	
+		for (File file : files) { 
+			
+			if (file.isDirectory()) { 
+				deleteDirectory(file); 
+				
+			} else { 
+				
+				file.delete(); 
+			} 
+		} 
+		
+		return path.delete(); 
+		}
+
+	
 }
+
