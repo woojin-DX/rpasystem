@@ -890,7 +890,7 @@ public class GpsiDataScheduler {
 	
 
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0/2 * * * *")
+	@Scheduled(cron = "0 0/3 * * * *")
     	public void scheduler7z() throws Exception {
             try {
 
@@ -910,18 +910,18 @@ public class GpsiDataScheduler {
                 SevenZ.compress2(MULTIPLE_RESOURCES_PATH, filenames); 
                 //deleteDirectory(new File("D:\\PSIData"));
                 
-                
-                Runtime rt = Runtime.getRuntime();
-                //실행시킬 파일 일음
-                String exeFile = "D:\\G-EDItest\\CMD\\Call_SFTP_PUT_Pre_4600_1000_PSIX0.bat"; 
-                Process p;
-                             
-                try {
-                    p = rt.exec(exeFile);
-                    //p.waitFor();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                
+//                Runtime rt = Runtime.getRuntime();
+//                //실행시킬 파일 일음
+//                String exeFile = "D:\\G-EDItest\\CMD\\Call_SFTP_PUT_Pre_4600_1000_PSIX0.bat"; 
+//                Process p;
+//                             
+//                try {
+//                    p = rt.exec(exeFile);
+//                    //p.waitFor();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
                 
             } catch (Exception e) {
