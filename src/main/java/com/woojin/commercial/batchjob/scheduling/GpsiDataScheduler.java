@@ -829,14 +829,14 @@ public class GpsiDataScheduler {
              * '"' : 값을 감싸주기위한 문자
              **/
             
-            //String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
+            String path = "//192.9.200.112\\wqms_백업\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
             //String path = "d:\\psi\\A1. RPA\\02. g-psi\\psix9"; //폴더 경로
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm00");
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             Calendar c1 = Calendar.getInstance();
             String strToday = sdf.format(c1.getTime());
             String strToday2 = sdf2.format(c1.getTime());
-            String path = "D:\\PSIXdata\\"+ strToday2;
+            //String path = "D:\\PSIXdata\\"+ strToday2;
             
         	File file = new File(path);
             //file을 생성할 폴더가 없으면 생성합니다.
