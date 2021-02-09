@@ -890,7 +890,7 @@ public class GpsiDataScheduler {
 	
 
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0/3 * * * *")
+	@Scheduled(cron = "0 50 7 * * MON-FRI")
     	public void scheduler7z() throws Exception {
             try {
 
