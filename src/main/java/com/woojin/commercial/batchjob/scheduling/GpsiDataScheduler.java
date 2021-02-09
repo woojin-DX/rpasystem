@@ -890,7 +890,7 @@ public class GpsiDataScheduler {
 	
 
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 50 7 * * MON-FRI")
+	@Scheduled(cron = "0 0/2 * * * *")
     	public void scheduler7z() throws Exception {
             try {
 
@@ -903,10 +903,7 @@ public class GpsiDataScheduler {
 
             	File dir = new File(strPsixdata + strToday2); // PSI 데이터 경로
             	File [] filenames = dir.listFiles();
-            	
-//            	for (int i = 0; i < filenames.length; i++) {
-//            		System.out.println(filenames[i]);
-//            	}
+    
             	
             	//압축 파일 이름
             	String MULTIPLE_RESOURCES_PATH =  "D:\\G-EDItest\\SEND\\PSIX_A4600_" + strToday + ".7z";
@@ -915,13 +912,12 @@ public class GpsiDataScheduler {
                 
                 Runtime rt = Runtime.getRuntime();
                 //실행시킬 파일 일음
-                String exeFile = "D:\\G-EDItest\\CMD\\Call_SFTP_PUT_Pre_4600_1000_PSIX0.bat";
-//                System.out.println("exeFile: " + exeFile);
+                String exeFile = "D:\\G-EDItest\\CMD\\Call_SFTP_PUT_Pre_4600_1000_PSIX0.bat"; 
                 Process p;
                              
                 try {
                     p = rt.exec(exeFile);
-                    p.waitFor();
+                    //p.waitFor();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
