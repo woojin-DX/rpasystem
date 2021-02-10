@@ -141,12 +141,16 @@
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
 				where /*mkpf.VGART = 'WA' and*/ mara.MTART IN('FERT','HALB','ROH','HAWA') and mseg.BWART in ('601','602','653','654','951','952') and mseg.INSMK != '3'
 					and mseg.ERFMG != 0
-					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+					and mkpf.BUDAT = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112) 
 			) tot
 			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,out_pls_code, EBELN,ebelp, free_flag, ZEILE
 			order by MBLNR,MATNR
     	]]>
 	</select>
+	
+	
+	
+	
 	
 	<!--*******************************************************************************************
     쿼리함수명 : 자재코드목록
@@ -233,7 +237,7 @@
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
 				where mkpf.VGART = 'WA' and mara.MTART IN('FERT','HALB','ROH') and mseg.BWART in ('261','262') and mseg.INSMK != '3'
 					and mseg.ERFMG != 0
-					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+					and mkpf.BUDAT = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112)
 			) tot
 			group by   CPUDT,MBLNR,MATNR, BUDAT, ERFME,ZEILE
 			order by MBLNR,MATNR
@@ -319,7 +323,7 @@
 					inner join [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.MATNR = mara.MATNR
 				where mkpf.VGART = 'WF' and mara.MTART in('FERT','HALB') and mseg.BWART in ('101','102') and mseg.INSMK != '3'
 					and mseg.ERFMG != 0
-					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+					and mkpf.BUDAT = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112) 
 			) tot
 			group by CPUDT,MBLNR,MATNR, BUDAT, ERFME
 			order by MBLNR,MATNR
@@ -372,7 +376,7 @@
 					left join  [ERP_DL].[WJP].[wjp].[MARA] mara on  mseg.matnr = mara.matnr
 				where mseg.lifnr = 'A1000A01' and mseg.bwart in ('101','102','122','123','161','162')
 					and mkpf.vgart = 'WE' and mseg.menge != 0
-					and mkpf.CPUDT between CONVERT(CHAR(10), DATEADD(month, -2, getdate()), 112) and CONVERT(CHAR(10), getdate(), 112)
+					and mkpf.budat = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112)
 					and mara.mtart  not in('ZERS','UNBW','ERSA')
 			) tot
 			group by mblnr
