@@ -670,7 +670,7 @@
 		<![CDATA[
 			SELECT
 			  	knumh                   /* CondRegNo */
-				, material_num  /* 자재코드 */
+				, material_num  /* 자재코드A */
 				, unit_price  /* 단가 */
 			FROM OPENQUERY(ERP_DL, '
 					select 
