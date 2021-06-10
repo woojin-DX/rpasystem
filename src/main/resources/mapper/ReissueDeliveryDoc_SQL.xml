@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.web.ReissueDeliveryDocDAO">
+	
+	<resultMap type="com.woojin.commercial.web.ReissueDeliveryDocVO" id="ReissueDeliveryDocInfo">
+	</resultMap>
+	
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectReissueDeliveryDoc" parameterType="hashmap" resultMap="ReissueDeliveryDocInfo">
+		<![CDATA[	
+			WITH TMP_ZMMT AS (
+				select t1.EBELN, t1.EBELP, sum(t1.MENGE) as menge_tot
+				from WINGSAPP.WJQ.wjq.ZMMT2006 as t1 
+				left join WINGSAPP.WJQ.wjq.ZMMT2004 as t2 on t1.EBELN = t2.EBELN and t1.EBELP = t2.EBELP 
+				where t1.DEL <>'X' AND  t2.lifnr = #{company_cd}
+				group by t1.EBELN,t1.EBELP 
+			)
+	
+			SELECT 
+				t1.MANDT,
+				t1.lifnr,
+				t1.SUPP_F_IN_UNAME as UNAME,
+				t1.lifnr as FIN_ID,
+				t2.DELVN,
+				t2.DELVS,
+				t1.EBELN,
+				t1.EBELP,
+				t1.MATNR,
+				t1.TXZ01,
+				t1.MENGE as ebeln_menge,	-- 발주수량(납품예정수량)
+				isnull(t2.MENGE,0)as MENGE,	-- 오늘짜 납품 수량 (납품수량)
+				t1.MEINS,
+				t1.EINDT,					-- 납품일 (2004)
+				t1.MENGE,					-- 납품예정 수량(2004)
+				--t1.EINDT as NAP_PRE_DT, -- 납품일 (2006)
+				t2.NAP_PRE_DT as NAP_PRE_DT, -- 납품일 (2006)
+				isnull(t3.menge_tot,0)	as menge_tot ,			-- 총납품수량
+				(isnull(t1.MENGE,0)-isnull(t3.menge_tot,0)) as ibgo_menge  --남은 수량
+			FROM WINGSAPP.WJQ.wjq.ZMMT2004 as t1
+				left join WINGSAPP.WJQ.wjq.ZMMT2006 as t2 on t2.DEL <> 'X' AND t1.EBELN = t2.EBELN AND t1.EBELP = t2.EBELP
+				left join TMP_ZMMT as t3 on  t1.EBELN = t3.EBELN and t1.EBELP = t3.EBELP
+			WHERE t1.lifnr = #{company_cd}
+		]]>
+		
+			  
+		<if test="schword != '' and schword != null">
+			<![CDATA[
+	    		AND (t2.DELVN like concat('%',#{schword},'%'))
+	    	]]>
+		</if>
+			
+		<![CDATA[
+			 	AND t1.statu not in ('1','2')
+			 	AND (t2.DELVN is not null AND t2.DELVS not in ('','A'))
+    	    ]]>
+    	    
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<![CDATA[
+				t2.DELVN DESC ,t2.DELVS
+    	    ]]>
+		</trim>
+		
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    		OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    		]]>
+		</if>
+		
+	</select>
+
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+
+	<select id="listCountReissueDeliveryDoc" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			WITH TMP_ZMMT AS (
+				select t1.EBELN, t1.EBELP, sum(t1.MENGE) as menge_tot
+				from WINGSAPP.WJQ.wjq.ZMMT2006 as t1 
+				left join WINGSAPP.WJQ.wjq.ZMMT2004 as t2 on t1.EBELN = t2.EBELN and t1.EBELP = t2.EBELP 
+				where t1.DEL <> 'X' AND  t2.lifnr = #{company_cd}
+				group by t1.EBELN,t1.EBELP 
+			)
+	
+			select count(*) from WINGSAPP.WJQ.wjq.ZMMT2004 as t1
+				left join WINGSAPP.WJQ.wjq.ZMMT2006 as t2 on t2.DEL <> 'X' AND t1.EBELN = t2.EBELN AND t1.EBELP = t2.EBELP
+				left join TMP_ZMMT as t3 on  t1.EBELN = t3.EBELN and t1.EBELP = t3.EBELP
+			where t1.lifnr = #{company_cd}
+		
+		]]>
+		
+		<if test="schword != '' and schword != null">
+			<![CDATA[
+	    		AND (t1.EBELN like concat('%',#{schword},'%'))
+	    	]]>
+		</if>
+		
+		<![CDATA[
+			 	AND t1.statu not in ('1','2')
+			 	AND (t2.DELVN is not null AND t2.DELVS not in ('','A'))
+    	]]>
+    	    
+	</select>
+
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+
+	<select id="overlabCntReissueDeliveryDoc" parameterType="hashmap"  resultType="int">
+		<![CDATA[
+			select count(*) as  overcnt
+			from WINGSAPP.WJQ.wjq.ZMMT2004
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+			and ebeln  = #{web_EBELN}
+			and ebelp  = #{web_EBELP}
+			]]>
+		</trim>
+	</select>
+
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+
+	<update id="updateReissueDeliveryDoc" parameterType="java.util.Map">
+		<![CDATA[
+			SET XACT_ABORT ON
+			UPDATE WINGSAPP.WJQ.wjq.ZMMT2004
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='web_SUPP_JUPDT != null and !web_SUPP_JUPDT.equals("NULL")'>SUPP_JUPDT = replace(#{web_SUPP_JUPDT},'.',''),</if>
+			<if test='web_SUPP_JUPTM != null and !web_SUPP_JUPTM.equals("NULL")'>SUPP_JUPTM = replace(#{web_SUPP_JUPTM},':',''),</if>
+			<if test='web_SUPP_F_IN_UNAME != null and !web_SUPP_F_IN_UNAME.equals("NULL")'>SUPP_F_IN_UNAME = #{web_SUPP_F_IN_UNAME},</if>
+			<if test='web_SUPP_E_MOD_UNAME != null and !web_SUPP_E_MOD_UNAME.equals("NULL")'>SUPP_E_MOD_UNAME = #{web_SUPP_E_MOD_UNAME},</if>
+			<if test='web_SUPP_E_MOD_ID != null and !web_SUPP_E_MOD_ID.equals("NULL")'>SUPP_E_MOD_ID = #{company_cd},</if>
+			<if test='supply_req_dt != null and !supply_req_dt.equals("NULL")'>F_NAP_DT = replace(#{supply_req_dt},'.',''),</if>
+			<if test='supply_req_dt2 != null and !supply_req_dt2.equals("NULL")'>E_NAP_DT = replace(#{supply_req_dt2},'.',''),</if>
+		</trim>
+		
+		<![CDATA[
+		,STATU = '3'
+		WHERE EBELN = #{web_EBELN}
+		AND EBELP = #{web_EBELP}
+		SET XACT_ABORT OFF
+		]]>
+
+	</update>
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->	
+
+	<insert id="insertReissueDeliveryDoc" parameterType="java.util.Map">
+			<![CDATA[
+			SET XACT_ABORT ON
+				insert into WINGSAPP.WJQ.wjq.ZMMT2006 (
+					MANDT,			/* 클라이언트*/
+	 				DELVN,			/* 납품문서번호*/
+	 				DELVS,			/* 납품문서 품목*/
+					EBELN,			/* 구매 문서 번호*/
+					EBELP,			/* 구매 문서 품목 번호*/
+					MATNR,			/* 자재코드*/
+					TXZ01,			/* 자재 내역*/
+					LIFNR,			/* 공급업체*/
+					MENGE,			/* 납품문서수량*/
+					MEINS,			/* 단위*/
+					NAP_PRE_DT,		/* 납품예정일*/
+					NAP_PRE_TM,		/* 납품예정시간*/
+	 				DELVN_DT,		/* 납품문서번호생성일*/
+	 				DELVN_TM,		/* 납품문서번호생성시간*/
+	 				DEL,			/* 삭제지시자*/
+	 				DEL_DT,			/* 삭제일자 */
+	 				DEL_TM,			/* 삭제시간*/
+					UNAME,			/* 생성인*/
+					F_IN_ID,		/* 생성인ID*/
+	 				E_MOD_UNAME,	/* 최종수정인*/
+	 				E_MOD_ID,		/* 죄종수정아이디*/
+	 				E_MOD_DT,		/* 최종수정일자*/
+	 				E_MOD_TM		/* 최종수정시간*/
+	
+				) values (
+					#{DeliveryDoc_MANDT},		
+					'',
+					'A',
+					#{DeliveryDoc_EBELN},
+					#{DeliveryDoc_EBELP},
+					#{DeliveryDoc_MATNR},
+					#{DeliveryDoc_TXZ01},
+					#{DeliveryDoc_LIFNR},
+					replace(#{DeliveryDoc_ibgo_menge},',',''),
+					#{DeliveryDoc_MEINS},
+					replace(#{DeliveryDoc_NAP_PRE_DT},'.',''),					/* 납품예정일*/
+					'000000',													/* 납품예정시간 */
+					CONVERT(CHAR(8),GETDATE(), 112),							/* 납품문서번호생성일*/
+					Replace(Convert(varchar(8),Getdate(),108),':',''),			/* 납품문서번호생성시간*/					
+					'',															/* 삭제지시자*/
+					'',															/* 삭제일자 */
+					'',															/* 삭제시간*/
+					#{DeliveryDoc_UNAME},										/* 생성인*/
+					#{DeliveryDoc_FIN_ID},										/* 생성인ID*/
+					'',
+					'',
+					'',
+					''
+				)
+				SET XACT_ABORT OFF
+			]]>
+	
+	</insert>
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+		
+	<update id="multiUpdateReissueDeliveryDoc" parameterType="java.util.Map">
+
+		<![CDATA[
+		SET XACT_ABORT ON
+			UPDATE tb_shipping SET PROCESS_CD = 'ST_BCP', RECEIVE_DT = CONVERT(CHAR(10), getdate(), 102)
+			WHERE shipping_key in
+		]]>
+		<foreach collection="list" item="item"  index="index"  open="(" separator="," close=")" >
+			#{item.shipping_key}
+		</foreach>
+		
+		<![CDATA[
+		SET XACT_ABORT OFF
+		]]>
+	</update>
+	
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="ReissueDeliveryDocDelvn" parameterType="java.util.Map" resultType="String">
+		
+			<![CDATA[
+				SELECT MAX(DELVN)+1 as DELVN from WINGSAPP.WJQ.wjq.ZMMT2006 
+			]]>
+
+	</select>
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	
+	 <update id="ReissueDeliveryDocStatuUpdate" parameterType="java.util.Map" >
+		<foreach collection="list" item="item"  index="index"  >
+			<![CDATA[
+			SET XACT_ABORT ON
+				update WINGSAPP.WJQ.wjq.ZMMT2004 SET 
+					STATU =  (case when  (cast(FLOOR(#{item.doc_ebeln_menge}) as int)  -  cast(FLOOR(#{item.doc_menge}) as int)) = 0 then '3' else '5' end ) 
+				WHERE EBELN =   #{item.doc_ebeln}
+				AND EBELP =  #{item.doc_ebelp}
+			SET XACT_ABORT OFF
+			]]>
+		</foreach>
+	</update>
+
+
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	
+	<update id="ReissueDeliveryDocDelvnUpdate_Cancel" parameterType="java.util.Map" >
+		<foreach collection="list" item="item"  index="index"  >
+			<![CDATA[
+			SET XACT_ABORT ON
+				update WINGSAPP.WJQ.wjq.ZMMT2006 set 
+				DEL = 'X',
+	 			DEL_DT = CONVERT(CHAR(8),GETDATE(), 112),							/* 삭제일자 */
+	 			DEL_TM =Replace(Convert(varchar(8),Getdate(),108),':','')			/* 삭제시간*/
+				where DELVN =   #{item.doc_delvn}
+				AND DELVS =  #{item.doc_delvs}
+			SET XACT_ABORT OFF
+			]]>
+		</foreach>
+	</update>
+	
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->	
+	
+	<select id="userInfoList" parameterType="hashmap"  resultType="com.woojin.commercial.web.ReissueDeliveryDocVO">
+		<![CDATA[
+			SELECT 
+				  STCD2 as LFA_STCD2                /* 문서번호 */
+				, NAME1 as LFA_NAME1                /* 업체코드 */
+				, J_1KFREPRE as LFA_J_1KFREPRE      /* 확정일 */
+				, MCOD3 as LFA_MCOD3                /* 납품처키 */
+				, STRAS as LFA_STRAS                /* 발행일 */
+				, J_1KFTBUS as LFA_J_1KFTBUS        /* 업체명 */
+				, J_1KFTIND as LFA_J_1KFTIND		/* 납품처 */
+			FROM LFA1
+		]]>
+		
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and LIFNR = #{company_cd}
+		</trim>
+	</select>
+	
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+		
+	<select id="DeliveryDocList" parameterType="hashmap"  resultType="com.woojin.commercial.web.ReissueDeliveryDocVO">
+		<![CDATA[
+			SELECT TOP(15)
+				 t1.DELVN, t1.DELVS,t2.NAME1 ,t1.MATNR , t2.TXZ01
+				,CONVERT(NUMERIC(12,0) ,round((t2.NETPR*100),0),0) as NETPR 
+				,t2.PEINH, FLOOR(t1.MENGE) as MENGE, t2.BPRME , t1.EBELN, t1.EBELP 
+				,CONVERT(NUMERIC(12,0) ,round((((t2.NETPR * 100) * t1.MENGE)/t2.PEINH) ,0)) as PRICE
+				,CONVERT(varchar(10), CONVERT(date, CONVERT(varchar(8), t1.NAP_PRE_DT))) as NAP_PRE_DT
+			from WINGSAPP.WJQ.wjq.ZMMT2006 as t1
+			left join WINGSAPP.WJQ.wjq.ZMMT2004 as t2 on  t1.EBELN = t2.EBELN and t1.EBELP = t2.EBELP
+		]]>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			AND t1.DELVN = #{DELVN_NUM}
+			AND t1.DEL not in ('X')
+			ORDER by DELVS	
+		</trim>
+	</select>
+	
+	
+	
+</mapper>

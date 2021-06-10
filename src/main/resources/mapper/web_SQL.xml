@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woojin.commercial.web.webDAO">
+	
+	<resultMap type="com.woojin.commercial.web.webVO" id="wenInfo">
+	</resultMap>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :     			작  성  일 : 
+	수  정  자 :             	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="selectweb" parameterType="hashmap" resultMap="wenInfo">
+		<![CDATA[	
+			SELECT
+				(case when SUPP_JUPDT  = '00000000' then '20101215' else SUPP_JUPDT end)  as SUPP_JUPDT,
+				(case when SUPP_JUPTM  = '000000' then '120101' else SUPP_JUPTM end) as SUPP_JUPTM,
+				(case when F_NAP_DT  = '00000000' then '20101215' else F_NAP_DT end) as FNAPDT,
+				(case when E_NAP_DT  = '00000000' then '20101215' else E_NAP_DT end) as ENAPDT,   
+			 * FROM WINGSAPP.WJQ.wjq.ZMMT2004
+
+		]]>
+		
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+				AND LIFNR = #{company_cd}
+				AND BEDAT >= '20100101'
+				AND STATU IN ('1','2')
+			]]>
+		</trim>
+		
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<![CDATA[
+				STATU,BEDAT DESC,
+    	    ]]>
+		</trim>
+		
+		<if test="nStartRecord > -1 and nStartRecord != null">
+			<![CDATA[
+	    		OFFSET #{nStartRecord} ROWS FETCH NEXT #{pageRecordCount} ROWS ONLY
+    		]]>
+		</if>
+	</select>
+
+
+<!--*******************************************************************************************
+	쿼리함수명 : 
+	작  성  자 :       			작  성  일 : 
+	수  정  자 :            	수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="listCountweb" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT count(*) from WINGSAPP.WJQ.wjq.ZMMT2004
+		]]>	
+		
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+				AND LIFNR = #{company_cd}
+				AND BEDAT >= '20100101'
+				AND STATU IN ('1','2')
+			]]>
+		</trim>
+			
+	</select>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타에서 기존 존재여부
+	작  성  자 :       작  성  일 : 
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<select id="overlabCntweb" parameterType="hashmap"  resultType="int">
+
+		<![CDATA[
+			SELECT COUNT(*) AS overcnt
+			FROM WINGSAPP.WJQ.wjq.ZMMT2004
+		]]>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+			AND EBELN  = #{web_EBELN}
+			AND EBELP  = #{web_EBELP}
+			]]>
+		</trim>
+
+	</select>
+
+	<!--*******************************************************************************************
+	쿼리함수명 : 발주정보 데이타 수정
+	작  성  자 :       작  성  일 : 
+	수  정  자 :             수  정  일 :
+	수정  내용 :
+	*******************************************************************************************-->
+	<update id="updateweb" parameterType="java.util.Map">
+		<![CDATA[
+			SET XACT_ABORT ON
+			UPDATE WINGSAPP.WJQ.wjq.ZMMT2004
+		]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test='web_SUPP_JUPDT != null and !web_SUPP_JUPDT.equals("NULL")'>SUPP_JUPDT = replace(#{web_SUPP_JUPDT},'.',''),</if>
+			<if test='web_SUPP_JUPTM != null and !web_SUPP_JUPTM.equals("NULL")'>SUPP_JUPTM = replace(#{web_SUPP_JUPTM},':',''),</if>
+			<if test='web_SUPP_F_IN_UNAME != null and !web_SUPP_F_IN_UNAME.equals("NULL")'>SUPP_F_IN_UNAME = #{web_SUPP_F_IN_UNAME},</if>
+			<if test='web_SUPP_E_MOD_UNAME != null and !web_SUPP_E_MOD_UNAME.equals("NULL")'>SUPP_E_MOD_UNAME = #{web_SUPP_E_MOD_UNAME},</if>
+			<if test='web_SUPP_E_MOD_ID != null and !web_SUPP_E_MOD_ID.equals("NULL")'>SUPP_E_MOD_ID = #{company_cd},</if>
+			<if test='supply_req_dt != null and !supply_req_dt.equals("NULL")'>F_NAP_DT = replace(#{supply_req_dt},'.',''),</if>
+			<if test='supply_req_dt2 != null and !supply_req_dt2.equals("NULL")'>E_NAP_DT = replace(#{supply_req_dt2},'.',''),</if>
+			<if test='web_END_MENGE != null and !web_END_MENGE.equals("NULL")'>END_MENGE = replace(#{web_END_MENGE},',',''),</if>
+		</trim>
+		
+		<![CDATA[
+			,STATU = '3'
+		]]>
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[
+			AND EBELN  = #{web_EBELN}
+			AND EBELP  = #{web_EBELP}
+			SET XACT_ABORT OFF
+			]]>
+		</trim>
+		
+	</update>
+	
+
+	
+</mapper>

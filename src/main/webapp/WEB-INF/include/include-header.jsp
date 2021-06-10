@@ -19,7 +19,7 @@
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="http://malsup.github.io/jquery.form.js"></script>
     <script type="text/javascript" src="https://rawgit.com/select2/select2/master/dist/js/select2.js"></script>
     <script src="<c:url value='/jscript/common.js?${today}' />" charset="utf-8"></script>
     <script src="<c:url value='/jscript/CommonUtil.js?${today}' />" charset="utf-8"></script>

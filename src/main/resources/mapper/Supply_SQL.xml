@@ -815,7 +815,7 @@
 				, unit_price
 				, unit_type
 				, SUM(total_price) as total_price
-				, SUM(tax_price) as tax_price
+				, round(SUM(tax_price),0) as tax_price
 				, company_nm
 				, company_addr
 				, regster_no
