@@ -357,5 +357,33 @@ public class SupplyDAO extends AbstractDAO {
         return resultMap;
     }
     
+    /* *******************************************************************************************
+     * 함수  제목 : 발주업체,특정 품번에 대한 Material 리스트
+     * 작  성  자  : 손채원        		작  성  일 : 2025-04-17
+     * 내      용   : 발주업체, 품번으로 Material 정보 조회 (단가 및 효력 시작일/종료일 추출용)
+     * 수  정  자  :             	수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listDateMaterial(Map<String, Object> paramMap) {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        List<MeterialNumVO> lsListTable = new ArrayList<MeterialNumVO>();
+
+        try {
+            //데이타 리스트를 추출.
+            lsListTable = selectList("listDateMaterial", paramMap);
+            resultMap.put("listDateMaterial", lsListTable);
+            /*System.out.println("=========DAO : " + lsListTable.get(0).getDatab() + "============");	
+            System.out.println("=========DAO : " + lsListTable.get(0).getKnumh() + "============");	
+            System.out.println("=========DAO : " + lsListTable.get(0).getMaterial_num() + "============");	
+            System.out.println("=========DAO : " + lsListTable.get(0).getUnit_price() + "============");*/	
+        }
+        catch(Exception e){
+            resultMap.put("listDateMaterial", lsListTable);
+        }
+
+        return resultMap;
+    }
+    
 }
 

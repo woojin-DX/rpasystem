@@ -50,6 +50,7 @@
                                 <input type="hidden" id="order_dt" name="order_dt" value="${pageParam.order_dt}" />
                                 <input type="hidden" id="material_num" name="material_num" value="" />
                                 <input type="hidden" id="processFlag" name="processFlag" value="insert" />
+                                <input type="hidden" id="knumh_num" name="knumh_num" value="" /><!-- 2025-04-17 손채원 추가  -->
                                 <input type="text" style="width:0px; display: none;" />
                                 <div class="bbsCom_WRITE_box">
                                     <table class="bbsCom_WRITE">
@@ -94,7 +95,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">납품요청일</th>
-                                            <td><input maxlength="10" type="text" id="supply_req_dt" name="supply_req_dt" size="17" class="input_s1 ta_c" value='' ></td>
+                                            <td><input maxlength="10" type="text" id="supply_req_dt" name="supply_req_dt" size="17" class="input_s1 ta_c" value='' readonly></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">단가</th>
@@ -289,6 +290,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).prop('title', '${pageTitle} ${localPageTitle}');
+        
+
         $("#supply").attr('class', 'current');
         $("#order_dt_start").datepicker({
             dateFormat: 'yy.mm.dd' //Input Display Format 변경
@@ -326,26 +329,73 @@
             //,minDate: "-1M" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
             ,maxDate: "+1M" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
         });
-
+		
+        // 납품요청일 DATEPICKER 초기화
         $("#supply_req_dt").datepicker({
             dateFormat: 'yy.mm.dd' //Input Display Format 변경
-            ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-            ,showMonthAfterYear:true //년도 먼저 나오고, 뒤에 월 표시
-            ,changeYear: true //콤보박스에서 년 선택 가능
-            ,changeMonth: true //콤보박스에서 월 선택 가능
-            ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-            ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-            ,buttonImageOnly: true //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
-            ,buttonText: "선택" //버튼에 마우스 갖다 댔을 때 표시되는 텍스트
-            ,yearSuffix: "년" //달력의 년도 부분 뒤에 붙는 텍스트
-            ,monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'] //달력의 월 부분 텍스트
-            ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
-            ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
-            ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
-            ,minDate: "+7D" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-            ,maxDate: "+1Y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+           ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+           ,showMonthAfterYear:true //년도 먼저 나오고, 뒤에 월 표시
+           ,changeYear: true //콤보박스에서 년 선택 가능
+           ,changeMonth: true //콤보박스에서 월 선택 가능
+           ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+           ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+           ,buttonImageOnly: true //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
+           ,buttonText: "선택" //버튼에 마우스 갖다 댔을 때 표시되는 텍스트
+           ,yearSuffix: "년" //달력의 년도 부분 뒤에 붙는 텍스트
+           ,monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'] //달력의 월 부분 텍스트
+           ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
+           ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
+           ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
+           ,minDate: "+7D" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+           ,maxDate: "+1Y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
         });
-
+		
+        
+     	// 허용 처리할 날짜 범위 2025-04-16 손채원
+        var allowedRanges = [];
+        
+		function isDateAllowed(date) {
+		  for (var i = 0; i < allowedRanges.length; i++) {
+		    var start = allowedRanges[i][0];
+		    var end = allowedRanges[i][1];
+		    if (date >= start && date <= end) {
+		      return [true, "allowed-date", "Allowed"]; // 선택 가능
+		    }
+		  }
+		  return [false, "blocked-date", "Blocked"]; // 선택 불가
+		}
+		
+        /* 2024-04-11 손채원 추가  ~395번줄 */
+		// 최초 접속 시, 품번이 선택되지 않은 경우, 납품요청일 선택 불가
+        if ( ! $("#knumh option:selected").val() ){
+        	$('input[id=supply_req_dt]').datepicker('disable').removeAttr('disabled');
+        	$("#supply_req_dt").attr('disabled', true);
+        }
+		
+		// 품번 변경 시, 품번이 선택 여부에 따라 납품요청일 선택 가능/불가
+        $('#knumh').on('change',function(){
+    		$("#supply_req_dt").val('');
+    		$("#knumh_num").val('');
+        	if ( $("#knumh option:selected").val() ){
+        		$("#supply_req_dt").attr('disabled', false);
+                $("#supply_req_dt").datepicker('option', 'disabled', false);
+        		document.querySelector('#supply_req_dt').style.backgroundColor = '#FEFFE8';
+        	} else {
+        		$('input[id=supply_req_dt]').datepicker('disable').removeAttr('disabled'); 
+        		$("#supply_req_dt").attr('disabled', true);
+        		document.querySelector('#supply_req_dt').style.backgroundColor = '#dddddd';
+        	}
+		
+			// 품번 선택 여부 확인
+	        if ( $("#knumh option:selected").val() ){
+		     	
+				// 허용일자 적용
+		        $("#supply_req_dt").datepicker("option", {
+		        	  beforeShowDay: isDateAllowed
+		        });
+	        }
+        });
+		
         $("#receive_dt").datepicker({
             dateFormat: 'yy.mm.dd' //Input Display Format 변경
             ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
@@ -378,6 +428,7 @@
 
         $('#supply_req_qty').on('change',function(){
             var val = $('#supply_req_qty').val();
+            fnDisplayPrice();
         });
 
         $('#supply_req_qty').number( true, 0 );
@@ -457,15 +508,41 @@
         });
 
         $('#knumh').on('select2:select', function(e) {
+
             var value = e.params.data;
 
             var id = value.id;
             var text = value.text;
             var index = value.element.index;
             $("#material_num").val(text);
+            
+            // 납품 요청일, 단가, 금액 초기화 추가 [손채원] 2025-04-17
+            $("#unit_price").val("");
+            $("#total_price").val("");
+            $("#supply_req_dt").val("");
+            
+            // 품번 있을 때만 작동하면 되므로 조건 추가 [손채원] 2025-04-17
+            if ( $("#knumh").val() ){
+            	fnDisplayPrice();
+                fnDisplayDate();
+            }
+        });
+		
+        $('#supply_req_dt').on('change', function(e) {
+        	var value = $(this).val();
+        	console.log('suplly_req_dt 값 : ' + value)
             fnDisplayPrice();
         });
+        /*$('#place_key').on('change', function(e) {
+            var value = $(this).val();
 
+            if ($('#knumh').select2('val').length == 0){
+                alert("품번을 선택해주세요");
+                return;
+            }
+            fnOverlab();
+        });*/
+        
         function fnDisplayPrice(){
             $("#registerForm").ajaxForm({
                 type: 'POST',
@@ -477,7 +554,14 @@
                 timeout: 30000,
                 success: function(result) {
                     if (result.status == 0) {
-                        $("#unit_price").val(result.detailMaterialNum.unit_price);
+                    	// 기존 result.detailMaterialNum.unit_price 받아오지 못하는 경우,
+                    	// null 에러 발생 - 조건 추가 [손채원] 2025-04-17
+                    	if ( result.detailMaterialNum ) {
+                    		const supply_req_qty = $("#supply_req_qty").val();
+	                        $("#unit_price").val(result.detailMaterialNum.unit_price);
+	                        $("#total_price").val(result.detailMaterialNum.unit_price * supply_req_qty);
+	                        $("#knumh_num").val(result.detailMaterialNum.knumh);
+                    	}
                     }
                     else if (result.status == 1) {
                         alert(result.msg);
@@ -492,7 +576,69 @@
                 }
             }).submit();
         }
+		
+      /* 가격이 0원이 아닐 때 날짜 허용범위 추가[손채원] 2025-04-16 */
+      function fnDisplayDate(){
+    	  allowedRanges = [];
+    	  $("#registerForm").ajaxForm({
+              type: 'POST',
+              url: 'supply/listDateMaterial',
+              dataType: "json",
+              enctype: "multipart/form-data",
+              contentType: false,
+              processData: false,
+              timeout: 30000,
+              success: function(result) {
+                  if (result.status == 0) {
+                      var data;
+                	  try {
+                	  	// 문자열로 응답된 JSON을 파싱
+                	    data = JSON.parse(result.listDateMaterial);
+                	  } catch (e) {
+                	  	console.error("❌ JSON 파싱 실패:", e);
+                	    return;
+                	  }
 
+                	  if (!Array.isArray(data)) {
+                	  	console.error("❌ 파싱된 데이터가 배열이 아님:", data);
+                	  	return;
+                	  }
+
+                	  // 가격이 0보다 큰 데이터만 추려서 allowedRanges에 push
+                	  data.forEach(function(item) {
+                	  	if (item.unit_price > 0) {
+                	    	const startDate = new Date(
+                	        	parseInt(item.datab.slice(0, 4)),
+                	        	parseInt(item.datab.slice(4, 6)) - 1,
+                	        	parseInt(item.datab.slice(6, 8))
+                	        );
+
+                	        const endDate = new Date(
+                	        	parseInt(item.datbi.slice(0, 4)),
+                	        	parseInt(item.datbi.slice(4, 6)) - 1,
+                	        	parseInt(item.datbi.slice(6, 8))
+                	        );
+
+                	        allowedRanges.push([startDate, endDate]);
+                	     }
+                	 });
+                	   	console.log("✅ allowedRanges:", allowedRanges);
+                      
+                  }
+                  else if (result.status == 1) {
+                      alert(result.msg);
+                  }
+              },
+              error: function(data, status, err) {
+                  alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n"
+                      + "code: " + data.status + "\n"
+                      + "message :" + data.responseText + "\n"
+                      + "message1 : " + status + "\n"
+                      + "error: " + err);
+              }
+          }).submit();
+        }
+        
         $("#tbllist tr td.col").click(function() {
             // 현재 클릭된 Row(<tr>)
             var tr = $(this).closest('tr');
@@ -508,7 +654,6 @@
         });
 
         function fnDisplayDetail(){
-
             $("#registerForm").ajaxForm({
                 type: 'POST',
                 url: '/supply/detailSupply',
@@ -642,6 +787,14 @@
                 $("#supply_req_qty").focus()
                 return;
             }
+            // 단가가 0원이거나 빈 값일 때 저장되지 않도록 조건 추가 [손채원] 2025-04-16
+			var unit_price = $('#unit_price').val();
+            if (unit_price == "0" || unit_price == ""){
+                alert("단가를 확인해주세요");
+                $("#unit_price").focus()
+                return;
+            }
+            
             if ($('#supply_req_dt').val().length == 0){
                 alert("납품요청일을 입력해주세요");
                 $("#supply_req_dt").focus()
@@ -800,8 +953,6 @@
 
 
 
-
-
         /*
         $('#place_key').on('change', function(e) {
             var value = $(this).val();
@@ -841,6 +992,7 @@
         }
         */
     });
+
 
 </script>
 </body>

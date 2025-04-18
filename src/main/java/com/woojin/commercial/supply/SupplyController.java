@@ -19,6 +19,7 @@ import com.artofsolving.jodconverter.DocumentConverter;
 import com.artofsolving.jodconverter.DocumentFormat;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woojin.commercial.common.SearchVO;
 import com.woojin.commercial.login.LoginVO;
 import com.woojin.commercial.util.ExcelStyleBuilder;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.woojin.commercial.common.CommandMap;
@@ -91,7 +93,7 @@ public class SupplyController {
 	                mv.addObject("supplyList", resultMap.get("supplyList")); //검색
 	                mv.addObject("materialList", resultMap.get("materialList")); //검색
 	                mv.addObject("placeList", resultMap.get("placeList")); //검색
-	
+	                
 	                mv.setViewName("/supply/supply");
 	            }
 	            else{
@@ -701,12 +703,13 @@ public class SupplyController {
      * 함수  제목 : 발주정보 상세내역
      * 작  성  자 : 가치노을      작  성  일 : 2020-03-26
      * 내      용 : 상세내역
-     * 수  정  자 :             수  정  일 :
-     * 수정  내용 :
+     * 수  정  자 : 손채원         수  정  일 : 2025-04-16
+     * 수정  내용 :supply_req_dt 추가
      * ******************************************************************************************* */
     @RequestMapping(value="/supply/detailMaterialNum", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> detailMaterialNum(CommandMap commandMap) throws Exception {
+    public Map<String, Object> detailMaterialNum(CommandMap commandMap,
+			 				@RequestParam("supply_req_dt") String supply_req_dt) throws Exception {			// 2025-04-17 추가
         Map<String, Object> resultMap = new HashMap<String, Object>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
         try {
@@ -714,6 +717,7 @@ public class SupplyController {
             String order_dt = formatter.format(time.getTime());
 
             commandMap.put("order_dt", order_dt);
+            commandMap.put("supply_req_dt", supply_req_dt);	// 2025-04-17 추가
             resultMap = supplyService.detailMaterialNum(commandMap);
 
             resultMap.put("detailMaterialNum", resultMap.get("detailMaterialNum")); //내용
@@ -795,5 +799,54 @@ public class SupplyController {
         }
         return resultMap;
     }
+    
+    /* *******************************************************************************************
+     * 함수  제목 : 발주업체,특정 품번에 대한 Material 리스트
+     * 작  성  자  : 손채원        		작  성  일 : 2025-04-17
+     * 내      용   : 발주업체, 품번으로 Material 정보 조회 (단가 및 효력 시작일/종료일 추출용)
+     * 수  정  자  :             	수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @RequestMapping(value="/supply/listDateMaterial", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> listDateMaterial(CommandMap commandMap,
+    											 @RequestParam("company_cd") String company_cd,
+												 @RequestParam("user_id") String user_id,
+												 @RequestParam("order_dt") String order_dt,
+												 @RequestParam("material_num") String material_num) throws Exception {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+        try {
+            Calendar time = Calendar.getInstance();
+            
+            commandMap.put("company_cd", company_cd);
+            commandMap.put("material_num", material_num);
+        	
+            resultMap = supplyService.listDateMaterial(commandMap);
+            List<MeterialNumVO> listDataMaterial = (List<MeterialNumVO>) resultMap.get("listDateMaterial");
+        	
+        	ObjectMapper mapper = new ObjectMapper();
+            String jsonTxt = mapper.writeValueAsString(listDataMaterial);
+            /*for (int i = 0; i < listDataMaterial.size(); i++) {
+                System.out.println("============" + i + "번째==================");
+                System.out.println("Knumh 값: " + listDataMaterial.get(i).getKnumh());
+                System.out.println("Material_num 값: " + listDataMaterial.get(i).getMaterial_num());
+                System.out.println("price 값: " + listDataMaterial.get(i).getUnit_price());
+                System.out.println("datab 값: " + listDataMaterial.get(i).getDatab());
+                System.out.println("datbi 값: " + listDataMaterial.get(i).getDatbi());
+            }*/
 
+            //resultMap.put("listDateMaterial", resultMap.get("listDateMaterial")); //내용
+            resultMap.put("listDateMaterial", jsonTxt); //내용
+            resultMap.put("status", "0");
+            resultMap.put("msg", "데이타를 정상적으로 호출하였습니다");
+        }
+        catch(Exception e) {
+            log.error(e.toString());
+            resultMap.put("status", "1");
+            resultMap.put("msg", "데이타 호출에 실패하였습니다");
+        }
+        return resultMap;
+    }
+     
 }

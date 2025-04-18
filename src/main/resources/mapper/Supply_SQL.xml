@@ -483,7 +483,7 @@
 	쿼리함수명 : 발주정보 데이타 입력
 	작  성  자 : 가치노을      작  성  일 : 2020-03-26
 	수  정  자 :             수  정  일 :
-	수정  내용 :
+	수정  내용 : knumh > knumh_num 수정
 	*******************************************************************************************-->
 	<insert id="insertSupply" parameterType="java.util.Map">
 		<selectKey resultType="String" keyProperty="new_cd" order="BEFORE">
@@ -522,7 +522,7 @@
 				#{order_dt},
 				#{material_num},
 				#{place_key},
-				#{knumh},
+				#{knumh_num},
 				#{user_id},
 				#{process_cd},
 				#{supply_place},
@@ -663,50 +663,108 @@
 	<!--*******************************************************************************************
 	쿼리함수명 : 자재코드목록
 	작  성  자 : 가치노을      작  성  일 : 2020-03-26
-	수  정  자 :             수  정  일 :
-	수정  내용 :
+	수  정  자 : 손채원         수  정  일 : 2025-04-10
+	수정  내용 : SQL문 변경  // ${order_dt}  2021.01.01
 	*******************************************************************************************-->
 	<select id="listMaterialNum" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
 		<![CDATA[
 			SELECT
-			  	knumh                   /* CondRegNo */
+			  	knumh           /* CondRegNo */
 				, material_num  /* 자재코드A */
-				, unit_price  /* 단가 */
+				, unit_price  	/* 단가 */
+				, datab			/* 효력시작일 */
+				, datbi			/* 효력종료일 */
 			FROM OPENQUERY(ERP_DL, '
-					select 
-						a.KNUMH as knumh
-						, a.MATNR as material_num
-						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
-					from [wjp].[A305] a 
-					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
-					where a.KUNNR = ''${company_cd}'' and replace(''${order_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
+				select *
+						from (
+							select 	a.KNUMH as knumh
+											, a.MATNR as material_num
+											, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+											, a.DATAB as datab
+											, a.DATBI as datbi
+											, row_number() over (partition by a.KNUMH order by a.DATBI desc) as rn
+										from [wjp].[A305] a 
+										inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
+										where 
+										a.KUNNR = ''${company_cd}''
+										and b.KBETR <> 0.00
+										and not (replace(a.DATBI,''.'','''') = ''99991231'' and b.KBETR = 0.00)
+										and not (replace(''${order_dt}'',''.'','''') > replace(a.DATBI,''.'','''') )
+										) AS sub
+									WHERE rn = 1
 				')
 			ORDER BY material_num ASC
     	]]>
 	</select>
-
+	<!-- 기존 list<aterialNum SQL
+					select 
+						a.KNUMH as knumh
+						, a.MATNR as material_num
+						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+						, a.DATAB as datab
+						, a.DATBI as datbi
+					from [wjp].[A305] a 
+					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
+					where a.KUNNR = ''${company_cd}'' and replace(''${order_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
+	
+	
+	 -->
 	<!--*******************************************************************************************
-	쿼리함수명 : 자재코드목록
-	작  성  자 : 가치노을      작  성  일 : 2020-03-26
-	수  정  자 :             수  정  일 :
-	수정  내용 :
+	쿼리함수명 : 발주업체,특정 품번에 대한 Material 리스트
+	작  성  자   : 손채원        	 작  성  일 : 2025-04-16
+	수  정  자   :        	 수  정  일 : 
+	수정  내용  : and b.KBETR <> 0.00 나중에 추가해줄 것
 	*******************************************************************************************-->
-	<select id="detailMaterialNum" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
+	<select id="listDateMaterial" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
 		<![CDATA[
 			SELECT
-			  	knumh                   /* CondRegNo */
-				, material_num  /* 자재코드 */
-				, unit_price  /* 단가 */
+			  	knumh           /* CondRegNo */
+				, material_num  /* 자재코드A */
+				, unit_price  	/* 단가 */
+				, datab			/* 효력시작일 */
+				, datbi			/* 효력종료일 */
 			FROM OPENQUERY(ERP_DL, '
 					select 
 						a.KNUMH as knumh
 						, a.MATNR as material_num
 						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+						, a.DATAB as datab
+						, a.DATBI as datbi
+					from [wjp].[A305] a 
+					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
+					where a.KUNNR = ''${company_cd}'' 
+						and a.MATNR = ''${material_num}''
+				')
+			ORDER BY knumh ASC
+    	]]>
+	</select>
+	
+	<!--*******************************************************************************************
+	쿼리함수명 : 자재코드목록 조회
+	작  성  자 : 가치노을      작  성  일 : 2020-03-26
+	수  정  자 : 손채원         수  정  일 : 2025-04-11
+	수정  내용 : datab / datbi 추가 , order_dt > supply_req_dt 변경,  and a.KNUMH = ''${knumh}'' 제거
+	*******************************************************************************************-->
+	<select id="detailMaterialNum" parameterType="hashmap" resultType="com.woojin.commercial.supply.MeterialNumVO">
+		<![CDATA[
+			SELECT
+			  	knumh           /* CondRegNo */
+				, material_num  /* 자재코드 */
+				, unit_price  	/* 단가 */
+				, datab			/* 효력시작일 */
+				, datbi			/* 효력종료일 */
+			FROM OPENQUERY(ERP_DL, '
+					select 
+						a.KNUMH as knumh
+						, a.MATNR as material_num
+						, ISNULL(ROUND(b.KBETR  / b.KPEIN *100,0),0) as unit_price
+						, a.DATAB as datab
+						, a.DATBI as datbi
 					from [wjp].[A305] a 
 					inner join [wjp].[KONP] b on a.KNUMH = b.KNUMH
 					where a.KUNNR = ''${company_cd}''
-						and a.MATNR = ''${material_num}'' and a.KNUMH = ''${knumh}''
-						and replace(''${order_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
+						and a.MATNR = ''${material_num}''
+						and replace(''${supply_req_dt}'',''.'','''') between replace(a.DATAB,''.'','''') and replace(a.DATBI,''.'','''')
 				')
     	]]>
 	</select>

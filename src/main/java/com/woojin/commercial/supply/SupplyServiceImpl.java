@@ -543,5 +543,30 @@ public class SupplyServiceImpl implements SupplyService {
     }
 
     
+    /* *******************************************************************************************
+     * 함수  제목 : 발주업체,특정 품번에 대한 Material 리스트
+     * 작  성  자  : 손채원        		작  성  일 : 2025-04-17
+     * 내      용   : 발주업체, 품번으로 Material 정보 조회용 (단가 및 효력 시작일/종료일 추출용)
+     * 수  정  자  :             	수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+	@SuppressWarnings("unchecked")
+	@Override
+    public Map<String, Object> listDateMaterial(CommandMap commandMap)  throws Exception {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+        	Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  supplyDAO.listDateMaterial(commandMap.getMap());
+            List<MeterialNumVO> listParam = (List<MeterialNumVO>) dataMap.get("listDateMaterial");
+            resultMap.put("listDateMaterial", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e.toString());
+            throw e;
+        }
+        return resultMap;
+        
+    }
+    
 }
 
