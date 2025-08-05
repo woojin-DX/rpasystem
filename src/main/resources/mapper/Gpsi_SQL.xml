@@ -3,8 +3,8 @@
 <mapper namespace="com.woojin.commercial.batchjob.scheduling.GpsiDataDAO">
    <!--*******************************************************************************************
     쿼리함수명 : 자재코드목록
-    작  성  자 : 가치노을      작  성  일 : 2020-03-26
-    수  정  자 : 손채원         수  정  일 : 2025-08-05
+    작  성  자 : 가치노을       작  성  일 : 2020-03-26
+    수  정  자 : 손채원1   수  정  일 : 2025-08-05
     수정  내용 :
     *******************************************************************************************-->
     <select id="listPsix0Data" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix0VO">
