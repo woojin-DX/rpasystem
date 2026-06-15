@@ -109,7 +109,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -232,7 +232,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -338,7 +338,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -481,7 +481,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -584,7 +584,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -705,7 +705,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -796,7 +796,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -899,7 +899,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -1010,7 +1010,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
@@ -1105,7 +1105,7 @@ public class GpsiDataController {
 		            Calendar c1 = Calendar.getInstance();
 		            String strToday = sdf.format(c1.getTime());
 		            String strToday2 = sdf2.format(c1.getTime());
-		            String path = "D:\\PSIXdata\\"+ strToday2;
+		            String path = "D:\\PSIXdata\\"+ strToday2 + "_z";
 		            
 		        	File file = new File(path);
 		            //file을 생성할 폴더가 없으면 생성합니다.
