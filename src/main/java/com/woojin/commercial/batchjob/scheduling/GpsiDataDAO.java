@@ -246,4 +246,30 @@ public class GpsiDataDAO extends AbstractDAO {
         return resultMap;
     }
 
+    /* *******************************************************************************************
+     * 함수  제목 : Open PO 정보
+     * 작  성  자 : 			      작  성  일 : 2026-05-21
+     * 내      용 : 미입고/발주 잔량 조회
+     * 수  정  자 :             수  정  일 :
+     * 수정  내용 :
+     * ******************************************************************************************* */
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> listPsixGData() {
+        Map<String, Object> resultMap = new HashMap<String,Object>();
+        List<GpsiPsixGVO> lsListTable = new ArrayList<GpsiPsixGVO>();
+
+        try {
+            //데이타 리스트를 추출.
+            lsListTable = selectList("listPsixGData", null);
+            resultMap.put("datalist", lsListTable);
+
+        }
+        catch(Exception e){
+            resultMap.put("datalist", lsListTable);
+        }
+
+        return resultMap;
+    }
+    
+
 }
