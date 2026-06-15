@@ -14,7 +14,8 @@
 				, tot.matnr
 				, 'DUMMY' as inven_status
 				, 'DUMMY' as lot
-				, sum(ISNULL(tot.supply_div,0)) as supply_div
+				--, sum(ISNULL(tot.supply_div,0)) as supply_div
+				, supply_div
 				, SUM(tot.inven_qty) as inven_qty
 				, tot.meins
 				, CONVERT(CHAR(8), getdate(), 112) as data_dt
@@ -26,7 +27,8 @@
 			FROM(
 				SELECT
 					mara.[MATNR] matnr
-					, supply_div
+					--, supply_div
+					, iif(marc.DISMM <> 'ND', '1', '0') AS supply_div
 					, inven_qty
 					, case when mara.MEINS = 'EA' then 'PC' else mara.MEINS end meins
 				  FROM [ERP_DL].[WJP].[wjp].[MARA] mara
@@ -36,13 +38,14 @@
 						  where concat([LFGJA],[LFMON]) = (SELECT MAX(concat([LFGJA],[LFMON])) FROM [ERP_DL].[WJP].[wjp].[MARD] where MATNR = sub.MATNR and LGORT = sub.LGORT)
 						   and [LABST] + [UMLME] + [INSME] > 0
 						  group by [MATNR])	mard on mara.MATNR = mard.MATNR
-					left outer join 
+					/*left outer join 
 						(SELECT distinct MATNR,case when LIFNR = 'A1000A01' then 1 else 0 end supply_div 
 							FROM [ERP_DL].[WJP].[wjp].[EINA]
-						) eina on mara.MATNR = eina.MATNR
+						) eina on mara.MATNR = eina.MATNR*/
+					 left join [ERP_DL].[WJP].[wjp].[MARC] marc on marc.MATNR = mara.MATNR
 				  where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') 
 			) tot
-			group by tot.matnr, tot.meins
+			group by tot.matnr, tot.meins, tot.supply_div
 			order by tot.matnr
     	]]>
 	</select>
@@ -83,10 +86,12 @@
 				from [ERP_DL].[WJP].[wjp].[MARA] mara
 					inner join [ERP_DL].[WJP].[wjp].[S076] s076 on mara.MATNR = s076.PMNUX
 				where mara.MTART in ('ROH', 'HAWA', 'FERT','HALB') and s076.ABSAT != 0 and s076.VRSIO = concat('2',right(concat('00',month(getdate())),2))
-					and (left(s076.sptag,6) between left(CONVERT(CHAR(10), getdate(), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
+					--and (left(s076.sptag,6) between left(CONVERT(CHAR(10), getdate(), 112),6) and left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6)
+					and (SPTAG >= left(CONVERT(CHAR(10), getdate(), 112),8) and left(s076.SPTAG,6) <= left(CONVERT(CHAR(10), DATEADD(month, 8, getdate()), 112),6)
 						OR s076.SPWOC between
-						concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), getdate(), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), getdate(), 112),6),'01'))),2)) 
-						and concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), DATEADD(month, 6, getdate()), 112),6),'01'))),2))
+						--concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), getdate(), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), getdate(), 112),6),'01'))),2)) 
+						concat( YEAR(GETDATE()), right(concat('00', DATEPART(WEEK, GETDATE())), 2))
+						and concat(YEAR(CONVERT(date,concat(left(CONVERT(CHAR(10), DATEADD(month, 8, getdate()), 121),7),'-01'))),right(concat('00',DATEPART(WEEK, concat(left(CONVERT(CHAR(10), DATEADD(month, 8, getdate()), 112),6),'01'))),2))
 				)
 			) tot
 			group by matnr,psttr,pedtr,meins
@@ -255,7 +260,7 @@
 			SELECT 'PSIX5' as data_type
 				, 'A4600001' as base_code
 				, MATNR as matnr
-				, PEDTR as psttr
+				, PSTTR as psttr
 				, PEDTR as pedtr
 				, SUM(GSMNG) as gsmng
 				, MEINS as meins
@@ -283,6 +288,7 @@
 					where mara.MTART in('HALB', 'FERT') and afko.GSTRS >=  CONVERT(CHAR(8), getdate(), 112)
 			) tot
 			group by MATNR
+				, PSTTR -- 추가
 				, PEDTR
 				, MEINS
 			
@@ -360,10 +366,9 @@
 			FROM(
 				select
 					mseg.mblnr
-					,case when mseg.lifnr ='A1000A01' then 'A1000J99' else 
-					 case when mseg.lifnr ='A4750001' then 'A4750001' else '' end end as lifnr
+					,IIF(mseg.lifnr ='A1000A01', 'A1000J99', 'A4150001') as lifnr
 					,mseg.matnr
-					,case when mseg.shkzg = 'S' then mseg.menge when mseg.shkzg = 'S' then  mseg.menge * (-1) end menge
+					,case when mseg.shkzg = 'S' then mseg.menge when mseg.shkzg = 'H' then  mseg.menge * (-1) end menge
 					,case when mseg.meins = 'EA' then 'PC' else mseg.meins end meins
 					,case when ISNULL(mseg.ebeln,'') = '' then 'DUMMY' else mseg.ebeln end ebeln
 					,case when ISNULL(mseg.ebelp,'') = '' then 'DUMMY' else mseg.ebelp end ebelp
@@ -373,10 +378,10 @@
 				from
 					([ERP_DL].[WJP].[wjp].[MSEG] mseg
 					inner join [ERP_DL].[WJP].[wjp].[MKPF] mkpf on mseg.MBLNR = mkpf.MBLNR)
-					left join  [ERP_DL].[WJP].[wjp].[MARA] mara on  mseg.matnr = mara.matnr
-				where mseg.lifnr = 'A1000A01' and mseg.bwart in ('101','102','122','123','161','162')
+					left join  [ERP_DL].[WJP].[wjp].[MARA] mara on mseg.matnr = mara.matnr
+				where mseg.lifnr in ('A1000A01', 'A4105A01') and mseg.bwart in ('101','102','122','123','161','162')
 					and mkpf.vgart = 'WE' and mseg.menge != 0
-					and mkpf.budat = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112)
+					and mkpf.CPUDT = CONVERT(CHAR(10), DATEADD(day, -1, getdate()), 112)
 					and mara.mtart  not in('ZERS','UNBW','ERSA')
 			) tot
 			group by mblnr
@@ -421,5 +426,49 @@
 			order by eket.eindt,ekpo.ebeln,ekpo.ebelp,ekpo.matnr
     	]]>
 	</select>
+
+	
+	<!--*******************************************************************************************
+	    쿼리함수명 : Open PO 정보
+	    작  성  자 : 			   작  성  일 : 2026-05-21
+	    수  정  자 :             수  정  일 : 2026-05-26
+	    수정  내용 :
+    *******************************************************************************************-->
+    <select id="listPsixGData" parameterType="hashmap" resultType="com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsixGVO">
+		<![CDATA[
+			select
+				'PSIXG' as data_type
+				, ekpo.EBELN collate Korean_Wansung_CI_AS + convert(varchar,ekpo.EBELP collate Korean_Wansung_CI_AS) as po_key
+				, 'A4600001' as from_loc_code
+				, 'OI' as status_val
+				, ekpo.MATNR as item_code
+				, eket.EINDT as delivery_dt
+				--, eket.MENGE menge -- PO 수량
+				, IIF(GR_QTY is null, ekpo.MENGE, (ekpo.MENGE - GR_QTY)) as open_po_qty
+				--, ekpo.ELIKZ -- 납품완료 지시자
+				, case when ekpo.LMEIN = 'EA' then 'PC' else ekpo.LMEIN end base_po_unit
+				, ekko.AEDAT as po_created_dt
+				, CONVERT(CHAR(8), getdate(), 112) as data_dt
+				, IIF(ekko.LIFNR = 'A1000A01', 'A1000J99', 'A4150001') as to_loc_code
+			from
+				[ERP_DL].[WJP].[wjp].[EKKO] ekko
+				inner join [ERP_DL].[WJP].[wjp].[EKPO] ekpo on ekko.EBELN = ekpo.EBELN and ekpo.LOEKZ <> 'L' and ekpo.ELIKZ <> 'X' and ekpo.KNTTP = ''-- 계정 지정 범주
+				inner join [ERP_DL].[WJP].[wjp].[MARA] mara on ekpo.MATNR = mara.MATNR and mara.MTART in ('FERT', 'HALB', 'HAWA', 'ROH')
+				inner join [ERP_DL].[WJP].[wjp].[EKET] eket on ekpo.EBELN = eket.EBELN and ekpo.EBELP = eket.EBELP
+				left join  (
+						SELECT
+							EBELN,
+							EBELP,
+							SUM(IIF(SHKZG = 'S', MENGE * 1, MENGE * (-1))) AS GR_QTY
+						FROM [ERP_DL].[WJP].[wjp].[EKBE]
+						WHERE BEWTP = 'E' --and VGABE = '1'
+						GROUP BY EBELN, EBELP
+					) ekbe on ekpo.EBELN = ekbe.EBELN and ekpo.EBELP = ekbe.EBELP
+			where ekko.LIFNR in ('A1000A01', 'A4105A01') and (ekpo.MENGE <> GR_QTY or GR_QTY is null)-- PO수량 - SUM(입고수량) <> 0
+				and ekko.MEMORY = ''
+			order by eket.EINDT, ekpo.EBELN, ekpo.EBELP, ekpo.MATNR
+    	]]>
+	</select>
+	
 
 </mapper>
