@@ -19,6 +19,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsixGVO;
 
 @Service("gpsiDataService")
 public class GpsiDataServiceImpl implements GpsiDataService{
@@ -207,5 +208,26 @@ public class GpsiDataServiceImpl implements GpsiDataService{
         }
         return resultMap;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> listPsixGData() throws Exception {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+        try {
+            Map<String, Object> dataMap = new HashMap<String,Object>();
+            dataMap =  gpsiDataDAO.listPsixGData();
+
+            List<GpsiPsixGVO> listParam = (List<GpsiPsixGVO>) dataMap.get("datalist");
+
+            //jsp 에서 보여줄 정보 추출
+            resultMap.put("listPsixGData", listParam); //목록
+        }
+        catch(Exception e){
+            log.error(e.toString());
+            throw e;
+        }
+        return resultMap;
+	}
+	
 
 }
