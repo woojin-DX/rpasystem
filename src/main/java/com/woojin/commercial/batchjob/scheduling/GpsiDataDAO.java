@@ -16,6 +16,7 @@ import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix5VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix6VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix7VO;
 import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsix9VO;
+import com.woojin.commercial.batchjob.scheduling.GpsiDataVO.GpsiPsixGVO;
 import com.woojin.commercial.common.AbstractDAO;
 
 @Repository("gpsiDataDAO")
