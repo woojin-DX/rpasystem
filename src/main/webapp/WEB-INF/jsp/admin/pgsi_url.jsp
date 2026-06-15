@@ -24,10 +24,13 @@
         <!-- container -->
         <div id="container">
             <div id="content">
-                <div id="content_title">
+                <div id="content_title" style="margin-bottom: 40px;">
                     <h3>G-PSI 관리 </h3>
+                    <h4>* 서버: WQIS 서버&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 경로: D:\PSIXdata\금일자_z</h4>
+                    
+                    <a href="${pageContext.request.contextPath}/manual/GPSI 데이터 미전송 시 니테라 측 전송 매뉴얼.pptx">[미전송 시 매뉴얼  (다운로드)]</a>
                 </div>
-                <div id="content_start">
+                <div id="content_start" style="padding-top: 60px;">
                 	<div class="bbsB ta_l mt_10">
                         <ul class="btn_all">
                             <li id="btnPSIX0"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsix0Data" id="PSIX0">PSIX0 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
@@ -38,7 +41,8 @@
                             <li id="btnPSIX5"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsix5Data" id="PSIX5">PSIX5 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
                             <li id="btnPSIX6"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsix6Data" id="PSIX6">PSIX6 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
                             <li id="btnPSIX7"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsix7Data" id="PSIX7">PSIX7 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
-                            <li id="btnPSIX9"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsix9Data" id="PSIX9">PSIX9 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
+                            <li id="btnPSIX9"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="PSIX9">PSIX9 파일  (사용X)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
+                            <li id="btnPSIXG"><span class="button medium" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/pgsi/listPsixGData" id="PSIXG">PSIXG 파일 생성하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></span><br /><br /></li>
                         </ul>
                     </div>
                 </div>
