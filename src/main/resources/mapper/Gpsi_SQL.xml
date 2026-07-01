@@ -260,7 +260,7 @@
 			SELECT 'PSIX5' as data_type
 				, 'A4600001' as base_code
 				, MATNR as matnr
-				, PSTTR as psttr
+				, PEDTR as psttr
 				, PEDTR as pedtr
 				, SUM(GSMNG) as gsmng
 				, MEINS as meins
@@ -288,7 +288,6 @@
 					where mara.MTART in('HALB', 'FERT') and afko.GSTRS >=  CONVERT(CHAR(8), getdate(), 112)
 			) tot
 			group by MATNR
-				, PSTTR -- 추가
 				, PEDTR
 				, MEINS
 			
